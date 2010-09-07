@@ -14,43 +14,53 @@
 	$tab = get_input('tab', 'activity');
 ?>
 <script type="text/javascript">
-
-	function get_elgg_echo(value) {
-		var url = '<?php echo $elgg_echo_url; ?>';	
-		var result = "Blah";
-		$.get(url, { value: value },
-		   function(data){
-				result = data;
-				$("#group_extend_nav_" + value).append(result);
+	
+	function hideGroupDivs() {
+		$("li#group_nav_list").removeClass('selected');
+		$.each($('#group_tools_latest').children(), function() {
+			$(this).hide();
 		});
 	}
 
 	$(document).ready(function () {
 		$.each($('#group_tools_latest').children(), function() {			
+				// Get rid of any clearfloat
 				$(this).removeClass('clearfloat');
+				
+				// Get child H3 title
+				var title = $('h3', this).html();
+				var id = '';
+				
+				// Split list of classes
 				var classes = $(this).attr('class').split(/\s+/);
 				
 				// Check through each class and add a new list item for each discovered widget
 				$.each(classes, function(index, item) {
 					if (item != 'group_tool_widget') {					
-						$("#group_extender_nav").append('<li id=' + item + '><a id="group_extend_nav_' + item + '" href="?tab=' + item + '"></a></li>');
-						get_elgg_echo(item);	
+						$("#group_extender_nav").append('<li id="group_nav_list" class="group_' + item + '"><a class="group_extend_link" id="group_' + item + '" href="#">' + title + '</a></li>');	
+						id = 'div_group_' + item; 
 					}
 				});
 				
-				// Determine which tab we're on, and select/show content
-				if ($(this).hasClass("<?php echo $tab; ?>")) {
-					$("li#<?php echo $tab; ?>").addClass('selected');
-					$(this).toggle();
-				}
+				$(this).addClass(id);
 		});	
 		
-		$("div#group_nav").toggle();
+		$(".group_extend_link").click(
+			function() {
+				hideGroupDivs();
+				$(".div_" + $(this).attr('id')).show();
+				$("li." + $(this).attr('id')).addClass('selected');
+				return false;
+			}
+		);
+		
+		// Show activity as selected.. we can assume this is here
+		$("li.group_activity").addClass('selected');
+		$("div.div_group_activity").show();
+		
 	});
-	
-	
 </script>	 
-<div id="group_nav" class="elgg_horizontal_tabbed_nav" style="display: none;">
+<div id="group_nav" class="elgg_horizontal_tabbed_nav">
 	<ul id='group_extender_nav'>
 	</ul>
 </div>
