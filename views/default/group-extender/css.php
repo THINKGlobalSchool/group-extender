@@ -41,3 +41,8 @@
 .group-extend .group_tool_widget {
 	display: none;
 }
+
+.group_tool_widget .new_wire_post textarea {
+	width: 98%;
+	padding: 2px 1% 1% !important;
+}
