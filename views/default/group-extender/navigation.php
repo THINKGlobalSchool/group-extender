@@ -26,6 +26,7 @@
 		$.each($('#group_tools_latest').children(), function() {			
 				// Get rid of any clearfloat
 				$(this).removeClass('clearfloat');
+				$(this).removeClass('clearfix');
 				
 				// Get child H3 title
 				var title = $('h3', this).html();
