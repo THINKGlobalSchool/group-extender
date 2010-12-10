@@ -22,7 +22,7 @@
 		register_page_handler('groups','group_extender_page_handler');
 		
 		// CSS
-		elgg_extend_view('css', 'group-extender/css');
+		elgg_extend_view('css/screen', 'group-extender/css');
 	}
 	
 	/**
