@@ -1,17 +1,16 @@
 <?php
-	/**
-	 * Group-Extender navigation
-	 * 
-	 * @package Group-Extender
-	 * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
-	 * @author Jeff Tilson
-	 * @copyright THINK Global School 2010
-	 * @link http://www.thinkglobalschool.com/
-	 * 
-	 */
+/**
+ * Group-Extender navigation
+ * 
+ * @package Group-Extender
+ * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
+ * @author Jeff Tilson
+ * @copyright THINK Global School 2010
+ * @link http://www.thinkglobalschool.com/
+ * 
+ */
 
-	$elgg_echo_url = $CONFIG->wwwroot . "mod/group-extender/ajax_actions/get_elgg_echo.php";
-	$tab = get_input('tab', 'activity');
+$tab = get_input('tab', 'activity');
 ?>
 <script type="text/javascript">
 	
