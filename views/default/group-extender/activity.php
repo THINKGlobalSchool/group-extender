@@ -10,7 +10,7 @@
  * 
  */
 
-$limit = get_input("limit", 20);
+$limit = get_input("limit", 10);
 $offset = get_input("offset", 0);
 $group_guid = $vars['entity']->getGUID();
 
@@ -21,7 +21,8 @@ $group_guid = (int) $group_guid;
 
 $entities = elgg_get_entities(array(
 	'container_guids' => $group_guid,
-	'group_by' => 'e.guid'
+	'group_by' => 'e.guid', 
+	'limit' => 0,
 ));
 
 $entity_guids = array();
