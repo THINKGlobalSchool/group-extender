@@ -11,15 +11,9 @@
  */
 
 $english = array(
-	'group-extender:groupactivity' => 'Group Activity',
-	
-	// Nav items
-	'group-extender:nav:activity' => 'Group Activity',
-	'group-extender:nav:forum' => 'Discussion',
-	'group-extender:nav:bookmarks' => 'Bookmarks',
-	'group-extender:nav:photos' => 'Photos',
-	'group-extender:nav:todo' => 'Group To Do\'s',
-	'group-extender:nav:documents' => 'Documents',
+	'group-extender:removeuser' => 'Remove From Group',
+	'group-extender:cantremove' => 'Cannot remove user from group',
+	'group-extender:removed' => 'User successfully removed from group',
 );
 
 add_translation('en',$english);
