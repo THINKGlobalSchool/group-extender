@@ -1,6 +1,6 @@
 <?php
 /**
- * Group-Extender tool_latest view
+ * Group-Extender css
  * 
  * @package Group-Extender
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
@@ -10,3 +10,13 @@
  * 
  */
 ?>
+
+#groups-tools > div.group-tools-module {
+	float: none;
+	margin-bottom: 20px;
+	width: auto;
+}
+
+#groups-tools > div.group-tools-module:nth-child(odd) {
+	margin-right: 0px;
+}
