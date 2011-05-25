@@ -24,14 +24,14 @@ function group_extender_init() {
 	elgg_register_page_handler('groups','group_extender_page_handler');
 	
 	// Hook into user entitiy menu
-	elgg_register_plugin_hook_handler('register', 'menu:entity', 'group_extender_users_setup_entity_menu', 502);
+	//elgg_register_plugin_hook_handler('register', 'menu:entity', 'group_extender_users_setup_entity_menu', 502);
 	
 	// CSS
 	elgg_extend_view('css/elgg', 'css/group-extender/css');
 	
 	// Register new actions
-	$action_base = elgg_get_plugins_path() . 'group-extender/actions/group-extender';
-	elgg_register_action("groups/remove", "$action_base/remove.php");
+	//$action_base = elgg_get_plugins_path() . 'group-extender/actions/group-extender';
+	//elgg_register_action("groups/remove", "$action_base/remove.php");
 }
 
 /**
