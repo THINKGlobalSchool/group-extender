@@ -18,6 +18,7 @@ $group = get_entity($group_guid);
 elgg_set_page_owner_guid($group->guid);
 
 if (($user instanceof ElggUser) && ($group instanceof ElggGroup) && $group->canEdit()) {
+	// Don't allow removeing group owner
 	if ($group->getOwnerGUID() != $user->getGUID()) {
 		if ($group->leave($user)) {
 			system_message(elgg_echo("group-extender:removed"));
