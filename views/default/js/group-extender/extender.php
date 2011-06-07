@@ -35,6 +35,7 @@ elgg.groupextender.init = function() {
 					
 					// Get a code-friendly id for the modules (lowercase, spaces replaced with -)
 					var module_id = title.toLowerCase().replace(' ', '-');
+					module_id = module_id.replace(' ', '-');
 					
 					// Add the nav item	
 					$('#group-tools-tabbed-nav').append('<li class="group-tools-item"><a class="group-tools-item-link" href="#group-tools-' + module_id + '">' + title + '</a></li>');
