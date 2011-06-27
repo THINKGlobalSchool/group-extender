@@ -23,12 +23,15 @@ elgg.groupextender.init = function() {
 			
 			groupToolsDiv.prepend('<ul id="group-tools-tabbed-nav" class="elgg-menu elgg-menu-filter elgg-menu-hz elgg-menu-filter-default"></ul>');
 	
-			groupToolsDiv.children("div.elgg-module").each(function() {
+			// Unwrap divs
+			groupToolsDiv.children('li').each(function() {
+				// Add to nav
+				$(this).children('div.elgg-module').each(function() {
+					// Remove parent <li>'s
+					$(this).unwrap();
+					
 					// Hide the module
 					$(this).hide();
-				
-					// Clean up extra classes
-					$(this).removeClass('odd');
 
 					// Get title
 					var title = $('h3', this).html();
@@ -42,11 +45,11 @@ elgg.groupextender.init = function() {
 					// Add an id and class to the module
 					$(this).attr('id', 'group-tools-' + module_id);
 					$(this).addClass('group-tools-module');
-			});	
-			
+				});
+			});
+
 			// Fire the click handler for the first nav item
 			groupToolsDiv.find("ul#group-tools-tabbed-nav li:first-child a").click();
-
 	});
 }
 
