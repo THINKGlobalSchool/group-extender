@@ -21,7 +21,7 @@ function group_extender_init() {
 	elgg_register_js('elgg.groupextender', $extender_js);
 	
 	// Register my own page handler
-	elgg_register_page_handler('groups','group_extender_page_handler');
+	//elgg_register_page_handler('groups','group_extender_page_handler');
 	
 	// Hook into user entitiy menu
 	//elgg_register_plugin_hook_handler('register', 'menu:entity', 'group_extender_users_setup_entity_menu', 502);
