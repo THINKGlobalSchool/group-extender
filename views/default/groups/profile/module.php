@@ -14,9 +14,7 @@ if ($group->canWriteToContainer() && isset($vars['add_link'])) {
 	$vars['content'] .= "<span class='elgg-widget-more'>{$vars['add_link']}</span>";
 }
 
-echo '<li>';
 echo elgg_view_module('info', '', $vars['content'], array(
-	'header' => '',
+	'header' => "<h3>" . elgg_echo('groups:activity') . "</h3>",
 	'class' => 'elgg-module-group',
 ));
-echo '</li>';
