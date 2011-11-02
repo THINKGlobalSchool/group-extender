@@ -22,7 +22,7 @@ function group_extender_init() {
 	elgg_register_js('elgg.groupextender', $extender_js);
 	
 	// Register my own page handler
-	//elgg_register_page_handler('groups','group_extender_page_handler');
+	elgg_register_page_handler('groups','group_extender_page_handler');
 	
 	// Hook into user entitiy menu
 	//elgg_register_plugin_hook_handler('register', 'menu:entity', 'group_extender_users_setup_entity_menu', 502);
@@ -42,7 +42,12 @@ function group_extender_init() {
  */
 function group_extender_page_handler($page) {
 		// Load extender JS
-		elgg_load_js('elgg.groupextender');
+		//elgg_load_js('elgg.groupextender');
+		
+		// Going to hack in a better group activity handler
+		if ($page[0] == 'activity') {
+			groups_extender_handle_activity_page($page[1]);
+		}
 		groups_page_handler($page);
 		return true;
 }
@@ -81,4 +86,49 @@ function group_extender_users_setup_entity_menu($hook, $type, $value, $params) {
 
 	return $value;
 }
+
+/**
+ * Group activity page
+ *
+ * @param int $guid Group entity GUID
+ */
+function groups_extender_handle_activity_page($guid) {
+
+	elgg_set_page_owner_guid($guid);
+
+	$group = get_entity($guid);
+	if (!$group || !elgg_instanceof($group, 'group')) {
+		forward();
+	}
+
+	group_gatekeeper();
+
+	$title = elgg_echo('groups:activity');
+
+	elgg_push_breadcrumb($group->name, $group->getURL());
+	elgg_push_breadcrumb($title);
+
+	$db_prefix = elgg_get_config('dbprefix');
+
+	$content = elgg_list_river(array(
+		'joins' => array(
+			"JOIN {$db_prefix}entities e ON e.guid = rv.object_guid",
+			"JOIN {$db_prefix}entities ec ON ec.guid = e.container_guid"
+		),
+		'wheres' => array("(e.container_guid = $guid || ec.container_guid = $guid)")
+	));
+	if (!$content) {
+		$content = '<p>' . elgg_echo('groups:activity:none') . '</p>';
+	}
+	
+	$params = array(
+		'content' => $content,
+		'title' => $title,
+		'filter' => '',
+	);
+	$body = elgg_view_layout('content', $params);
+
+	echo elgg_view_page($title, $body);
+}
+
 	
