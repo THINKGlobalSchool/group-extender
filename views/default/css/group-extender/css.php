@@ -20,3 +20,7 @@
 #groups-tools > div.group-tools-module:nth-child(odd) {
 	margin-right: 0px;
 }
+
+#group-navigator-select {
+	width: 200px;
+}

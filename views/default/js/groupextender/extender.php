@@ -12,12 +12,14 @@
 //<script>
 elgg.provide('elgg.groupextender');
 
-elgg.groupextender.init = function() {	
+elgg.groupextender.init = function() {
+	// Change handler for group navigator
+	$('#group-navigator-select').live('change', elgg.groupextender.switchGroup);
 
 	// Add a click handler for the tabs
-	$('a.group-tools-item-link').live('click', elgg.groupextender.switchGroupToolsTab);
+	//$('a.group-tools-item-link').live('click', elgg.groupextender.switchGroupToolsTab);
 
-	// When ready, hack the divs
+	/** When ready, hack the divs
 	$(function() {
 			var groupToolsDiv = $('#groups-tools');
 			
@@ -51,6 +53,7 @@ elgg.groupextender.init = function() {
 			// Fire the click handler for the first nav item
 			groupToolsDiv.find("ul#group-tools-tabbed-nav li:first-child a").click();
 	});
+	*/
 }
 
 // Click handler for group tools nav items
@@ -67,6 +70,12 @@ elgg.groupextender.switchGroupToolsTab = function(event) {
 	// Show the div (passed as href)
 	$($(this).attr('href')).show();
 	
+	event.preventDefault();
+}
+
+// Change handler for group navigator select
+elgg.groupextender.switchGroup = function(event) {
+	window.location = $(this).val();
 	event.preventDefault();
 }
 
