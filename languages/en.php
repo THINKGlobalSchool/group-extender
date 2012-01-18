@@ -14,7 +14,7 @@ $english = array(
 	'group-extender:removeuser' => 'Remove from group',
 	'group-extender:cantremove' => 'Cannot remove user from group',
 	'group-extender:removed' => 'User successfully removed from group',
-	'group-extender:navigator' => 'Group Navigator',
+	'group-extender:navigator' => 'Change Group',
 	'group-extender:nogroups' => 'You haven\'t joined any groups',
 );
 
