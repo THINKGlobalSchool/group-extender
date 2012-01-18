@@ -29,7 +29,10 @@ function group_extender_init() {
 	
 	// CSS
 	elgg_extend_view('css/elgg', 'css/group-extender/css');
-	
+
+	// Extend owner_block for easy group navigator
+	elgg_extend_view('page/elements/owner_block', 'group-extender/navigator', 499);
+
 	// Register new actions
 	//$action_base = elgg_get_plugins_path() . 'group-extender/actions/group-extender';
 	//elgg_register_action("groups/remove", "$action_base/remove.php");
@@ -42,7 +45,7 @@ function group_extender_init() {
  */
 function group_extender_page_handler($page) {
 		// Load extender JS
-		//elgg_load_js('elgg.groupextender');
+		elgg_load_js('elgg.groupextender');
 		
 		// Going to hack in a better group activity handler
 		if ($page[0] == 'activity') {
