@@ -16,7 +16,7 @@ elgg_register_event_handler('init', 'system', 'group_extender_init');
 // Init
 function group_extender_init() {
 	
-	// Register typeaheadtags JS
+	// Register group extender JS
 	$extender_js = elgg_get_simplecache_url('js', 'groupextender/extender');
 	elgg_register_simplecache_view('js/groupextender/extender');
 	elgg_register_js('elgg.groupextender', $extender_js);
