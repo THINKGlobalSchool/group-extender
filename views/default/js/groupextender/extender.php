@@ -80,4 +80,3 @@ elgg.groupextender.switchGroup = function(event) {
 }
 
 elgg.register_hook_handler('init', 'system', elgg.groupextender.init);
-//</script>
