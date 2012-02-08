@@ -20,13 +20,16 @@ function group_extender_init() {
 	$extender_js = elgg_get_simplecache_url('js', 'groupextender/extender');
 	elgg_register_simplecache_view('js/groupextender/extender');
 	elgg_register_js('elgg.groupextender', $extender_js);
-	
+
+	// Load extender JS
+	elgg_load_js('elgg.groupextender');
+
 	// Register my own page handler
 	elgg_register_page_handler('groups','group_extender_page_handler');
-	
+
 	// Hook into user entitiy menu
 	//elgg_register_plugin_hook_handler('register', 'menu:entity', 'group_extender_users_setup_entity_menu', 502);
-	
+
 	// CSS
 	elgg_extend_view('css/elgg', 'css/group-extender/css');
 
@@ -43,10 +46,7 @@ function group_extender_init() {
  *
  * @param array $page Array of page elements, forwarded by the page handling mechanism
  */
-function group_extender_page_handler($page) {
-		// Load extender JS
-		elgg_load_js('elgg.groupextender');
-		
+function group_extender_page_handler($page) {		
 		// Going to hack in a better group activity handler
 		if ($page[0] == 'activity') {
 			groups_extender_handle_activity_page($page[1]);
