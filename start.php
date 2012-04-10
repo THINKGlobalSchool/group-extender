@@ -5,7 +5,7 @@
  * @package Group-Extender
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Jeff Tilson
- * @copyright THINK Global School 2010
+ * @copyright THINK Global School 2010 - 2012
  * @link http://www.thinkglobalschool.com/
  * 
  */
@@ -16,29 +16,42 @@ elgg_register_event_handler('init', 'system', 'group_extender_init');
 // Init
 function group_extender_init() {
 	
+	// Register library
+	elgg_register_library('elgg:groupextender', elgg_get_plugins_path() . "group-extender/lib/groupextender.php");
+	elgg_load_library('elgg:groupextender');
+	
 	// Register group extender JS
 	$extender_js = elgg_get_simplecache_url('js', 'groupextender/extender');
 	elgg_register_simplecache_view('js/groupextender/extender');
 	elgg_register_js('elgg.groupextender', $extender_js);
-
-	// Load extender JS
-	elgg_load_js('elgg.groupextender');
+	
+	// Register tabs css
+	$t_css = elgg_get_simplecache_url('css', 'groupextender/tabs');
+	elgg_register_simplecache_view('css/groupextender/tags');
+	elgg_register_css('elgg.groupextender.tabs', $t_css);
 
 	// Register my own page handler
 	elgg_register_page_handler('groups','group_extender_page_handler');
 
-	// Hook into user entitiy menu
-	//elgg_register_plugin_hook_handler('register', 'menu:entity', 'group_extender_users_setup_entity_menu', 502);
-
 	// CSS
-	elgg_extend_view('css/elgg', 'css/group-extender/css');
+	elgg_extend_view('css/elgg', 'css/groupextender/css');
+	
+	elgg_extend_view("groups/edit", "group-extender/edit_tabs_link", 400);
 
 	// Extend owner_block for easy group navigator
 	elgg_extend_view('page/elements/owner_block', 'group-extender/navigator', 499);
-
-	// Register new actions
-	//$action_base = elgg_get_plugins_path() . 'group-extender/actions/group-extender';
-	//elgg_register_action("groups/remove", "$action_base/remove.php");
+	
+	// Actions
+	$action_base = elgg_get_plugins_path() . 'group-extender/actions/group-extender';
+	elgg_register_action("groupextender/save_tab", "$action_base/save_tab.php");
+	elgg_register_action("groupextender/delete_tab", "$action_base/delete_tab.php");
+	
+	// Whitelist ajax views
+	elgg_register_ajax_view('group-extender/modules/activity');
+	elgg_register_ajax_view('group-extender/modules/subtype');
+	elgg_register_ajax_view('group-extender/forms/edit_subtype');
+	elgg_register_ajax_view('group-extender/forms/edit_static');
+	elgg_register_ajax_view('group-extender/forms/edit_tagdashboard');
 }
 
 /**
@@ -46,48 +59,26 @@ function group_extender_init() {
  *
  * @param array $page Array of page elements, forwarded by the page handling mechanism
  */
-function group_extender_page_handler($page) {		
+function group_extender_page_handler($page) {
+		// Load extender JS
+		elgg_load_js('elgg.groupextender');		
+		
+		// Load tab CSS
+		elgg_load_css('elgg.groupextender.tabs');
+		
+		// Load up tinymce
+		elgg_load_js('tinymce');
+		elgg_load_js('elgg.tinymce');
+		
 		// Going to hack in a better group activity handler
 		if ($page[0] == 'activity') {
 			groups_extender_handle_activity_page($page[1]);
-		}
-		groups_page_handler($page);
+		} else if ($page[0] == 'edit' && $page[2] == 'tabs') {
+			groups_extender_handle_edit_tabs_page($page[1]);
+		} else {
+			groups_page_handler($page);
+		}	
 		return true;
-}
-
-function group_extender_users_setup_entity_menu($hook, $type, $value, $params) {
-	if (elgg_in_context('widgets')) {
-		return $value;
-	}
-	
-	$group = elgg_get_page_owner_entity();
-
-	if (!elgg_instanceof($group, 'group')) {
-		return $value;
-	}
-	
-	$entity = $params['entity'];
-	if (!elgg_instanceof($entity, 'user')) {
-		return $value;
-	}
-
-	if ($group->canEdit() && $group->getOwnerGUID() != $entity->guid) {
-		
-
-		$remove = elgg_view('output/confirmlink', array(
-			'href' => "action/groups/remove?user_guid={$entity->guid}&group_guid={$group->guid}",
-			'text' => elgg_echo('group-extender:removeuser'),
-		));
-
-		$options = array(
-			'name' => 'removeuser',
-			'text' => $remove,
-			'priority' => 999,
-		);
-		$value[] = ElggMenuItem::factory($options);
-	} 
-
-	return $value;
 }
 
 /**
@@ -134,4 +125,33 @@ function groups_extender_handle_activity_page($guid) {
 	echo elgg_view_page($title, $body);
 }
 
+/**
+ * Handle edit tabs page
+ * 
+ * @param int $guid Group entity GUID
+ */
+function groups_extender_handle_edit_tabs_page($guid) {
+	$title = elgg_echo('group-extender:label:editgrouptabs');
+	$group = get_entity($guid);
+
+	if ($group && $group->canEdit()) {
+		elgg_set_page_owner_guid($group->getGUID());
+		elgg_push_breadcrumb(elgg_echo('groups'), "groups/all");
+		elgg_push_breadcrumb($group->name, $group->getURL());
+		elgg_push_breadcrumb(elgg_echo('groups:edit'), elgg_get_site_url() . 'groups/edit/' . $group->guid);
+		elgg_push_breadcrumb($title);
+		$content = elgg_view("group-extender/forms/edit_tabs", array('entity' => $group));
+	} else {
+		$content = elgg_echo('groups:noaccess');
+	}
+	
+	$params = array(
+		'content' => $content,
+		'title' => $title,
+		'filter' => '',
+	);
+	$body = elgg_view_layout('content', $params);
+
+	echo elgg_view_page($title, $body);
+}
 	

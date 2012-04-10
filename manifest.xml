@@ -19,5 +19,11 @@
 		<priority>after</priority>
 		<plugin>groups</plugin>
 	</requires>
+	<requires>
+		<type>plugin</type>
+		<name>modules</name>
+		<version>1.8</version>
+		<comparison>ge</comparison>
+	</requires>
 	<admin_interface>simple</admin_interface>
 </plugin_manifest>

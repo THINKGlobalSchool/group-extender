@@ -2,12 +2,15 @@
 /**
  * Layout of the groups profile page
  *
+ * - Override displays the custom tabs interface
+ * 
  * @uses $vars['entity']
  */
 
 echo elgg_view('groups/profile/summary', $vars);
 if (group_gatekeeper(false)) {
-	echo elgg_view('groups/profile/improved_activity_module', $vars);
+	echo elgg_view('group-extender/group_tabs', $vars);
+	//echo elgg_view('groups/profile/improved_activity_module', $vars);
 } else {
 	echo elgg_view('groups/profile/closed_membership');
 }
