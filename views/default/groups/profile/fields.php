@@ -1,6 +1,8 @@
 <?php
 /**
  * Group profile fields
+ * 
+ * - This custom view removes the name and description
  */
 
 $group = $vars['entity'];

@@ -1,76 +1,22 @@
 <?php
 /**
- * Typeahead Tags JS
+ * Group Extender JS
  * 
  * @package Group-Extender
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Jeff Tilson
- * @copyright THINK Global School 2010
+ * @copyright THINK Global School 2010 - 2012
  * @link http://www.thinkglobalschool.com/
  */
 ?>
 //<script>
 elgg.provide('elgg.groupextender');
+elgg.provide('elgg.groupextender.tabs');
 
+// General init
 elgg.groupextender.init = function() {
 	// Change handler for group navigator
-	$('#group-navigator-select').live('change', elgg.groupextender.switchGroup);
-
-	// Add a click handler for the tabs
-	//$('a.group-tools-item-link').live('click', elgg.groupextender.switchGroupToolsTab);
-
-	/** When ready, hack the divs
-	$(function() {
-			var groupToolsDiv = $('#groups-tools');
-			
-			groupToolsDiv.prepend('<ul id="group-tools-tabbed-nav" class="elgg-menu elgg-menu-filter elgg-menu-hz elgg-menu-filter-default"></ul>');
-	
-			// Unwrap divs
-			groupToolsDiv.children('li').each(function() {
-				// Add to nav
-				$(this).children('div.elgg-module').each(function() {
-					// Remove parent <li>'s
-					$(this).unwrap();
-					
-					// Hide the module
-					$(this).hide();
-
-					// Get title
-					var title = $('h3', this).html();
-					
-					// Get a code-friendly id for the modules (lowercase, spaces replaced with -)
-					var module_id = title.toLowerCase().replace(' ', '-');
-					module_id = module_id.replace(' ', '-');
-					
-					// Add the nav item	
-					$('#group-tools-tabbed-nav').append('<li class="group-tools-item"><a class="group-tools-item-link" href="#group-tools-' + module_id + '">' + title + '</a></li>');
-					// Add an id and class to the module
-					$(this).attr('id', 'group-tools-' + module_id);
-					$(this).addClass('group-tools-module');
-				});
-			});
-
-			// Fire the click handler for the first nav item
-			groupToolsDiv.find("ul#group-tools-tabbed-nav li:first-child a").click();
-	});
-	*/
-}
-
-// Click handler for group tools nav items
-elgg.groupextender.switchGroupToolsTab = function(event) {
-	// Hide all modules
-	$('.group-tools-module').hide();
-	
-	// Remove selected class
-	$('#group-tools-tabbed-nav').children("li").each(function() {$(this).removeClass('elgg-state-selected');});
-	
-	// Add selected class to this item
-	$(this).parent().addClass('elgg-state-selected');
-	
-	// Show the div (passed as href)
-	$($(this).attr('href')).show();
-	
-	event.preventDefault();
+	$(document).delegate('#group-navigator-select', 'change', elgg.groupextender.switchGroup);
 }
 
 // Change handler for group navigator select
@@ -79,4 +25,123 @@ elgg.groupextender.switchGroup = function(event) {
 	event.preventDefault();
 }
 
+// Tabs init
+elgg.groupextender.tabs.init = function() {
+	// Click handler for custom group tabs
+	$(document).delegate('.group-extender-tab-menu-item', 'click', elgg.groupextender.tabs.customTabClick);
+
+	// Click handler for subtype tab save
+	$(document).delegate('#group-extender-save-subtype-submit', 'click', elgg.groupextender.tabs.subtypeSaveClick);
+
+	// Click handler for static tab save
+	$(document).delegate('#group-extender-save-static-submit', 'click', elgg.groupextender.tabs.staticSaveClick);
+
+	// Set up submission dialog
+	$(".group-extender-lightbox").fancybox({
+		'onComplete': function() {
+			// Fix tinymce control
+			if (typeof(tinyMCE) !== 'undefined') {
+				tinyMCE.EditorManager.execCommand('mceAddControl', false, 'static-content');
+			}
+		},
+		'onCleanup': function() {
+			// Fix tinymce control
+			if (typeof(tinyMCE) !== 'undefined') {
+	    		tinyMCE.EditorManager.execCommand('mceRemoveControl', false, 'static-content');
+			}
+		}
+	});
+}
+
+// Click handler for group custom tabs
+elgg.groupextender.tabs.customTabClick = function(event) {
+	$('.group-extender-tab-menu-item').parent().removeClass('elgg-state-selected');
+	$(this).parent().addClass('elgg-state-selected');
+
+	$('.group-extender-tab-content-container').hide();
+	$($(this).attr('href')).show();
+	
+	event.preventDefault();
+}
+
+// Click handler for subtype tab save
+elgg.groupextender.tabs.subtypeSaveClick = function(event) {
+	// Get form inputs
+	var $inputs = $("#group-extender-edit-subtype-form :input");
+
+	var values = {};
+	$inputs.each(function() {
+		values[this.name] = $(this).val();
+	});
+	
+	var params = {};
+	params['subtype'] = values['tab_selected_subtype'];
+	
+	var $_this = $(this);
+	
+	$(this).replaceWith("<div class='elgg-ajax-loader' id='ge-loader'></div>");
+	
+	// Fire save action
+	elgg.action('groupextender/save_tab', {
+		data: {
+			tab_id: values['tab_id'],
+			tab_title: values['tab_title'],
+			group_guid: values['group_guid'],
+			tab_params: params,
+		},
+		success: function(data) {
+			if (data.status != -1) {
+				$.fancybox.close();
+			}
+			else $('#ge-loader').replaceWith($_this);
+		}
+	});
+	
+	event.preventDefault();
+}
+
+// Click handler for static tab save
+elgg.groupextender.tabs.staticSaveClick = function(event) {
+	// Get form inputs
+	var $inputs = $("#group-extender-edit-static-form :input");
+
+	var values = {};
+	$inputs.each(function() {
+		values[this.name] = $(this).val();
+	});
+
+	if (typeof(tinyMCE) !== 'undefined') {
+		var static_content = tinyMCE.get('static-content').getContent();
+		$("textarea#static-content").val(static_content);
+	} else {
+		var static_content = $("textarea#static-content").val();
+	}
+
+	var params = {};
+	params['static_content'] = static_content;
+	
+	var $_this = $(this);
+	
+	$(this).replaceWith("<div class='elgg-ajax-loader' id='ge-loader'></div>");
+	
+	// Fire save action
+	elgg.action('groupextender/save_tab', {
+		data: {
+			tab_id: values['tab_id'],
+			tab_title: values['tab_title'],
+			group_guid: values['group_guid'],
+			tab_params: params,
+		},
+		success: function(data) {
+			if (data.status != -1) {
+				$.fancybox.close();
+			}
+			else $('#ge-loader').replaceWith($_this);
+		}
+	});
+	
+	event.preventDefault();
+}
+
 elgg.register_hook_handler('init', 'system', elgg.groupextender.init);
+elgg.register_hook_handler('init', 'system', elgg.groupextender.tabs.init);
