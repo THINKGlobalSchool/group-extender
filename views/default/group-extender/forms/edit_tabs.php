@@ -37,6 +37,7 @@ HTML;
 $editable_types = array(
 	'static',
 	'subtype',
+	'tagdashboard',
 );
 
 // Build tabs content

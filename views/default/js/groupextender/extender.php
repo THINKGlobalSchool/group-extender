@@ -33,6 +33,9 @@ elgg.groupextender.tabs.init = function() {
 	// Click handler for subtype tab save
 	$(document).delegate('#group-extender-save-subtype-submit', 'click', elgg.groupextender.tabs.subtypeSaveClick);
 
+	// Click handler for dashboard tab save
+	$(document).delegate('#group-extender-save-dashboard-submit', 'click', elgg.groupextender.tabs.dashboardSaveClick);
+
 	// Click handler for static tab save
 	$(document).delegate('#group-extender-save-static-submit', 'click', elgg.groupextender.tabs.staticSaveClick);
 
@@ -97,6 +100,42 @@ elgg.groupextender.tabs.subtypeSaveClick = function(event) {
 	
 	var params = {};
 	params['subtype'] = values['tab_selected_subtype'];
+	
+	var $_this = $(this);
+	
+	$(this).replaceWith("<div class='elgg-ajax-loader' id='ge-loader'></div>");
+	
+	// Fire save action
+	elgg.action('groupextender/save_tab', {
+		data: {
+			tab_id: values['tab_id'],
+			tab_title: values['tab_title'],
+			group_guid: values['group_guid'],
+			tab_params: params,
+		},
+		success: function(data) {
+			if (data.status != -1) {
+				$.fancybox.close();
+			}
+			else $('#ge-loader').replaceWith($_this);
+		}
+	});
+	
+	event.preventDefault();
+}
+
+// Click handler for subtype tab save
+elgg.groupextender.tabs.dashboardSaveClick = function(event) {
+	// Get form inputs
+	var $inputs = $("#group-extender-edit-dashboard-form :input");
+
+	var values = {};
+	$inputs.each(function() {
+		values[this.name] = $(this).val();
+	});
+	
+	var params = {};
+	params['custom_tags'] = values['tab_custom_tags'];
 	
 	var $_this = $(this);
 	

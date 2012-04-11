@@ -19,6 +19,8 @@ $group = elgg_extract('group', $vars);
 $tab_id = elgg_extract('tab_id', $vars);
 $tab = group_extender_get_tab_by_id($group, $tab_id);
 
+$custom = string_to_tag_array($tab['params']['custom_tags']);
+
 // Get subtypes
 $subtypes = tagdashboards_get_entity_subtypes_from_metadata(array(
 	'container_guid' => $group->guid,
@@ -28,7 +30,7 @@ $subtypes = tagdashboards_get_entity_subtypes_from_metadata(array(
 $td_type_input = elgg_view('input/hidden', array(
 	'name' => 'type', 
 	'id' => 'type', 
-	'value' => 'group',
+	'value' => 'custom',
 ));
 
 $td_subtypes_input = elgg_view('input/hidden', array(
@@ -37,10 +39,16 @@ $td_subtypes_input = elgg_view('input/hidden', array(
 	'value' => json_encode($subtypes)
 ));
 
+$td_custom_input = elgg_view('input/hidden', array(
+	'name' => 'custom_tags',
+	'id' => 'custom_tags',
+	'value' => json_encode($custom)
+));
+
 $td_search_input = elgg_view('input/hidden', array(
 	'name' => 'search', 
 	'id' => 'search', 
-	'value' => $tag_portfolio,
+	'value' => $asd,
 ));
 
 $td_container_guid_input = elgg_view('input/hidden', array(
@@ -56,6 +64,7 @@ $content .= <<<HTML
 			$td_subtypes_input
 			$td_search_input
 			$td_container_guid_input
+			$td_custom_input
 		</div>
 		<div class='tagdashboards-content-container'></div>
 	</div>
