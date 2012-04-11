@@ -40,6 +40,7 @@ $editable_types = array(
 );
 
 // Build tabs content
+$i = 0;
 foreach ($group_tabs as $uid => $tab) {
 
 	$tab_title = $group_tabs[$uid]['title'];
@@ -68,15 +69,41 @@ foreach ($group_tabs as $uid => $tab) {
 			'href' => $delete_url,
 		));
 	}
+	
+	$move_url = "action/groupextender/move_tab?group_guid={$group->guid}&tab_id={$uid}";
+	
+	$up_url = elgg_add_action_tokens_to_url($move_url . "&priority=" . ($tab_priority - 1));
+	$down_url = elgg_add_action_tokens_to_url($move_url . "&priority=" . ($tab_priority + 1));
+	
+	$up_link = elgg_view('output/url', array(
+		'text' => elgg_echo('group-extender:label:up'),
+		'href' => $up_url,
+	));
+	
+	$down_link = "&nbsp;" . elgg_view('output/url', array(
+		'text' => elgg_echo('group-extender:label:down'),
+		'href' => $down_url,
+	));
+	
+	// Add 'down' link
+	if ($i == 0) {
+		$move_links = $down_link;
+	} else if ($i + 1 == count($group_tabs)) { // Add 'up' link
+		$move_links = $up_link;
+	} else { // Add both down and up
+		$move_links = $down_link . " " .  $up_link;
+	}
 
 	$current_tabs .= <<<HTML
 		<tr>
 			<td>$tab_type_text</td>
 			<td>$tab_title</td>
-			<td>$tab_priority</td>
+			<td class='group-extender-tab-priority'>$tab_priority <span style='float: right;'>$move_links</span></td>
 			<td class='group-extender-tab-actions'>$actions</td>
 		</tr>
 HTML;
+
+	$i++;
 }
 
 $current_tabs .= "</tbody></table>";

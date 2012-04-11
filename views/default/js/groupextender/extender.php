@@ -61,7 +61,28 @@ elgg.groupextender.tabs.customTabClick = function(event) {
 	$('.group-extender-tab-content-container').hide();
 	$($(this).attr('href')).show();
 	
+	// Trigger a hook to watch for tab changes
+	var params = {
+		target_id: $(this).attr('href'),
+		source: $(this)
+	};
+	
+	elgg.trigger_hook('groupextender', 'tab_clicked', params);
+	
 	event.preventDefault();
+}
+
+// Hook into the tab_clicked hook and perform extra processing for custom search tabs
+elgg.groupextender.tabs.customSearchTabClicked = function(hook, type, params, options) {
+	// @TODO this will change when we have multple searches (probably)
+	if ($(params.target_id).find('.googlesearch-module').length) {
+		// If we have a googlesearch module, fire the description positioner.. this is hacky..
+		$('.googlesearch-module').resize(function(event) {
+			if ($('.googlesearch-desc').is(':visible')) {
+				$('.googlesearch-desc').hide();
+			}
+		});
+	}
 }
 
 // Click handler for subtype tab save
@@ -145,3 +166,4 @@ elgg.groupextender.tabs.staticSaveClick = function(event) {
 
 elgg.register_hook_handler('init', 'system', elgg.groupextender.init);
 elgg.register_hook_handler('init', 'system', elgg.groupextender.tabs.init);
+elgg.register_hook_handler('groupextender', 'tab_clicked', elgg.groupextender.tabs.customSearchTabClicked);

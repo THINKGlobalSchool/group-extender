@@ -48,6 +48,7 @@ function group_extender_init() {
 	$action_base = elgg_get_plugins_path() . 'group-extender/actions/group-extender';
 	elgg_register_action("groupextender/save_tab", "$action_base/save_tab.php");
 	elgg_register_action("groupextender/delete_tab", "$action_base/delete_tab.php");
+	elgg_register_action("groupextender/move_tab", "$action_base/move_tab.php");
 	
 	// Whitelist ajax views
 	elgg_register_ajax_view('group-extender/modules/activity');

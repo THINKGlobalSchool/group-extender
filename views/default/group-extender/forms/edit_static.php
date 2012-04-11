@@ -78,6 +78,6 @@ HTML;
 	));
 
 	echo elgg_view_module('info', elgg_echo('group-extender:label:edittab'), $subtype_form, array(
-		'class' => 'group-extender-tab-form-module',
+		'class' => 'group-extender-tab-form-module group-extender-tab-form-static',
 	));
 }

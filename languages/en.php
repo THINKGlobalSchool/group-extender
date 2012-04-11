@@ -30,6 +30,8 @@ $english = array(
 	'group-extender:label:edittab' => 'Edit Tab',
 	'group-extender:label:showsubtype' => 'Display Content',
 	'group-extender:label:noresults' => 'No Results',
+	'group-extender:label:up' => 'Move Up',
+	'group-extender:label:down' => 'Move Down',
 	
 	// Tab labels
 	'group-extender:tab:activity' => 'Activity',
@@ -41,10 +43,12 @@ $english = array(
 	// Messages
 	'group-extender:error:invalidgroup' => 'Invalid Group',
 	'group-extender:error:invalidtab' => 'Invalid Tab',
+	'group-extender:error:invalidpriority' => 'Invalid Priority',
 	'group-extender:error:googlesearch' => 'Google search is not enabled for this group',
 	'group-extender:error:savetab' => 'There was an error saving the group tab',
 	'group-extender:success:savetab' => 'Successfully saved group tab',
 	'group-extender:success:deletetab' => 'Successfully deleted tab',
+	'group-extender:success:movetab' => 'Successfully moved tab',
 );
 
 add_translation('en',$english);

@@ -15,7 +15,17 @@ table.group-extender-edit-tab-table td.group-extender-tab-actions {
 	font-size: 85%;
 }
 
+table.group-extender-edit-tab-table td.group-extender-tab-priority a {
+	font-size: 85%;
+}
+
+
 .group-extender-tab-form-module {
 	width: 400px;
 	min-height: 200px;
+}
+
+.group-extender-tab-form-static {
+	width: 650px;
+	min-height: 350px;
 }
