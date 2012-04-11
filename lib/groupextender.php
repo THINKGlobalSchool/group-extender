@@ -212,6 +212,7 @@ function group_extender_get_group_subtypes($group) {
 		'submissionannotationfile',
 		'ta_sticky_note',
 		'thewire',
+		'batch',
 		'tidypics_batch',
 		'todosubmission',
 		'todosubmissionfile',
