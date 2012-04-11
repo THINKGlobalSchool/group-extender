@@ -24,4 +24,8 @@ $content = elgg_list_river(array(
 	'wheres' => array("(e1.container_guid = $group->guid || ec.container_guid = $group->guid)"),
 ));
 
-echo $content;
+if (!$content) {
+	echo "<h3 class='center'>" . elgg_echo('group-extender:label:noresults') . "</h3>"; 
+} else {
+	echo $content;
+}
