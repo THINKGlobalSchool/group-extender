@@ -155,6 +155,29 @@ function group_extender_reprioritize_tabs(&$tabs) {
 }
 
 /**
+ * Helper function to change the priority of a tab
+ */
+function group_extender_change_tab_priority($group, $tab_id, $priority) {
+	$current_tabs = group_extender_get_tabs($group);
+	$change_tab = $current_tabs[$tab_id];
+
+	$priority = (int)$priority;
+
+	foreach ($current_tabs as $uid => $tab) {
+		if ($tab['priority'] == $priority) {
+			// Swap priority
+			$current_tabs[$uid]['priority'] = $change_tab['priority'];
+		}
+		if ($uid == $tab_id) {
+			// Set new priority
+			$current_tabs[$tab_id]['priority'] = $priority;
+		}
+	} 
+
+	$group->custom_tabs = serialize($current_tabs);
+}
+
+/**
  * Get available tab types
  * 
  * @return array
@@ -190,7 +213,7 @@ function group_extender_get_group_subtypes($group) {
 	// @TODO This isn't cool at all.. for the same reason we have an admin area for tagdashboards
 	// theres no way to get a list of entity subtypes that are enabled for a group..
 
-	// Set up some exceptions
+	// Set up some exceptions @TODO change this to whitelist
 	$exceptions = array(
 		'achievement',
 		'custommenu',
@@ -222,7 +245,13 @@ function group_extender_get_group_subtypes($group) {
 		'sitepages_page', 
 		'page', 
 		'test_subtype',
-		'site'
+		'site',
+		'sitemessage',
+		'ubertag',
+		'shared_access',
+		'kaltura_video',
+		'resourcerequest',
+		'resourcerequesttype',
 	);
 
 	// Allow exceptions to be modified

@@ -31,7 +31,7 @@ foreach ($group_tabs as $uid => $tab) {
 		'href' => "#groupextender-tab-{$uid}",
 		'priority' => $priority,
 		'item_class' => $default ? 'elgg-state-selected' : '',
-		'class' => 'group-extender-tab-menu-item',
+		'class' => "group-extender-tab-menu-item",
 	));
 	
 	$display = !$default ? "style='display: none;'" : '';
