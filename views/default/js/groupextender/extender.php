@@ -38,6 +38,15 @@ elgg.groupextender.tabs.init = function() {
 
 	// Click handler for static tab save
 	$(document).delegate('#group-extender-save-static-submit', 'click', elgg.groupextender.tabs.staticSaveClick);
+	
+	// Click handler for activity tab save
+	$(document).delegate('#group-extender-save-activity-submit', 'click', elgg.groupextender.tabs.activitySaveClick);
+	
+	// Click handler for customsearch tab save
+	$(document).delegate('#group-extender-save-customsearch-submit', 'click', elgg.groupextender.tabs.customsearchSaveClick);
+	
+	// Click handler for move up/down links
+	$(document).delegate('.group-extender-move-link', 'click', elgg.groupextender.tabs.moveLinkClick);
 
 	// Set up submission dialog
 	$(".group-extender-lightbox").fancybox({
@@ -54,6 +63,18 @@ elgg.groupextender.tabs.init = function() {
 			}
 		}
 	});
+}
+
+// Teardown function
+elgg.groupextender.tabs.destroy = function() {
+	// Undelegate events
+	$(document).undelegate('.group-extender-tab-menu-item', 'click');
+	$(document).undelegate('#group-extender-save-subtype-submit', 'click');
+	$(document).undelegate('#group-extender-save-dashboard-submit', 'click');
+	$(document).undelegate('#group-extender-save-static-submit', 'click');
+	$(document).undelegate('#group-extender-save-activity-submit', 'click');
+	$(document).undelegate('#group-extender-save-customsearch-submit', 'click');
+	$(document).undelegate('.group-extender-move-link', 'click');
 }
 
 // Click handler for group custom tabs
@@ -116,6 +137,7 @@ elgg.groupextender.tabs.subtypeSaveClick = function(event) {
 		success: function(data) {
 			if (data.status != -1) {
 				$.fancybox.close();
+				elgg.groupextender.tabs.refreshCurrentTabs(values['group_guid']);
 			}
 			else $('#ge-loader').replaceWith($_this);
 		}
@@ -152,6 +174,7 @@ elgg.groupextender.tabs.dashboardSaveClick = function(event) {
 		success: function(data) {
 			if (data.status != -1) {
 				$.fancybox.close();
+				elgg.groupextender.tabs.refreshCurrentTabs(values['group_guid']);
 			}
 			else $('#ge-loader').replaceWith($_this);
 		}
@@ -195,12 +218,119 @@ elgg.groupextender.tabs.staticSaveClick = function(event) {
 		success: function(data) {
 			if (data.status != -1) {
 				$.fancybox.close();
+				elgg.groupextender.tabs.refreshCurrentTabs(values['group_guid']);
 			}
 			else $('#ge-loader').replaceWith($_this);
 		}
 	});
 	
 	event.preventDefault();
+}
+
+// Click handler for activity tab save
+elgg.groupextender.tabs.activitySaveClick = function(event) {
+	// Get form inputs
+	var $inputs = $("#group-extender-edit-activity-form :input");
+
+	var values = {};
+	$inputs.each(function() {
+		values[this.name] = $(this).val();
+	});
+
+	var $_this = $(this);
+	
+	$(this).replaceWith("<div class='elgg-ajax-loader' id='ge-loader'></div>");
+	
+	// Fire save action
+	elgg.action('groupextender/save_tab', {
+		data: {
+			tab_id: values['tab_id'],
+			tab_title: values['tab_title'],
+			group_guid: values['group_guid'],
+		},
+		success: function(data) {
+			if (data.status != -1) {
+				$.fancybox.close();
+				elgg.groupextender.tabs.refreshCurrentTabs(values['group_guid']);
+			}
+			else $('#ge-loader').replaceWith($_this);
+		}
+	});
+	
+	event.preventDefault();
+}
+
+// Click handler for customsearch tab save
+elgg.groupextender.tabs.customsearchSaveClick = function(event) {
+	// Get form inputs
+	var $inputs = $("#group-extender-edit-customsearch-form :input");
+
+	var values = {};
+	$inputs.each(function() {
+		values[this.name] = $(this).val();
+	});
+
+	var $_this = $(this);
+	
+	$(this).replaceWith("<div class='elgg-ajax-loader' id='ge-loader'></div>");
+	
+	// Fire save action
+	elgg.action('groupextender/save_tab', {
+		data: {
+			tab_id: values['tab_id'],
+			tab_title: values['tab_title'],
+			group_guid: values['group_guid'],
+		},
+		success: function(data) {
+			if (data.status != -1) {
+				$.fancybox.close();
+				elgg.groupextender.tabs.refreshCurrentTabs(values['group_guid']);
+			}
+			else $('#ge-loader').replaceWith($_this);
+		}
+	});
+	
+	event.preventDefault();
+}
+
+// Click handler for move up/down links
+elgg.groupextender.tabs.moveLinkClick = function(event) {
+	var action_url = $(this).attr('href');
+
+	var $_this = $(this);
+	
+	var group_guid = elgg.groupextender.tabs.extractParamByName(action_url, 'group_guid');
+	
+	$(this).replaceWith("<span id='ge-loader'>" + $(this).html() + "</span>");
+	
+	// Fire move action
+	elgg.action(action_url, {
+		data: {},
+		success: function(data) {
+			if (data.status != -1) {
+				elgg.groupextender.tabs.refreshCurrentTabs(group_guid);
+			}
+			else $('#ge-loader').replaceWith($_this);
+		}
+	});
+	
+	event.preventDefault();
+}
+
+// Helper function to refresh the current tabs form
+elgg.groupextender.tabs.refreshCurrentTabs = function(group_guid) {
+	var url = elgg.normalize_url('ajax/view/group-extender/forms/current_tabs?group_guid=' + group_guid);
+	
+	$("#group-extender-current-tabs-form").load(url, function() {
+		elgg.groupextender.tabs.destroy();
+		elgg.groupextender.tabs.init();
+	});
+}
+
+// Helper function to extract querystring values
+elgg.groupextender.tabs.extractParamByName = function(string, name) {
+    var match = RegExp('[?&]' + name + '=([^&]*)').exec(string);
+    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
 }
 
 elgg.register_hook_handler('init', 'system', elgg.groupextender.init);

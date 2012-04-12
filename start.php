@@ -8,6 +8,9 @@
  * @copyright THINK Global School 2010 - 2012
  * @link http://www.thinkglobalschool.com/
  * 
+ * @TODO
+ * - DRY up the edit forms
+ * - Add tab params at creation time
  */
 
 // Register init
@@ -56,6 +59,9 @@ function group_extender_init() {
 	elgg_register_ajax_view('group-extender/forms/edit_subtype');
 	elgg_register_ajax_view('group-extender/forms/edit_static');
 	elgg_register_ajax_view('group-extender/forms/edit_tagdashboard');
+	elgg_register_ajax_view('group-extender/forms/edit_activity');
+	elgg_register_ajax_view('group-extender/forms/edit_customsearch');
+	elgg_register_ajax_view('group-extender/forms/current_tabs');
 }
 
 /**
