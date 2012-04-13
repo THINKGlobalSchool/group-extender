@@ -20,9 +20,17 @@ table.group-extender-edit-tab-table td.group-extender-tab-priority span#ge-loade
 	font-size: 85%;
 }
 
-.group-extender-tab-form-module {
+.group-extender-tab-form-activity,
+.group-extender-tab-form-customsearch,
+.group-extender-tab-form-tagdashboard,
+.group-extender-tab-form-subtype {
 	width: 400px;
-	min-height: 100px;
+	height: auto;
+}
+
+.group-extender-tab-form-new {
+	width: 100%;
+	height: auto;
 }
 
 .group-extender-tab-form-static {

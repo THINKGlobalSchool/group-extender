@@ -56,7 +56,7 @@ foreach ($group_tabs as $uid => $tab) {
 	$actions = elgg_view('output/url', array(
 		'text' => elgg_echo('edit'),
 		'class' => 'group-extender-lightbox',
-		'href' => "ajax/view/group-extender/forms/edit_{$tab_type}?group_guid={$group->guid}&tab_id={$uid}",
+		'href' => "ajax/view/group-extender/forms/edit_tab?group_guid={$group->guid}&tab_id={$uid}",
 	)) . "&nbsp;";
 	
 	// Only show delete if there is more than one tab
@@ -64,6 +64,7 @@ foreach ($group_tabs as $uid => $tab) {
 		$delete_url = elgg_add_action_tokens_to_url("action/groupextender/delete_tab?tab_id={$uid}&group_guid={$group->guid}");
 		
 		$actions .= elgg_view('output/url', array(
+			'class' => 'group-extender-delete-link',
 			'text' => elgg_echo('delete'),
 			'href' => $delete_url,
 		));
@@ -87,7 +88,9 @@ foreach ($group_tabs as $uid => $tab) {
 	));
 	
 	// Add 'down' link
-	if ($i == 0) {
+	if (count($group_tabs) == 1) {
+		// Nadda.
+	} else if ($i == 0) {
 		$move_links = $down_link;
 	} else if ($i + 1 == count($group_tabs)) { // Add 'up' link
 		$move_links = $up_link;

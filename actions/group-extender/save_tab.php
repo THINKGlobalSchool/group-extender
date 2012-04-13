@@ -22,12 +22,20 @@ if (!elgg_instanceof($group, 'group') || !$group->canEdit()) {
 	forward(REFERER);
 }
 
+// Set default title if not set
+if (!$tab_title) {
+	$tab_title = elgg_echo("group-extender:tab:{$tab_type}");
+}
+
+// If we've got extra parameters, add them to the tab as well
+$add_param = get_input('add_param');
+if ($add_param) {
+	$tab_params[$add_param] = get_input($add_param);
+}
+
 // Check for tab id
 if ($tab_id) {	// Updating tab
 	$current_tabs = group_extender_get_tabs($group);
-	
-	// Get tab extended params
-	$tab_params = get_input('tab_params');
 	
 	// Try to grab tab
 	$tab = group_extender_get_tab_by_id($group, $tab_id);
@@ -47,11 +55,17 @@ if ($tab_id) {	// Updating tab
 	}
 	
 } else { // Adding new tab
-	$uid = group_extender_add_tab($group, array(
+	// Create new tab
+	$tab = array(
 		'title' => $tab_title,
 		'type' => $tab_type,
 		'priority' => group_extender_get_highest_tab_priority($group) +1,
-	));
+	);
+	
+	$tab['params'] = $tab_params;
+	
+	// Add to the group
+	$uid = group_extender_add_tab($group, $tab);
 }
 
 // All good, display success and return

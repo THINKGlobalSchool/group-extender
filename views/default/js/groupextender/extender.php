@@ -30,23 +30,17 @@ elgg.groupextender.tabs.init = function() {
 	// Click handler for custom group tabs
 	$(document).delegate('.group-extender-tab-menu-item', 'click', elgg.groupextender.tabs.customTabClick);
 
-	// Click handler for subtype tab save
-	$(document).delegate('#group-extender-save-subtype-submit', 'click', elgg.groupextender.tabs.subtypeSaveClick);
+	// Click handler for all tab save submit inputs
+	$(document).delegate('#group-extender-tab-save-submit', 'click', elgg.groupextender.tabs.tabSaveClick);
 
-	// Click handler for dashboard tab save
-	$(document).delegate('#group-extender-save-dashboard-submit', 'click', elgg.groupextender.tabs.dashboardSaveClick);
-
-	// Click handler for static tab save
-	$(document).delegate('#group-extender-save-static-submit', 'click', elgg.groupextender.tabs.staticSaveClick);
-	
-	// Click handler for activity tab save
-	$(document).delegate('#group-extender-save-activity-submit', 'click', elgg.groupextender.tabs.activitySaveClick);
-	
-	// Click handler for customsearch tab save
-	$(document).delegate('#group-extender-save-customsearch-submit', 'click', elgg.groupextender.tabs.customsearchSaveClick);
-	
 	// Click handler for move up/down links
-	$(document).delegate('.group-extender-move-link', 'click', elgg.groupextender.tabs.moveLinkClick);
+	$(document).delegate('.group-extender-move-link', 'click', elgg.groupextender.tabs.refreshableClick);
+
+	// Click handler for delete links
+	$(document).delegate('.group-extender-delete-link', 'click', elgg.groupextender.tabs.refreshableClick);
+	
+	// Change handler for tab type change
+	$(document).delegate('#group-extender-tab-type-select', 'change', elgg.groupextender.tabs.tabTypeChange);
 
 	// Set up submission dialog
 	$(".group-extender-lightbox").fancybox({
@@ -69,12 +63,10 @@ elgg.groupextender.tabs.init = function() {
 elgg.groupextender.tabs.destroy = function() {
 	// Undelegate events
 	$(document).undelegate('.group-extender-tab-menu-item', 'click');
-	$(document).undelegate('#group-extender-save-subtype-submit', 'click');
-	$(document).undelegate('#group-extender-save-dashboard-submit', 'click');
-	$(document).undelegate('#group-extender-save-static-submit', 'click');
-	$(document).undelegate('#group-extender-save-activity-submit', 'click');
-	$(document).undelegate('#group-extender-save-customsearch-submit', 'click');
+	$(document).undelegate('#group-extender-tab-save-submit', 'click');
 	$(document).undelegate('.group-extender-move-link', 'click');
+	$(document).undelegate('.group-extender-delete-link', 'click');
+	$(document).undelegate('#group-extender-tab-type-select', 'change');
 }
 
 // Click handler for group custom tabs
@@ -91,12 +83,12 @@ elgg.groupextender.tabs.customTabClick = function(event) {
 		source: $(this)
 	};
 	
-	elgg.trigger_hook('groupextender', 'tab_clicked', params);
+	elgg.trigger_hook('geTabClicked', 'clicked', params);
 	
 	event.preventDefault();
 }
 
-// Hook into the tab_clicked hook and perform extra processing for custom search tabs
+// Hook into the clicked hook and perform extra processing for custom search tabs
 elgg.groupextender.tabs.customSearchTabClicked = function(hook, type, params, options) {
 	// @TODO this will change when we have multple searches (probably)
 	if ($(params.target_id).find('.googlesearch-module').length) {
@@ -109,84 +101,46 @@ elgg.groupextender.tabs.customSearchTabClicked = function(hook, type, params, op
 	}
 }
 
-// Click handler for subtype tab save
-elgg.groupextender.tabs.subtypeSaveClick = function(event) {
+// Master click handler for all save events
+elgg.groupextender.tabs.tabSaveClick = function(event) {
 	// Get form inputs
-	var $inputs = $("#group-extender-edit-subtype-form :input");
-
+	var $form = $(this).closest('form');
 	var values = {};
-	$inputs.each(function() {
-		values[this.name] = $(this).val();
+	$.each($form.serializeArray(), function(i, field) {
+	    values[field.name] = field.value;
 	});
-	
-	var params = {};
-	params['subtype'] = values['tab_selected_subtype'];
-	
+
+	// Allow modifications of form values (if there are extended values)
+	values = elgg.trigger_hook('geGetFormValues', 'values', {'add_param' : values['add_param']}, values);
+
 	var $_this = $(this);
 	
 	$(this).replaceWith("<div class='elgg-ajax-loader' id='ge-loader'></div>");
-	
+
 	// Fire save action
 	elgg.action('groupextender/save_tab', {
-		data: {
-			tab_id: values['tab_id'],
-			tab_title: values['tab_title'],
-			group_guid: values['group_guid'],
-			tab_params: params,
-		},
+		data: values,
 		success: function(data) {
 			if (data.status != -1) {
+				// Close if we're in a fancybox
 				$.fancybox.close();
+
 				elgg.groupextender.tabs.refreshCurrentTabs(values['group_guid']);
+				
+				// Trigger a hook to provide extra cleanup after successful save
+				elgg.trigger_hook('geTabSaved', 'cleanup', {'add_param' : values['add_param']}, values);
 			}
-			else $('#ge-loader').replaceWith($_this);
+			$('#ge-loader').replaceWith($_this);
 		}
 	});
-	
-	event.preventDefault();
-}
 
-// Click handler for subtype tab save
-elgg.groupextender.tabs.dashboardSaveClick = function(event) {
-	// Get form inputs
-	var $inputs = $("#group-extender-edit-dashboard-form :input");
-
-	var values = {};
-	$inputs.each(function() {
-		values[this.name] = $(this).val();
-	});
-	
-	var params = {};
-	params['custom_tags'] = values['tab_custom_tags'];
-	
-	var $_this = $(this);
-	
-	$(this).replaceWith("<div class='elgg-ajax-loader' id='ge-loader'></div>");
-	
-	// Fire save action
-	elgg.action('groupextender/save_tab', {
-		data: {
-			tab_id: values['tab_id'],
-			tab_title: values['tab_title'],
-			group_guid: values['group_guid'],
-			tab_params: params,
-		},
-		success: function(data) {
-			if (data.status != -1) {
-				$.fancybox.close();
-				elgg.groupextender.tabs.refreshCurrentTabs(values['group_guid']);
-			}
-			else $('#ge-loader').replaceWith($_this);
-		}
-	});
-	
 	event.preventDefault();
 }
 
 // Click handler for static tab save
 elgg.groupextender.tabs.staticSaveClick = function(event) {
 	// Get form inputs
-	var $inputs = $("#group-extender-edit-static-form :input");
+	var $inputs = $("#group-extender-tab-edit-form-static :input");
 
 	var values = {};
 	$inputs.each(function() {
@@ -227,74 +181,8 @@ elgg.groupextender.tabs.staticSaveClick = function(event) {
 	event.preventDefault();
 }
 
-// Click handler for activity tab save
-elgg.groupextender.tabs.activitySaveClick = function(event) {
-	// Get form inputs
-	var $inputs = $("#group-extender-edit-activity-form :input");
-
-	var values = {};
-	$inputs.each(function() {
-		values[this.name] = $(this).val();
-	});
-
-	var $_this = $(this);
-	
-	$(this).replaceWith("<div class='elgg-ajax-loader' id='ge-loader'></div>");
-	
-	// Fire save action
-	elgg.action('groupextender/save_tab', {
-		data: {
-			tab_id: values['tab_id'],
-			tab_title: values['tab_title'],
-			group_guid: values['group_guid'],
-		},
-		success: function(data) {
-			if (data.status != -1) {
-				$.fancybox.close();
-				elgg.groupextender.tabs.refreshCurrentTabs(values['group_guid']);
-			}
-			else $('#ge-loader').replaceWith($_this);
-		}
-	});
-	
-	event.preventDefault();
-}
-
-// Click handler for customsearch tab save
-elgg.groupextender.tabs.customsearchSaveClick = function(event) {
-	// Get form inputs
-	var $inputs = $("#group-extender-edit-customsearch-form :input");
-
-	var values = {};
-	$inputs.each(function() {
-		values[this.name] = $(this).val();
-	});
-
-	var $_this = $(this);
-	
-	$(this).replaceWith("<div class='elgg-ajax-loader' id='ge-loader'></div>");
-	
-	// Fire save action
-	elgg.action('groupextender/save_tab', {
-		data: {
-			tab_id: values['tab_id'],
-			tab_title: values['tab_title'],
-			group_guid: values['group_guid'],
-		},
-		success: function(data) {
-			if (data.status != -1) {
-				$.fancybox.close();
-				elgg.groupextender.tabs.refreshCurrentTabs(values['group_guid']);
-			}
-			else $('#ge-loader').replaceWith($_this);
-		}
-	});
-	
-	event.preventDefault();
-}
-
-// Click handler for move up/down links
-elgg.groupextender.tabs.moveLinkClick = function(event) {
+// Click handler for refreshable clicks
+elgg.groupextender.tabs.refreshableClick = function(event) {
 	var action_url = $(this).attr('href');
 
 	var $_this = $(this);
@@ -317,6 +205,98 @@ elgg.groupextender.tabs.moveLinkClick = function(event) {
 	event.preventDefault();
 }
 
+// Click handler for refreshable clicks
+elgg.groupextender.tabs.tabTypeChange = function(event) {
+	var type = $(this).val();
+	
+	// Params for tab type change hook
+	var params = {
+		source: $(this),
+		tab_type: type
+	};
+	
+	// Allow further customization of tab type content on change
+	elgg.trigger_hook('geTabTypeChanged', 'geChanged', params);
+	
+	var url = elgg.normalize_url('ajax/view/group-extender/forms/edit_' + type);
+	
+	var $container = $('#group-extender-extended-type-content');
+	
+	$container.html("<div class='elgg-ajax-loader'></div>");
+	
+	$container.load(url, function() {
+		// Params for tab type loaded hook
+		var params = {
+			target_id: $container.attr('id'),
+			source: $(this)
+		};
+		
+		// Allow further customization of tab type content on load
+		elgg.trigger_hook('geTabTypeLoaded', type, params);
+	});
+	
+	event.preventDefault();
+}
+
+// Hook handler for tab type select for static content
+elgg.groupextender.tabs.tagTypeChanged = function(hook, type, params, options) {
+	if (params.tab_type != 'static') {
+		// Fix tinymce control
+		if (typeof(tinyMCE) !== 'undefined') {
+    		tinyMCE.EditorManager.execCommand('mceRemoveControl', false, 'static-content');
+		}
+	}
+	return options;
+}
+
+// Hook handler for tab type changed
+elgg.groupextender.tabs.staticContentSelected = function(hook, type, params, options) {
+	if (type == 'static') {
+		// Fix tinymce control
+		if (typeof(tinyMCE) !== 'undefined') {
+			tinyMCE.EditorManager.execCommand('mceAddControl', false, 'static-content');
+		}
+	}
+	return options;
+}
+
+// Hook handler for customizing the form value when submitting static content
+elgg.groupextender.tabs.staticContentFormValue = function(hook, type, params, options) {
+	if (params['add_param'] == 'static_content') {
+		// Get static content value from tinymcecontrol
+		if (typeof(tinyMCE) !== 'undefined') {
+			var static_content = tinyMCE.get('static-content').getContent();
+			options['static_content'] = static_content;
+		}
+	}
+	return options;
+}
+
+
+// Hook handler for cleaning up any tinymce inputs after saving
+elgg.groupextender.tabs.staticContentCleanup = function(hook, type, params, options) {
+	if (params['add_param'] == 'static_content') {
+		// Cleanup tinymce
+		if (typeof(tinyMCE) !== 'undefined') {
+    		tinyMCE.EditorManager.execCommand('mceRemoveControl', false, 'static-content');
+		}
+	}
+	return options;
+}
+
+// Hook handler for cleaning up the new tab save form
+elgg.groupextender.tabs.newFormCleanup = function(hook, type, params, options) {
+	$new_content = $('#group-extender-extended-type-content');
+	
+	if ($new_content.length != 0) {
+		$new_content.html('');
+		$('select#group-extender-tab-type-select').val('activity');
+		$('#group-extender-tab-edit-form-new').find('input[name="tab_title"]').val('');
+	}
+	
+	return options;
+}
+
 // Helper function to refresh the current tabs form
 elgg.groupextender.tabs.refreshCurrentTabs = function(group_guid) {
 	var url = elgg.normalize_url('ajax/view/group-extender/forms/current_tabs?group_guid=' + group_guid);
@@ -335,4 +315,9 @@ elgg.groupextender.tabs.extractParamByName = function(string, name) {
 
 elgg.register_hook_handler('init', 'system', elgg.groupextender.init);
 elgg.register_hook_handler('init', 'system', elgg.groupextender.tabs.init);
-elgg.register_hook_handler('groupextender', 'tab_clicked', elgg.groupextender.tabs.customSearchTabClicked);
+elgg.register_hook_handler('geTabClicked', 'clicked', elgg.groupextender.tabs.customSearchTabClicked);
+elgg.register_hook_handler('geTabTypeChanged', 'geChanged', elgg.groupextender.tabs.tagTypeChanged);
+elgg.register_hook_handler('geTabTypeLoaded', 'static', elgg.groupextender.tabs.staticContentSelected);
+elgg.register_hook_handler('geGetFormValues', 'values', elgg.groupextender.tabs.staticContentFormValue);
+elgg.register_hook_handler('geTabSaved', 'cleanup', elgg.groupextender.tabs.staticContentCleanup);
+elgg.register_hook_handler('geTabSaved', 'cleanup', elgg.groupextender.tabs.newFormCleanup);
