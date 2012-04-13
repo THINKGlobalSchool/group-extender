@@ -9,8 +9,7 @@
  * @link http://www.thinkglobalschool.com/
  * 
  * @TODO
- * - DRY up the edit forms
- * - Add tab params at creation time
+ * - Add tab to edit group tabs to group edit area
  */
 
 // Register init
@@ -56,6 +55,7 @@ function group_extender_init() {
 	// Whitelist ajax views
 	elgg_register_ajax_view('group-extender/modules/activity');
 	elgg_register_ajax_view('group-extender/modules/subtype');
+	elgg_register_ajax_view('group-extender/forms/edit_tab');
 	elgg_register_ajax_view('group-extender/forms/edit_subtype');
 	elgg_register_ajax_view('group-extender/forms/edit_static');
 	elgg_register_ajax_view('group-extender/forms/edit_tagdashboard');
