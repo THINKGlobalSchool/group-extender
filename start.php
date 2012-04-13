@@ -38,14 +38,16 @@ function group_extender_init() {
 	// CSS
 	elgg_extend_view('css/elgg', 'css/groupextender/css');
 	
-	elgg_extend_view("groups/edit", "group-extender/edit_tabs_link", 400);
+	//elgg_extend_view("groups/edit", "group-extender/edit_tabs_link", 400);
+	
+	elgg_extend_view("groups/edit", "group-extender/forms/edit_tabs", 1000);
 
 	// Extend owner_block for easy group navigator
 	elgg_extend_view('page/elements/owner_block', 'group-extender/navigator', 499);
 	
 	// Fix group profile ECML
 	elgg_register_plugin_hook_handler('get_views', 'ecml', 'group_extender_ecml_views_hook');
-	
+
 	// Actions
 	$action_base = elgg_get_plugins_path() . 'group-extender/actions/group-extender';
 	elgg_register_action("groupextender/save_tab", "$action_base/save_tab.php");
@@ -84,7 +86,7 @@ function group_extender_page_handler($page) {
 		if ($page[0] == 'activity') {
 			groups_extender_handle_activity_page($page[1]);
 		} else if ($page[0] == 'edit' && $page[2] == 'tabs') {
-			groups_extender_handle_edit_tabs_page($page[1]);
+			//groups_extender_handle_edit_tabs_page($page[1]);
 		} else {
 			groups_page_handler($page);
 		}	
@@ -168,9 +170,8 @@ function groups_extender_handle_edit_tabs_page($guid) {
 /**
  * Parse ECML on group profiles
  */
-function group_extender_ecml_views_hook($hook, $entity_type, $return_value, $params) {
-	$return_value['groups/profile/fields'] = elgg_echo('groups:ecml:groupprofile');
+function group_extender_ecml_views_hook($hook, $type, $return, $params) {
+	$return['groups/profile/fields'] = elgg_echo('groups:ecml:groupprofile');
 
-	return $return_value;
+	return $return;
 }
-	
