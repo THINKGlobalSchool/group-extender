@@ -21,10 +21,34 @@ $show_type_input = elgg_view('input/dropdown', array(
 	'value' => $tab['params']['subtype'],
 ));
 
-// Hidden param input
-$param_hidden = elgg_view('input/hidden', array(
-	'name' => 'add_param',
+$tag_label = elgg_echo('group-extender:label:showtag');
+$tag_input = elgg_view('input/text', array(
+	'name' => 'tag',
+	'value' => $tab['params']['tag'],
+));
+
+// Hidden param inputs
+$param_subtype_hidden = elgg_view('input/hidden', array(
+	'name' => 'add_param[]',
 	'value' => 'subtype',
 ));
 
-echo "<div><label>$show_type_label</label><br />$show_type_input</div>$param_hidden";
+$param_tag_hidden = elgg_view('input/hidden', array(
+	'name' => 'add_param[]',
+	'value' => 'tag',
+));
+
+$content = <<<HTML
+	<div>
+		<label>$show_type_label</label><br />
+		$show_type_input
+	</div><br />
+	<div>
+		<label>$tag_label</label><br />
+		$tag_input
+	</div>
+	$param_tag_hidden
+	$param_subtype_hidden
+HTML;
+
+echo $content;

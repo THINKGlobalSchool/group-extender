@@ -110,8 +110,28 @@ elgg.groupextender.tabs.tabSaveClick = function(event) {
 	    values[field.name] = field.value;
 	});
 
+	// Could possible be more than one add_param input.. so get all of them
+	if ($form.find("input[name='add_param[]']").length > 0) {
+		var multiple_add_params = [];
+
+		// Grab and store each param
+		$form.find("input[name='add_param[]']").each(function() {
+			multiple_add_params.push($(this).val());
+		});
+		
+		// Set value
+		values['add_param'] = multiple_add_params;
+		
+		// Remove add_param[]
+		delete values['add_param[]'];
+	}
+	
+	var params = {
+		'add_param' : values['add_param']
+	};
+
 	// Allow modifications of form values (if there are extended values)
-	values = elgg.trigger_hook('geGetFormValues', 'values', {'add_param' : values['add_param']}, values);
+	values = elgg.trigger_hook('geGetFormValues', 'values', params, values);
 
 	var $_this = $(this);
 	

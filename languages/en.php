@@ -29,6 +29,7 @@ $english = array(
 	'group-extender:label:newtab' => 'New Tab',
 	'group-extender:label:edittab' => 'Edit Tab',
 	'group-extender:label:showsubtype' => 'Display Content',
+	'group-extender:label:showtag' => 'Restrict by tag (Optional)',
 	'group-extender:label:customtags' => 'Group by tags',
 	'group-extender:label:noresults' => 'No Results',
 	'group-extender:label:up' => 'Move Up',

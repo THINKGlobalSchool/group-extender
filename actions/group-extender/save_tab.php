@@ -29,8 +29,16 @@ if (!$tab_title) {
 
 // If we've got extra parameters, add them to the tab as well
 $add_param = get_input('add_param');
+
+
 if ($add_param) {
-	$tab_params[$add_param] = get_input($add_param);
+	if (is_array($add_param)) {
+		foreach($add_param as $foo => $param) {
+			$tab_params[$param] = get_input($param);
+		}
+	} else {
+		$tab_params[$add_param] = get_input($add_param);
+	}
 }
 
 // Check for tab id
