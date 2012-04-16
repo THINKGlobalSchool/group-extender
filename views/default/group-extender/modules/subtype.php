@@ -27,7 +27,12 @@ $options = array(
 	'full_view' => FALSE,
 );
 
-$content = elgg_list_entities($options);
+// If a tag is supplied, restrict it
+if (!empty($tab['params']['tag'])) {
+	$options['metadata_name_value_pairs'] = array('name' => 'tags', 'value' => $tab['params']['tag']);
+}
+
+$content = elgg_list_entities_from_metadata($options);
 
 if (!$content) {
 	echo "<h3 class='center'>" . elgg_echo('group-extender:label:noresults') . "</h3>"; 
