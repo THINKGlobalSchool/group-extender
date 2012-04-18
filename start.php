@@ -29,7 +29,7 @@ function group_extender_init() {
 	
 	// Register tabs css
 	$t_css = elgg_get_simplecache_url('css', 'groupextender/tabs');
-	elgg_register_simplecache_view('css/groupextender/tags');
+	elgg_register_simplecache_view('css/groupextender/tabs');
 	elgg_register_css('elgg.groupextender.tabs', $t_css);
 
 	// Register my own page handler
