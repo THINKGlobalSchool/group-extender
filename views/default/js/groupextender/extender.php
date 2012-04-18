@@ -15,14 +15,7 @@ elgg.provide('elgg.groupextender.tabs');
 
 // General init
 elgg.groupextender.init = function() {
-	// Change handler for group navigator
-	$(document).delegate('#group-navigator-select', 'change', elgg.groupextender.switchGroup);
-}
-
-// Change handler for group navigator select
-elgg.groupextender.switchGroup = function(event) {
-	window.location = $(this).val();
-	event.preventDefault();
+	//
 }
 
 // Tabs init
