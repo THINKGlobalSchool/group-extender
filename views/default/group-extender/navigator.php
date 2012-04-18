@@ -49,3 +49,13 @@ if (count($groups)) {
 $navigator_label = elgg_echo('group-extender:navigator');
 
 echo elgg_view_module('aside', $navigator_label, $navigator_content);
+echo <<<JAVASCRIPT
+	<script type='text/javascript'>
+		// Change handler for group navigator
+		$(document).delegate('#group-navigator-select', 'change', function() {
+			window.location = $(this).val();
+			event.preventDefault();
+		});
+	</script>
+JAVASCRIPT;
+?>
