@@ -34,6 +34,8 @@ $english = array(
 	'group-extender:label:noresults' => 'No Results',
 	'group-extender:label:up' => 'Move Up',
 	'group-extender:label:down' => 'Move Down',
+	'group-extender:label:searchrefresh' => 'You need to refresh the page to see the Google Custom Search',
+	'group-extender:label:clickrefresh' => 'Click here to refresh',
 	
 	// Tab labels
 	'group-extender:tab:activity' => 'Activity',
