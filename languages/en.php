@@ -19,7 +19,7 @@ $english = array(
 	
 	// Labels
 	'group-extender:label:editgrouptabs' => 'Edit Group Tabs',
-	'group-extender:label:type' => 'Type',
+	'group-extender:label:type' => 'Tab Type',
 	'group-extender:label:priority' => 'Priority',
 	'group-extender:label:title' => 'Title',
 	'group-extender:label:staticcontent' => 'Content',
@@ -38,9 +38,10 @@ $english = array(
 	// Tab labels
 	'group-extender:tab:activity' => 'Activity',
 	'group-extender:tab:customsearch' => 'Custom Search',
-	'group-extender:tab:subtype' => 'Subtypes',
+	'group-extender:tab:subtype' => 'Content Type',
 	'group-extender:tab:tagdashboard' => 'Tag Dashboard',
 	'group-extender:tab:static' => 'Static Content',
+	'group-extender:tab:admin' => 'Customize Tabs',
 	
 	// Messages
 	'group-extender:error:invalidgroup' => 'Invalid Group',
