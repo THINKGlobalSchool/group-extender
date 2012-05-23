@@ -13,7 +13,18 @@
 
 $group = elgg_extract('group', $vars);
 
-elgg_load_css('elgg.googlesearch');
-elgg_load_js('elgg.googlesearch');
+if (elgg_is_xhr()) {
+	echo "<br />";
+	echo elgg_view('output/text', array('value' => elgg_echo('group-extender:label:searchrefresh')));
+	echo "<br /><br />";
+	echo elgg_view('output/url', array(
+		'text' => elgg_echo('group-extender:label:clickrefresh'),
+		'href' => $group->getURL(),
+	));
+} else {
+	elgg_load_css('elgg.googlesearch');
+	elgg_load_js('elgg.googlesearch');
 
-echo elgg_view('googlesearch/group_search', array('group' => $group));
+	echo elgg_view('googlesearch/group_search', array('group' => $group));
+}
+
