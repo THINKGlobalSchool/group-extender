@@ -10,7 +10,12 @@
  * 
  */
 
+
 $group = elgg_get_page_owner_entity();
+
+if (!$group) {
+	$group = elgg_extract('group', $vars);
+}
 
 if (!$group || !$group->canEdit()) {
 	forward(REFERER);

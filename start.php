@@ -40,7 +40,7 @@ function group_extender_init() {
 	
 	//elgg_extend_view("groups/edit", "group-extender/edit_tabs_link", 400);
 	
-	elgg_extend_view("groups/edit", "group-extender/forms/edit_tabs", 1000);
+	//elgg_extend_view("groups/edit", "group-extender/forms/edit_tabs", 1000);
 
 	// Extend owner_block for easy group navigator
 	elgg_extend_view('page/elements/owner_block', 'group-extender/navigator', 499);
@@ -64,6 +64,7 @@ function group_extender_init() {
 	elgg_register_ajax_view('group-extender/forms/edit_activity');
 	elgg_register_ajax_view('group-extender/forms/edit_customsearch');
 	elgg_register_ajax_view('group-extender/forms/current_tabs');
+	elgg_register_ajax_view('group-extender/group_tabs');
 }
 
 /**

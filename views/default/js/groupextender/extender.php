@@ -25,6 +25,9 @@ elgg.groupextender.tabs.init = function() {
 
 	// Click handler for all tab save submit inputs
 	$(document).delegate('#group-extender-tab-save-submit', 'click', elgg.groupextender.tabs.tabSaveClick);
+	
+	// Click handler for refreshing group tabs
+	$(document).delegate('#group-extender-tab-refresh-submit', 'click', elgg.groupextender.tabs.tabRefreshClick);
 
 	// Click handler for move up/down links
 	$(document).delegate('.group-extender-move-link', 'click', elgg.groupextender.tabs.refreshableClick);
@@ -57,6 +60,7 @@ elgg.groupextender.tabs.destroy = function() {
 	// Undelegate events
 	$(document).undelegate('.group-extender-tab-menu-item', 'click');
 	$(document).undelegate('#group-extender-tab-save-submit', 'click');
+	$(document).undelegate('#group-extender-tab-refresh-submit', 'click');
 	$(document).undelegate('.group-extender-move-link', 'click');
 	$(document).undelegate('.group-extender-delete-link', 'click');
 	$(document).undelegate('#group-extender-tab-type-select', 'change');
@@ -145,6 +149,30 @@ elgg.groupextender.tabs.tabSaveClick = function(event) {
 			}
 			$('#ge-loader').replaceWith($_this);
 		}
+	});
+
+	event.preventDefault();
+}
+
+// Click handler for refresh tab click
+elgg.groupextender.tabs.tabRefreshClick = function(event) {
+	// Get form inputs
+	var $form = $(this).closest('form');
+	var values = {};
+	$.each($form.serializeArray(), function(i, field) {
+	    values[field.name] = field.value;
+	});
+	
+	var url = elgg.normalize_url('ajax/view/group-extender/group_tabs?group_guid=' + values['group_guid']);
+	
+	$("#group-extender-group-tabs").html("<div class='elgg-ajax-loader'></div>");
+	
+	$("#group-extender-group-tabs").load(url, function() {
+		elgg.groupextender.tabs.destroy();
+		elgg.groupextender.tabs.init();
+		
+		elgg.modules.genericmodule.init();
+		elgg.tagdashboards.init();
 	});
 
 	event.preventDefault();
