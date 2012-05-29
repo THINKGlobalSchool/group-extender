@@ -45,6 +45,8 @@ function group_extender_init() {
 	// Extend owner_block for easy group navigator
 	elgg_extend_view('page/elements/owner_block', 'group-extender/navigator', 499);
 	
+	elgg_extend_view('groups/edit', 'group-extender/group_tools_extra_js', 9999999999);
+	
 	// Fix group profile ECML
 	elgg_register_plugin_hook_handler('get_views', 'ecml', 'group_extender_ecml_views_hook');
 
