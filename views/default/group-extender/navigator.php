@@ -23,6 +23,7 @@ $groups = elgg_get_entities_from_relationship_count(array(
 	'relationship_guid' => elgg_get_logged_in_user_guid(),
 	'inverse_relationship' => FALSE,
 	'full_view' => FALSE,
+	'limit' => 0,
 ));
 
 if (count($groups)) {
