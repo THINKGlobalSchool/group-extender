@@ -47,6 +47,8 @@ function group_extender_init() {
 	
 	elgg_extend_view('groups/edit', 'group-extender/group_tools_extra_js', 9999999999);
 	
+	elgg_extend_view('groups/sidebar/find', 'group-extender/sidebar/find_name');
+	
 	// Fix group profile ECML
 	elgg_register_plugin_hook_handler('get_views', 'ecml', 'group_extender_ecml_views_hook');
 
@@ -90,6 +92,8 @@ function group_extender_page_handler($page) {
 			groups_extender_handle_activity_page($page[1]);
 		} else if ($page[0] == 'edit' && $page[2] == 'tabs') {
 			//groups_extender_handle_edit_tabs_page($page[1]);
+		} else if ($page[0] == 'search' && get_input('name')) {
+			group_extender_get_name_search();
 		} else {
 			groups_page_handler($page);
 		}	

@@ -282,3 +282,33 @@ function group_extender_get_group_subtypes($group) {
 function group_extender_get_group_subtypes_callback($data) {
 	return $data->subtype;
 }
+
+/**
+ * Get group name search content
+ */
+function group_extender_get_name_search() {
+	$name = sanitize_string(get_input('name'));
+
+	$title = elgg_echo('group-extender:search:name', array($name));
+
+	$db_prefix = elgg_get_config('dbprefix');
+	$params = array(
+		'type' => 'group',
+		'full_view' => false,
+	);
+
+	$params['joins'] = array("JOIN {$db_prefix}groups_entity oe ON e.guid= oe.guid");
+	$params['wheres'] = array("oe.name LIKE \"%{$name}%\"");
+
+	$content = elgg_list_entities($params);
+
+	$params = array(
+		'title' => $title,
+		'content' => $content,
+		'sidebar' => elgg_view('groups/sidebar/find') . elgg_view('groups/sidebar/featured'),
+	);
+
+	$body = elgg_view_layout('one_sidebar', $params);
+
+	echo elgg_view_page($title, $body);
+}
