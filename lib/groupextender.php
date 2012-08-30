@@ -301,14 +301,19 @@ function group_extender_get_name_search() {
 	$params['wheres'] = array("oe.name LIKE \"%{$name}%\"");
 
 	$content = elgg_list_entities($params);
+	
+	if (!$content) {
+		$content = elgg_echo('groups:search:none');
+	}
 
 	$params = array(
 		'title' => $title,
 		'content' => $content,
 		'sidebar' => elgg_view('groups/sidebar/find') . elgg_view('groups/sidebar/featured'),
+		'filter' => FALSE,
 	);
 
-	$body = elgg_view_layout('one_sidebar', $params);
+	$body = elgg_view_layout('content', $params);
 
 	echo elgg_view_page($title, $body);
 }
