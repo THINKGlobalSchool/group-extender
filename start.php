@@ -58,6 +58,15 @@ function group_extender_init() {
 	elgg_register_action("groupextender/delete_tab", "$action_base/delete_tab.php");
 	elgg_register_action("groupextender/move_tab", "$action_base/move_tab.php");
 	
+	// Replace the group_tools mail action if it's enabled
+	if (elgg_is_active_plugin('group_tools')) {
+		// Unregister existing action
+		elgg_unregister_action("group_tools/mail");
+	
+		// Register new action
+		elgg_register_action("group_tools/mail", "$action_base/mail.php");
+	}
+	
 	// Whitelist ajax views
 	elgg_register_ajax_view('group-extender/modules/activity');
 	elgg_register_ajax_view('group-extender/modules/subtype');
