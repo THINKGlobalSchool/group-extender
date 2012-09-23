@@ -98,6 +98,15 @@ elgg.groupextender.tabs.customSearchTabClicked = function(hook, type, params, op
 	}
 }
 
+// Hook into the clicked hook and perform extra processing for tag dashboard tabs
+elgg.groupextender.tabs.tagdashboardTabClicked = function(hook, type, params, options) {
+	var $container = $(params.target_id).find('.tagdashboard-tab-container');
+	if ($container.length) {
+		elgg.tagdashboards.init_dashboards_with_container($container);
+	}
+}
+
+
 // Master click handler for all save events
 elgg.groupextender.tabs.tabSaveClick = function(event) {
 	// Get form inputs
@@ -357,6 +366,7 @@ elgg.groupextender.tabs.extractParamByName = function(string, name) {
 elgg.register_hook_handler('init', 'system', elgg.groupextender.init);
 elgg.register_hook_handler('init', 'system', elgg.groupextender.tabs.init);
 elgg.register_hook_handler('geTabClicked', 'clicked', elgg.groupextender.tabs.customSearchTabClicked);
+elgg.register_hook_handler('geTabClicked', 'clicked', elgg.groupextender.tabs.tagdashboardTabClicked);
 elgg.register_hook_handler('geTabTypeChanged', 'geChanged', elgg.groupextender.tabs.tagTypeChanged);
 elgg.register_hook_handler('geTabTypeLoaded', 'static', elgg.groupextender.tabs.staticContentSelected);
 elgg.register_hook_handler('geGetFormValues', 'values', elgg.groupextender.tabs.staticContentFormValue);
