@@ -17,7 +17,6 @@
 			var hash = window.location.hash.replace("#", "");
 
 			if (hash == 'other') {
-				console.log(hash);
 				$('.group-tools-group-edit-other').closest('li').click();
 			}
 		}

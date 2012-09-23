@@ -58,7 +58,7 @@ $td_container_guid_input = elgg_view('input/hidden', array(
 ));
 
 $content .= <<<HTML
-	<div class='tagdashboard-container portfolio-left'>
+	<div id='tagdashboard-tab-$tab_id' class='tagdashboard-tab-container portfolio-left'>
 		<div class='tagdashboard-options'>
 			$td_type_input
 			$td_subtypes_input
