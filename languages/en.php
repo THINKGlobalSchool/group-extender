@@ -16,6 +16,13 @@ $english = array(
 	'group-extender:removed' => 'User successfully removed from group',
 	'group-extender:navigator' => 'Change Group',
 	'group-extender:nogroups' => 'You haven\'t joined any groups',
+	'item:object:group_category' => 'Group Categories',
+	
+	// Admin
+	'admin:groupextender' => 'Groups',
+	'admin:groupextender:categories' => 'Categories',
+	'admin:groupextender:addcategory' => 'Add Category',
+	'admin:groupextender:editcategory' => 'Edit Category',
 	
 	// Labels
 	'group-extender:label:editgrouptabs' => 'Edit Group Tabs',
@@ -39,6 +46,12 @@ $english = array(
 	'group-extender:search:name' => 'Search for groups named \'%s\'',
 	'group-extender:search:namestring' => 'name',
 	'group-extender:searchname' => "Search for groups by name",
+	'group-extend:label:newcategory' => 'Add Category',
+	'group-extender:label:currentcategories' => 'Current Categories',
+	'group-extender:label:nogroups' => 'No Groups',
+	'group-extender:label:addgroup' => 'Add Group',
+	'group-extender:label:groups' => 'Groups',
+	'group-extender:removeconfirm' => 'Are you sure you want to remove this group?',
 	
 	// Tab labels
 	'group-extender:tab:activity' => 'Activity',
@@ -50,13 +63,27 @@ $english = array(
 	
 	// Messages
 	'group-extender:error:invalidgroup' => 'Invalid Group',
+	'group-extender:error:invalidcategory' => 'Invalid Category',
 	'group-extender:error:invalidtab' => 'Invalid Tab',
 	'group-extender:error:invalidpriority' => 'Invalid Priority',
 	'group-extender:error:googlesearch' => 'Google search is not enabled for this group',
 	'group-extender:error:savetab' => 'There was an error saving the group tab',
+	'group-extender:error:requiredfields' => 'One or more required fields are missing',
+	'group-extender:error:editcategory' => 'There was an error editing the category',
+	'group-extender:error:savecategory' => 'There was an error saving the category',
+	'group-extender:error:deletecategory' => 'There was an error deleting the category',
+	'group-extender:error:grouprequired' => 'At least one group is required!',
+	'group-extender:error:invalidcategory' => 'Invalid category',
+	'group-extender:error:existingcategory' => '%s is already a part of the category %s',
+	'group-extender:error:addgroup' => 'There was an error adding the group to the category',
+	'group-extender:error:removegroup' => 'There was an error removing the group from the category',
+	'group-extender:success:addgroup' => 'Successfully added group to category: %s',
+	'group-extender:success:removegroup' => 'Successfully removed group from category: %s',
 	'group-extender:success:savetab' => 'Successfully saved group tab',
 	'group-extender:success:deletetab' => 'Successfully deleted tab',
 	'group-extender:success:movetab' => 'Successfully moved tab',
+	'group-extender:success:savecategory' => 'Successfully saved category',
+	'group-extender:success:deletecategory' => 'Successfully deleted category',
 );
 
 add_translation('en',$english);
