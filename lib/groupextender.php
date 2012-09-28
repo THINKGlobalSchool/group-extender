@@ -317,3 +317,121 @@ function group_extender_get_name_search() {
 
 	echo elgg_view_page($title, $body);
 }
+
+/** Group Categories Content **/
+
+function groupcategories_get_edit_content($type, $guid = NULL) {	
+	elgg_push_breadcrumb(elgg_echo('admin:groupextender:categories'), elgg_get_site_url() . 'admin/groupextender/categories');
+	if ($type == 'edit') {
+		$category = get_entity($guid);
+		elgg_push_breadcrumb($category->title, $category->getURL());
+		elgg_push_breadcrumb(elgg_echo('edit'));
+		if (!elgg_instanceof($category, 'object', 'group_category')) {
+			forward(REFERER);
+		}
+	} else {
+		elgg_push_breadcrumb(elgg_echo('Add'));
+		$category = null;
+	}
+	
+	$form_vars = groupcategories_prepare_form_vars($category);
+	
+	$content = elgg_view('navigation/breadcrumbs');
+	
+	$content .= elgg_view_form('group_category/save', array('name' => 'category-edit-form', 'id' => 'category-edit-form'), $form_vars);
+	
+	echo $content;
+}
+
+/** End Group Categories Content **/
+
+/**
+ * Prepare the add/edit form variables
+ *
+ * @param ElggObject $category
+ * @return array
+ */
+function groupcategories_prepare_form_vars($category = NULL) {
+	// input names => defaults
+	$values = array(
+		'title' => '',
+		'description' => '',
+		'guid' => NULL,
+	);
+
+	if ($category) {
+		foreach (array_keys($values) as $field) {
+			$values[$field] = $category->$field;
+		}
+	}
+
+	if (elgg_is_sticky_form('category-edit-form')) {
+		foreach (array_keys($values) as $field) {
+			$values[$field] = elgg_get_sticky_value('category-edit-form', $field);
+		}
+	}
+
+	elgg_clear_sticky_form('category-edit-form');
+
+	return $values;
+}
+
+/**
+ * Get groups belonging to given category
+ * 
+ * @param ElggObject $category
+ * @return array
+ */
+function groupcategories_get_groups($category) {
+	return elgg_get_entities_from_relationship(array(
+		'relationship' => GROUP_CATEGORY_RELATIONSHIP,
+		'relationship_guid' => $category->guid,
+		'inverse_relationship' => TRUE,
+		'types' => 'group',
+		'limit' => $limit,
+		'offset' => $offset,
+		'count' => $count,
+	));
+}
+
+/**
+ * Determine if group is a member of the category
+ * 
+ * @param ElggObject $category
+ * @param ElggGroup $group
+ */
+function groupcategories_is_group_member($category, $group) {
+	$object = check_entity_relationship($group->guid, GROUP_CATEGORY_RELATIONSHIP, $category->guid);
+	if ($object) {
+		return TRUE;
+	} else {
+		return FALSE;
+	}
+}
+
+/**
+ * Add a group to given category
+ *
+ * @param ElggObject $category
+ * @param ElggGroup $group
+ */
+function groupcategories_add_group($category, $group) {
+	try {
+		$result = add_entity_relationship($group->guid, GROUP_CATEGORY_RELATIONSHIP, $category->guid);
+	} catch (DatabaseException $e) {
+		$result = FALSE;
+	}
+
+	return $result;
+}
+
+/**
+ * Remove a group from given category
+ *
+ * @param ElggObject $category
+ * @param ElggGroup $group
+ */
+function groupcategories_remove_group($category, $group) {
+	$result = remove_entity_relationship($group->guid, GROUP_CATEGORY_RELATIONSHIP, $category->guid);
+	return $result;
+}

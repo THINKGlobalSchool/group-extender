@@ -8,8 +8,6 @@
  * @copyright THINK Global School 2010 - 2012
  * @link http://www.thinkglobalschool.com/
  * 
- * @TODO
- * - Add tab to edit group tabs to group edit area
  */
 
 // Register init
@@ -17,20 +15,42 @@ elgg_register_event_handler('init', 'system', 'group_extender_init');
 
 // Init
 function group_extender_init() {
+	define('GROUP_CATEGORY_RELATIONSHIP', 'group_memberof_category');
 	
 	// Register library
 	elgg_register_library('elgg:groupextender', elgg_get_plugins_path() . "group-extender/lib/groupextender.php");
 	elgg_load_library('elgg:groupextender');
 	
 	// Register group extender JS
-	$extender_js = elgg_get_simplecache_url('js', 'groupextender/extender');
+	$ge_js = elgg_get_simplecache_url('js', 'groupextender/extender');
 	elgg_register_simplecache_view('js/groupextender/extender');
-	elgg_register_js('elgg.groupextender', $extender_js);
+	elgg_register_js('elgg.groupextender', $ge_js);
+	
+	
+	// Register group extender tabs JS
+	$tabs_js = elgg_get_simplecache_url('js', 'groupextender/tabs');
+	elgg_register_simplecache_view('js/groupextender/tabs');
+	elgg_register_js('elgg.groupextender.tabs', $tabs_js);
+	
+	// Register group extender admin JS
+	$ga_js = elgg_get_simplecache_url('js', 'groupextender/admin');
+	elgg_register_simplecache_view('js/groupextender/admin');
+	elgg_register_js('elgg.groupextender.admin', $ga_js);
 	
 	// Register tabs css
 	$t_css = elgg_get_simplecache_url('css', 'groupextender/tabs');
 	elgg_register_simplecache_view('css/groupextender/tabs');
 	elgg_register_css('elgg.groupextender.tabs', $t_css);
+	
+	// Register admin css
+	$ga_css = elgg_get_simplecache_url('css', 'groupextender/admin');
+	elgg_register_simplecache_view('css/groupextender/admin');
+	elgg_register_css('elgg.groupextender.admin', $ga_css);
+	
+	// Groups picker js
+	$gp_js = elgg_get_simplecache_url('js', 'groupextender/grouppicker');
+	elgg_register_simplecache_view('js/groupextender/grouppicker');
+	elgg_register_js('elgg.grouppicker', $gp_js);
 
 	// Register my own page handler
 	elgg_register_page_handler('groups','group_extender_page_handler');
@@ -51,12 +71,22 @@ function group_extender_init() {
 	
 	// Fix group profile ECML
 	elgg_register_plugin_hook_handler('get_views', 'ecml', 'group_extender_ecml_views_hook');
+	
+	// Group categories entity menu hook
+	elgg_register_plugin_hook_handler('register', 'menu:entity', 'groupcategories_setup_entity_menu', 9999);
 
-	// Actions
+	// Tab actions
 	$action_base = elgg_get_plugins_path() . 'group-extender/actions/group-extender';
 	elgg_register_action("groupextender/save_tab", "$action_base/save_tab.php");
 	elgg_register_action("groupextender/delete_tab", "$action_base/delete_tab.php");
 	elgg_register_action("groupextender/move_tab", "$action_base/move_tab.php");
+	
+	// Group category actions
+	$action_base = elgg_get_plugins_path() . 'group-extender/actions/group_category';
+	elgg_register_action("group_category/save", "$action_base/save.php");
+	elgg_register_action("group_category/delete", "$action_base/delete.php");
+	elgg_register_action("group_category/addgroup", "$action_base/addgroup.php");
+	elgg_register_action("group_category/removegroup", "$action_base/removegroup.php");
 	
 	// Replace the group_tools mail action if it's enabled
 	if (elgg_is_active_plugin('group_tools')) {
@@ -66,6 +96,9 @@ function group_extender_init() {
 		// Register new action
 		elgg_register_action("group_tools/mail", "$action_base/mail.php");
 	}
+	
+	// Pagesetup event handler
+	elgg_register_event_handler('pagesetup', 'system', 'group_extender_submenus');
 	
 	// Whitelist ajax views
 	elgg_register_ajax_view('group-extender/modules/activity');
@@ -78,6 +111,7 @@ function group_extender_init() {
 	elgg_register_ajax_view('group-extender/forms/edit_customsearch');
 	elgg_register_ajax_view('group-extender/forms/current_tabs');
 	elgg_register_ajax_view('group-extender/group_tabs');
+	elgg_register_ajax_view('group-extender/groups_categories');
 }
 
 /**
@@ -88,6 +122,7 @@ function group_extender_init() {
 function group_extender_page_handler($page) {
 		// Load extender JS
 		elgg_load_js('elgg.groupextender');		
+		elgg_load_js('elgg.groupextender.tabs');		
 		
 		// Load tab CSS
 		elgg_load_css('elgg.groupextender.tabs');
@@ -181,6 +216,50 @@ function groups_extender_handle_edit_tabs_page($guid) {
 	$body = elgg_view_layout('content', $params);
 
 	echo elgg_view_page($title, $body);
+}
+
+/**
+ * Group categories entity plugin hook
+ */
+function groupcategories_setup_entity_menu($hook, $type, $return, $params) {
+
+	$entity = $params['entity'];
+	
+	if (!elgg_instanceof($entity, 'object', 'group_category')) {
+		return $return;
+	}
+
+	$return = array();
+
+	$options = array(
+		'name' => 'edit',
+		'text' => elgg_echo('edit'),
+		'href' => elgg_get_site_url() . 'admin/groupextender/editcategory?guid=' . $entity->guid,
+		'priority' => 2,
+	);
+	$return[] = ElggMenuItem::factory($options);
+	
+	$options = array(
+		'name' => 'delete',
+		'text' => elgg_view_icon('delete'),
+		'title' => elgg_echo('delete:this'),
+		'href' => "action/{$params['handler']}/delete?guid={$entity->getGUID()}",
+		'confirm' => elgg_echo('deleteconfirm'),
+		'priority' => 3,
+	);
+
+	$return[] = ElggMenuItem::factory($options);
+
+	return $return;
+}
+
+/**
+ * Setup Group Extender Submenus
+ */
+function group_extender_submenus() {
+	if (elgg_in_context('admin')) {
+		elgg_register_admin_menu_item('administer', 'categories', 'groupextender');
+	}
 }
 
 /**

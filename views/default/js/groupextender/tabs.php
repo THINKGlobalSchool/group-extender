@@ -10,13 +10,7 @@
  */
 ?>
 //<script>
-elgg.provide('elgg.groupextender');
 elgg.provide('elgg.groupextender.tabs');
-
-// General init
-elgg.groupextender.init = function() {
-	//
-}
 
 // Tabs init
 elgg.groupextender.tabs.init = function() {
@@ -363,7 +357,6 @@ elgg.groupextender.tabs.extractParamByName = function(string, name) {
     return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
 }
 
-elgg.register_hook_handler('init', 'system', elgg.groupextender.init);
 elgg.register_hook_handler('init', 'system', elgg.groupextender.tabs.init);
 elgg.register_hook_handler('geTabClicked', 'clicked', elgg.groupextender.tabs.customSearchTabClicked);
 elgg.register_hook_handler('geTabClicked', 'clicked', elgg.groupextender.tabs.tagdashboardTabClicked);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Group-Extender css
+ * Group-Extender add group category admin
  * 
  * @package Group-Extender
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
@@ -9,8 +9,6 @@
  * @link http://www.thinkglobalschool.com/
  * 
  */
-?>
-
-#group-navigator-select {
-	width: 200px;
-}
+// Load Admin CSS
+elgg_load_css('elgg.groupextender.admin');
+echo groupcategories_get_edit_content('add');
