@@ -25,8 +25,7 @@ function group_extender_init() {
 	$ge_js = elgg_get_simplecache_url('js', 'groupextender/extender');
 	elgg_register_simplecache_view('js/groupextender/extender');
 	elgg_register_js('elgg.groupextender', $ge_js);
-	
-	
+
 	// Register group extender tabs JS
 	$tabs_js = elgg_get_simplecache_url('js', 'groupextender/tabs');
 	elgg_register_simplecache_view('js/groupextender/tabs');
@@ -80,13 +79,14 @@ function group_extender_init() {
 	elgg_register_action("groupextender/save_tab", "$action_base/save_tab.php");
 	elgg_register_action("groupextender/delete_tab", "$action_base/delete_tab.php");
 	elgg_register_action("groupextender/move_tab", "$action_base/move_tab.php");
+	elgg_register_action("group_dashboard/dashboard", "$action_base/dashboard.php");
 	
 	// Group category actions
 	$action_base = elgg_get_plugins_path() . 'group-extender/actions/group_category';
 	elgg_register_action("group_category/save", "$action_base/save.php");
 	elgg_register_action("group_category/delete", "$action_base/delete.php");
 	elgg_register_action("group_category/addgroup", "$action_base/addgroup.php");
-	elgg_register_action("group_category/removegroup", "$action_base/removegroup.php");
+	elgg_register_action("group_category/removegroup", "$action_base/removegroup.php");	
 	
 	// Replace the group_tools mail action if it's enabled
 	if (elgg_is_active_plugin('group_tools')) {
@@ -112,6 +112,8 @@ function group_extender_init() {
 	elgg_register_ajax_view('group-extender/forms/current_tabs');
 	elgg_register_ajax_view('group-extender/group_tabs');
 	elgg_register_ajax_view('group-extender/groups_categories');
+	elgg_register_ajax_view('group-extender/modules/groups');
+	elgg_register_ajax_view('group-extender/modules/group');
 }
 
 /**
@@ -138,6 +140,8 @@ function group_extender_page_handler($page) {
 			//groups_extender_handle_edit_tabs_page($page[1]);
 		} else if ($page[0] == 'search' && get_input('name')) {
 			group_extender_get_name_search();
+		} else if ($page[0] == 'dashboard'){
+			group_extender_get_dashboard();
 		} else {
 			groups_page_handler($page);
 		}	
@@ -259,6 +263,16 @@ function groupcategories_setup_entity_menu($hook, $type, $return, $params) {
 function group_extender_submenus() {
 	if (elgg_in_context('admin')) {
 		elgg_register_admin_menu_item('administer', 'categories', 'groupextender');
+		elgg_register_admin_menu_item('administer', 'dashboard', 'groupextender');
+	}
+	
+	// Display group dashboard sidebar menu item
+	$page_owner = elgg_get_page_owner_entity();
+
+	if (elgg_is_logged_in() && elgg_get_context() == 'groups' && !elgg_instanceof($page_owner, 'group') && elgg_get_plugin_setting('enable_dashboard', 'group-extender')) {
+		$url =  "groups/dashboard";
+		$item = new ElggMenuItem('zz-groupdashboard', elgg_echo('group-extender:title:groupdashboard'), $url);
+		elgg_register_menu_item('page', $item);
 	}
 }
 
