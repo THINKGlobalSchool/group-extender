@@ -318,6 +318,21 @@ function group_extender_get_name_search() {
 	echo elgg_view_page($title, $body);
 }
 
+/** Group Dashboard Content **/
+
+function group_extender_get_dashboard() {
+	elgg_set_context('groups');
+	
+	$params['title'] = elgg_echo('group-extender:title:groupdashboard');
+	$params['content'] = elgg_view('group-extender/dashboard');
+	
+	$body = elgg_view_layout('one_sidebar', $params);
+
+	echo elgg_view_page($params['title'], $body);
+}
+
+/** End Group Dashboard Content **/
+
 /** Group Categories Content **/
 
 function groupcategories_get_edit_content($type, $guid = NULL) {	
@@ -380,9 +395,12 @@ function groupcategories_prepare_form_vars($category = NULL) {
  * Get groups belonging to given category
  * 
  * @param ElggObject $category
+ * @param int        $limit 
+ * @param int        $offset
+ * @param bool       $count
  * @return array
  */
-function groupcategories_get_groups($category) {
+function groupcategories_get_groups($category, $limit = 10, $offset = 0, $count = FALSE) {
 	return elgg_get_entities_from_relationship(array(
 		'relationship' => GROUP_CATEGORY_RELATIONSHIP,
 		'relationship_guid' => $category->guid,

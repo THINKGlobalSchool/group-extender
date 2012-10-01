@@ -23,6 +23,10 @@ $english = array(
 	'admin:groupextender:categories' => 'Categories',
 	'admin:groupextender:addcategory' => 'Add Category',
 	'admin:groupextender:editcategory' => 'Edit Category',
+	'admin:groupextender:dashboard' => 'Dashboard',
+	
+	// Titles
+	'group-extender:title:groupdashboard' => 'Group Dashboard',
 	
 	// Labels
 	'group-extender:label:editgrouptabs' => 'Edit Group Tabs',
@@ -51,7 +55,12 @@ $english = array(
 	'group-extender:label:nogroups' => 'No Groups',
 	'group-extender:label:addgroup' => 'Add Group',
 	'group-extender:label:groups' => 'Groups',
+	'group-extender:label:groupselect' => 'Select Groups',
+	'group-extender:label:groupactivity' => 'Group Activity',
 	'group-extender:removeconfirm' => 'Are you sure you want to remove this group?',
+	'group-extender:label:enabledashboard' => 'Enable group dashboard',
+	'group-extender:label:showondashboard' => 'Show these categories on group dashboard',
+	'group-extender:label:noactivity' => 'No Activity',
 	
 	// Tab labels
 	'group-extender:tab:activity' => 'Activity',
@@ -84,6 +93,7 @@ $english = array(
 	'group-extender:success:movetab' => 'Successfully moved tab',
 	'group-extender:success:savecategory' => 'Successfully saved category',
 	'group-extender:success:deletecategory' => 'Successfully deleted category',
+	'group-extender:success:dashboardsettings' => 'Group Dashboard Settings Saved',
 );
 
 add_translation('en',$english);

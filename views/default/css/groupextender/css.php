@@ -14,3 +14,19 @@
 #group-navigator-select {
 	width: 200px;
 }
+
+#group-dashboard-groups-container {
+	column-count: 2;
+	-moz-column-count: 2;
+	-webkit-column-count: 2;
+}
+
+#group-dashboard-group-select-form-container {
+	margin-top: 5px;
+	margin-bottom: 8px;
+}
+
+.group-dashboard-module {
+	display: inline-block;
+	margin-right: 10px;
+}

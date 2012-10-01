@@ -18,7 +18,7 @@ if (!$category) {
 	return;
 }
 
-$category_groups = groupcategories_get_groups($category);
+$category_groups = groupcategories_get_groups($category, 0);
 
 if ($category_groups) {
 	foreach($category_groups as $group) {
