@@ -49,6 +49,7 @@ HTML;
 } else {
 	// brief view
 	$params = array(
+		'title' => $category->title,
 		'entity' => $category,
 		'metadata' => $metadata,
 	);
