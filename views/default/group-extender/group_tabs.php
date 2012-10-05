@@ -36,7 +36,8 @@ foreach ($group_tabs as $uid => $tab) {
 		// Need to trigger load event if tagdashboard is the first tab
 		$tab_js = "<script type='text/javascript'>
 			$(document).ready(function() {
-				$('#{$uid}').trigger('click');
+				var tagdb = $('#groupextender-tab-{$uid}').find('.tagdashboard-tab-container');
+				elgg.tagdashboards.init_dashboards_with_container(tagdb);
 			});
 		</script>";
 	}
