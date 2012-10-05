@@ -357,6 +357,15 @@ elgg.groupextender.tabs.extractParamByName = function(string, name) {
     return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
 }
 
+// Hook into ajaxmodule should_display to handler multiple tagdashboards on the same page
+elgg.groupextender.tabs.multipleTagdashboards = function(hook, type, params, options) {
+	var $group_extender_container = params.closest('.group-extender-tab-content-container');
+	if ($group_extender_container.length !== 0 && !$group_extender_container.is(':visible')) {
+		return false;
+	}
+	return true;
+}
+
 elgg.register_hook_handler('init', 'system', elgg.groupextender.tabs.init);
 elgg.register_hook_handler('geTabClicked', 'clicked', elgg.groupextender.tabs.customSearchTabClicked);
 elgg.register_hook_handler('geTabClicked', 'clicked', elgg.groupextender.tabs.tagdashboardTabClicked);
@@ -365,3 +374,4 @@ elgg.register_hook_handler('geTabTypeLoaded', 'static', elgg.groupextender.tabs.
 elgg.register_hook_handler('geGetFormValues', 'values', elgg.groupextender.tabs.staticContentFormValue);
 elgg.register_hook_handler('geTabSaved', 'cleanup', elgg.groupextender.tabs.staticContentCleanup);
 elgg.register_hook_handler('geTabSaved', 'cleanup', elgg.groupextender.tabs.newFormCleanup);
+elgg.register_hook_handler('should_display', 'ajaxmodule', elgg.groupextender.tabs.multipleTagdashboards);

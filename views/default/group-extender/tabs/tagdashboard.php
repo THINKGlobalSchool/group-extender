@@ -48,7 +48,7 @@ $td_custom_input = elgg_view('input/hidden', array(
 $td_search_input = elgg_view('input/hidden', array(
 	'name' => 'search', 
 	'id' => 'search', 
-	'value' => $asd,
+	'value' => NULL,
 ));
 
 $td_container_guid_input = elgg_view('input/hidden', array(
