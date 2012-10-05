@@ -249,7 +249,7 @@ elgg.groupextender.tabs.refreshableClick = function(event) {
 	event.preventDefault();
 }
 
-// Click handler for refreshable clicks
+// Click handler for tab type change clicks
 elgg.groupextender.tabs.tabTypeChange = function(event) {
 	var type = $(this).val();
 	

@@ -28,8 +28,20 @@ if ($group->canEdit()) {
 
 $tab_content = '';
 
+$count = 0;
+
 // Build tabs content
 foreach ($group_tabs as $uid => $tab) {
+	if ($tab['type'] == 'tagdashboard' && $count == 0) {
+		// Need to trigger load event if tagdashboard is the first tab
+		$tab_js = "<script type='text/javascript'>
+			$(document).ready(function() {
+				$('#{$uid}').trigger('click');
+			});
+		</script>";
+	}
+	$count++;
+	
 	$title = $group_tabs[$uid]['title'];
 	$priority = $group_tabs[$uid]['priority'];
 	$type = $group_tabs[$uid]['type'];
@@ -43,6 +55,7 @@ foreach ($group_tabs as $uid => $tab) {
 		'priority' => $priority,
 		'item_class' => $default ? 'elgg-state-selected' : '',
 		'class' => "group-extender-tab-menu-item",
+		'id' => $uid,
 	));
 
 	$display = !$default ? "style='display: none;'" : '';
@@ -61,4 +74,4 @@ $menu = elgg_view_menu('group-extender-tab-menu', array(
 	'class' => 'elgg-menu-hz elgg-menu-filter elgg-menu-filter-default'
 ));
 
-echo $menu . $tab_content;
+echo $menu . $tab_content . $tab_js;
