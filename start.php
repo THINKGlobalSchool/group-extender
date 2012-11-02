@@ -62,7 +62,10 @@ function group_extender_init() {
 	//elgg_extend_view("groups/edit", "group-extender/forms/edit_tabs", 1000);
 
 	// Extend owner_block for easy group navigator
-	elgg_extend_view('page/elements/owner_block', 'group-extender/navigator', 499);
+	if (elgg_is_logged_in()) {
+		elgg_extend_view('page/elements/owner_block', 'group-extender/navigator', 499);
+	}
+
 	
 	elgg_extend_view('groups/edit', 'group-extender/group_tools_extra_js', 9999999999);
 	
