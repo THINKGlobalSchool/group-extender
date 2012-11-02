@@ -17,6 +17,7 @@ $english = array(
 	'group-extender:navigator' => 'Change Group',
 	'group-extender:nogroups' => 'You haven\'t joined any groups',
 	'item:object:group_category' => 'Group Categories',
+	'group-extender:action:mail:success' => 'Message successfully sent',
 	
 	// Admin
 	'admin:groupextender' => 'Groups',
