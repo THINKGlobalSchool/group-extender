@@ -30,7 +30,7 @@
 					elgg_send_email($group_owner->email, $user->email, $subject, $body);
 				}
 				
-				system_message(elgg_echo("group_tools:action:mail:success"));
+				system_message(elgg_echo("group-extender:action:mail:success"));
 				
 				$forward_url = $group->getURL();
 			} else {

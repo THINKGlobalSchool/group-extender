@@ -80,14 +80,7 @@ function group_extender_init() {
 	elgg_register_action("groupextender/delete_tab", "$action_base/delete_tab.php");
 	elgg_register_action("groupextender/move_tab", "$action_base/move_tab.php");
 	elgg_register_action("group_dashboard/dashboard", "$action_base/dashboard.php");
-	
-	// Group category actions
-	$action_base = elgg_get_plugins_path() . 'group-extender/actions/group_category';
-	elgg_register_action("group_category/save", "$action_base/save.php");
-	elgg_register_action("group_category/delete", "$action_base/delete.php");
-	elgg_register_action("group_category/addgroup", "$action_base/addgroup.php");
-	elgg_register_action("group_category/removegroup", "$action_base/removegroup.php");	
-	
+
 	// Replace the group_tools mail action if it's enabled
 	if (elgg_is_active_plugin('group_tools')) {
 		// Unregister existing action
@@ -96,6 +89,13 @@ function group_extender_init() {
 		// Register new action
 		elgg_register_action("group_tools/mail", "$action_base/mail.php");
 	}
+
+	// Group category actions
+	$action_base = elgg_get_plugins_path() . 'group-extender/actions/group_category';
+	elgg_register_action("group_category/save", "$action_base/save.php");
+	elgg_register_action("group_category/delete", "$action_base/delete.php");
+	elgg_register_action("group_category/addgroup", "$action_base/addgroup.php");
+	elgg_register_action("group_category/removegroup", "$action_base/removegroup.php");	
 	
 	// Pagesetup event handler
 	elgg_register_event_handler('pagesetup', 'system', 'group_extender_submenus');
