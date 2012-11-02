@@ -29,9 +29,14 @@ if (is_array($profile_fields) && count($profile_fields) > 0) {
 		}
 
 		echo "<div class=\"{$even_odd}\">";
-		echo "<b>";
-		echo elgg_echo("groups:$key");
-		echo ": </b>";
+		
+		// Don't show the 'description' label
+		if ($key != 'description') {
+			echo "<b>";
+			echo elgg_echo("groups:$key");
+			echo ": </b>";
+		}
+
 		echo elgg_view("output/$valtype", $options);
 		echo "</div>";
 
