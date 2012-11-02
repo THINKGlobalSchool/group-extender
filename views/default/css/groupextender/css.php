@@ -30,3 +30,8 @@
 	display: inline-block;
 	margin-right: 10px;
 }
+
+/* Fix alignment for 'image blocks' without an image */
+.group-extender-tab-content-container .elgg-body:only-child {
+	margin-left: 10px;	
+}
