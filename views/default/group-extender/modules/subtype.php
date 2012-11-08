@@ -30,6 +30,7 @@ $options = array(
 // Workaround for photo/album views
 if ($options['subtype'] == 'album' || $options['subtype'] == 'image') {
 	set_input('search_viewtype', 'gallery'); 
+	$options['list_type'] = 'gallery';
 }
 
 // If a tag is supplied, restrict it
