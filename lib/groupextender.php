@@ -252,6 +252,10 @@ function group_extender_get_group_subtypes($group) {
 		'kaltura_video',
 		'resourcerequest',
 		'resourcerequesttype',
+		'reportcard_import_container',
+		'reportcardfile',
+		'feedback', 
+		'group_category',
 	);
 
 	// Allow exceptions to be modified

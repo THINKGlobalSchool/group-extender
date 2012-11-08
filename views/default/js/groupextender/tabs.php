@@ -39,6 +39,11 @@ elgg.groupextender.tabs.init = function() {
 			if (typeof(tinyMCE) !== 'undefined') {
 				tinyMCE.EditorManager.execCommand('mceAddControl', false, 'static-content');
 			}
+			
+			// Init lightbox embed if it exists
+			if (typeof(elgg.tgsembed) != 'undefined') {
+				elgg.tgsembed.initLightbox();
+			}
 		},
 		'onCleanup': function() {
 			// Fix tinymce control
@@ -299,6 +304,11 @@ elgg.groupextender.tabs.staticContentSelected = function(hook, type, params, opt
 		// Fix tinymce control
 		if (typeof(tinyMCE) !== 'undefined') {
 			tinyMCE.EditorManager.execCommand('mceAddControl', false, 'static-content');
+		}
+		
+		// Init lightbox embed if it exists
+		if (typeof(elgg.tgsembed) != 'undefined') {
+			elgg.tgsembed.initLightbox();
 		}
 	}
 	return options;

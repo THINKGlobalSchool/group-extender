@@ -27,6 +27,11 @@ $options = array(
 	'full_view' => FALSE,
 );
 
+// Workaround for photo/album views
+if ($options['subtype'] == 'album' || $options['subtype'] == 'image') {
+	set_input('search_viewtype', 'gallery'); 
+}
+
 // If a tag is supplied, restrict it
 if (!empty($tab['params']['tag'])) {
 	$options['metadata_name_value_pairs'] = array('name' => 'tags', 'value' => $tab['params']['tag']);

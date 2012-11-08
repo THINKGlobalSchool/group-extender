@@ -136,6 +136,14 @@ function group_extender_page_handler($page) {
 		elgg_load_js('tinymce');
 		elgg_load_js('elgg.tinymce');
 		
+		// Load tgsembed JS/CSS
+		if (elgg_is_active_plugin('tgsembed')) {
+			elgg_load_js('colorbox');
+			elgg_load_js('jQuery-File-Upload');
+			elgg_load_js('elgg.tgsembed');
+			elgg_load_css('elgg.tgsembed');
+		}
+		
 		// Going to hack in a better group activity handler
 		if ($page[0] == 'activity') {
 			groups_extender_handle_activity_page($page[1]);
