@@ -62,6 +62,8 @@ $english = array(
 	'group-extender:label:enabledashboard' => 'Enable group dashboard',
 	'group-extender:label:showondashboard' => 'Show these categories on group dashboard',
 	'group-extender:label:noactivity' => 'No Activity',
+	'group-extender:label:add' => 'Add',
+	'group-extender:label:refresh' => 'Refresh',
 	
 	// Tab labels
 	'group-extender:tab:activity' => 'Activity',
