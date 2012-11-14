@@ -165,12 +165,13 @@ elgg.groupextender.tabs.tabSaveClick = function(event) {
 // Click handler for refresh tab click
 elgg.groupextender.tabs.tabRefreshClick = function(event) {
 	// Get form inputs
-	var $form = $(this).closest('form');
+	var $form = $('#groupextender-tab-admin').find('form');
+
 	var values = {};
 	$.each($form.serializeArray(), function(i, field) {
 	    values[field.name] = field.value;
 	});
-	
+
 	var url = elgg.normalize_url('ajax/view/group-extender/group_tabs?group_guid=' + values['group_guid']);
 	
 	$("#group-extender-group-tabs").html("<div class='elgg-ajax-loader'></div>");

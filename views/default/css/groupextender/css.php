@@ -35,3 +35,8 @@
 .group-extender-tab-content-container .elgg-body:only-child {
 	margin-left: 10px;	
 }
+
+#group-extender-tab-refresh-submit {
+	float: right;
+	font-size: 90%;
+}

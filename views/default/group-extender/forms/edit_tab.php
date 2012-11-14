@@ -45,13 +45,6 @@ if (!elgg_instanceof($group, 'group') || !$group->canEdit()) {  // Check valid g
 		// New Tab
 		$type_label = elgg_echo('group-extender:label:type');
 		
-		// Refresh input
-		$refresh_input = elgg_view('input/submit', array(
-			'name' => 'refresh_all_group_tabs',
-			'value' => elgg_echo('refresh'),
-			'id' => "group-extender-tab-refresh-submit",
-		));
-		
 		$type_input = elgg_view('input/dropdown', array(
 			'name' => 'tab_type',
 			'id' => 'group-extender-tab-type-select',
@@ -72,7 +65,7 @@ if (!elgg_instanceof($group, 'group') || !$group->canEdit()) {  // Check valid g
 	// Save input
 	$save_input = elgg_view('input/submit', array(
 		'name' => $form_type,
-		'value' => elgg_echo('save'),
+		'value' => elgg_echo('group-extender:label:add'),
 		'id' => "group-extender-tab-save-submit",
 	));
 
