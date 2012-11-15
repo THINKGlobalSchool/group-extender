@@ -52,6 +52,8 @@ elgg.groupextender.tabs.init = function() {
 			}
 		}
 	});
+	
+	elgg.groupextender.tabs.processHash();
 }
 
 // Teardown function
@@ -80,6 +82,9 @@ elgg.groupextender.tabs.customTabClick = function(event) {
 	};
 	
 	elgg.trigger_hook('geTabClicked', 'clicked', params);
+	
+	// Put hash in url
+	window.location.hash = '#tab:' + $(this).attr('id');
 	
 	event.preventDefault();
 }
@@ -375,6 +380,24 @@ elgg.groupextender.tabs.multipleTagdashboards = function(hook, type, params, opt
 		return false;
 	}
 	return true;
+}
+
+/**
+ * Check for and process any supplied hash paramaters
+ * 
+ * - This doesn't do any kind of validation, it simple tries to click 
+ * the link that would be on the page if a submission exists. If there's no 
+ * match, nothing happens. (Desired behaviour)
+ */
+elgg.groupextender.tabs.processHash = function(todo_guid) {
+	// Check for hash
+	if (window.location.hash) {
+		// Grab the tab ID
+		var tab_id = window.location.hash.replace('#tab:', '');	
+
+		// Click the given tab_id
+		$('a#' + tab_id).trigger('click');
+	}
 }
 
 elgg.register_hook_handler('init', 'system', elgg.groupextender.tabs.init);
