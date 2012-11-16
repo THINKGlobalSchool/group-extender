@@ -14,7 +14,7 @@
 $module =  elgg_view('modules/ajaxmodule', array(
 	'title' => '',
 	'subtypes' => array('group_category'),
-	'limit' => 15,
+	'limit' => 0,
 	'module_type' => 'inline',
 	'module_class' => 'group-categories-module',
 	'module_id' => 'groups-all-categories-ajaxmodule',

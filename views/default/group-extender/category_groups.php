@@ -12,12 +12,6 @@
 
 $guid = elgg_extract('guid', $vars, NULL);
 
-$category = get_entity($guid);
-
-if (!$category) {
-	return;
-}
-
 // Groups Module
 $ajaxmodule = elgg_view('modules/genericmodule', array(
 	'view' => 'group-extender/modules/category_groups',

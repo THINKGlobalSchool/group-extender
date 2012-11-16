@@ -12,20 +12,29 @@
 
 $guid = elgg_extract('guid', $vars, NULL);
 
-$category = get_entity($guid);
+// Load All Groups
+if ($guid == 'all') {
+	$content = elgg_list_entities(array(
+		'types' => 'group',
+		'full_view' => FALSE,
+		'limit' => 15,
+	));
+} else {
+	$category = get_entity($guid);
 
-if (!$category) {
-	return;
+	if ($category) {
+		$content = elgg_list_entities_from_relationship(array(
+			'relationship' => GROUP_CATEGORY_RELATIONSHIP,
+			'relationship_guid' => $category->guid,
+			'inverse_relationship' => TRUE,
+			'types' => 'group',
+			'full_view' => FALSE,
+			'limit' => 15,
+		));
+	} else {
+		$content .= elgg_echo('group-extender:error:invalidcategory');
+	}
 }
-
-$content = elgg_list_entities_from_relationship(array(
-	'relationship' => GROUP_CATEGORY_RELATIONSHIP,
-	'relationship_guid' => $category->guid,
-	'inverse_relationship' => TRUE,
-	'types' => 'group',
-	'full_view' => FALSE,
-	'limit' => 15,
-));
 
 if (!$content) {
 	$content = elgg_echo('group-extender:label:nogroups');

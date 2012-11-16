@@ -66,6 +66,10 @@
 	border-top: 0;
 }
 
+#groups-all-categories-ajaxmodule .tgstheme-entity-menu {
+	display: none;
+}
+
 #groups-all-group-list {
 	float: right;
 	width: 69%;
@@ -74,4 +78,6 @@
 .category-state-selected, .category-state-selected:hover {
 	background: #ccc !important;
 }
+
+
 
