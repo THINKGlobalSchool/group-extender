@@ -12,7 +12,7 @@
 //<script>
 elgg.provide('elgg.groupextender.admin');
 
-elgg.groupextender.admin.getGroupsURL = 'ajax/view/group-extender/groups_categories';
+elgg.groupextender.admin.getGroupsURL = 'ajax/view/group-extender/admin/category_groups';
 
 // General init
 elgg.groupextender.admin.init = function() {
