@@ -299,12 +299,14 @@ function group_extender_route_groups_handler($hook, $type, $return, $params) {
 	set_input('groups_all_filter_extend', true);
 
 	// Make categories the default
-	if (!get_input('filter')) {
+	if (is_array($return['segments']) && $return['segments'][0] == 'all' && !get_input('filter')) {
 		forward('groups/all?filter=categories');
 	}
 
 	// Check if we're in the 'categories' filter
 	if (is_array($return['segments']) && $return['segments'][0] == 'all' && get_input('filter') == 'categories') {
+		//var_dump('here');
+		//die;
 		// Load JS
 		elgg_load_js('elgg.groupextender');	
 		
