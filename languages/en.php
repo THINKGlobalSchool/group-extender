@@ -54,6 +54,7 @@ $english = array(
 	'group-extend:label:newcategory' => 'Add Category',
 	'group-extender:label:currentcategories' => 'Current Categories',
 	'group-extender:label:nogroups' => 'No Groups',
+	'group-extender:label:nocategories' => 'No Categories',
 	'group-extender:label:addgroup' => 'Add Group',
 	'group-extender:label:groups' => 'Groups',
 	'group-extender:label:groupselect' => 'Select Groups',

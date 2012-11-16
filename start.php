@@ -58,14 +58,12 @@ function group_extender_init() {
 	elgg_extend_view('css/elgg', 'css/groupextender/css');
 	
 	//elgg_extend_view("groups/edit", "group-extender/edit_tabs_link", 400);
-	
 	//elgg_extend_view("groups/edit", "group-extender/forms/edit_tabs", 1000);
 
 	// Extend owner_block for easy group navigator
 	if (elgg_is_logged_in()) {
 		elgg_extend_view('page/elements/owner_block', 'group-extender/navigator', 499);
 	}
-
 	
 	elgg_extend_view('groups/edit', 'group-extender/group_tools_extra_js', 9999999999);
 	
@@ -76,6 +74,12 @@ function group_extender_init() {
 	
 	// Group categories entity menu hook
 	elgg_register_plugin_hook_handler('register', 'menu:entity', 'groupcategories_setup_entity_menu', 9999);
+	
+	// Hook into filter menu
+	elgg_register_plugin_hook_handler('register', 'menu:filter', 'group_extender_setup_group_filter_menu', 9999);
+
+	// extend groups page handler
+	elgg_register_plugin_hook_handler('route', 'groups', 'group_extender_route_groups_handler');
 
 	// Tab actions
 	$action_base = elgg_get_plugins_path() . 'group-extender/actions/group-extender';
@@ -114,9 +118,11 @@ function group_extender_init() {
 	elgg_register_ajax_view('group-extender/forms/edit_customsearch');
 	elgg_register_ajax_view('group-extender/forms/current_tabs');
 	elgg_register_ajax_view('group-extender/group_tabs');
-	elgg_register_ajax_view('group-extender/groups_categories');
+	elgg_register_ajax_view('group-extender/admin/category_groups');
 	elgg_register_ajax_view('group-extender/modules/groups');
 	elgg_register_ajax_view('group-extender/modules/group');
+	elgg_register_ajax_view('group-extender/modules/category_groups');
+	elgg_register_ajax_view('group-extender/modules/group_categories');
 }
 
 /**
@@ -265,6 +271,70 @@ function groupcategories_setup_entity_menu($hook, $type, $return, $params) {
 
 	$return[] = ElggMenuItem::factory($options);
 
+	return $return;
+}
+
+/**
+ * Hook into menu filter to find and extend the groups nav menu
+ */
+function group_extender_setup_group_filter_menu($hook, $type, $return, $params) {
+	// 'filter' menu is used elsewhere, so check for groups context, also check for filter flag (set in route handler)
+	if (elgg_in_context('groups') && get_input('groups_all_filter_extend')) {
+		// Add categories option
+		$options = array(
+			'name' => 'groups_categories',
+			'text' => elgg_echo('admin:groupextender:categories'),
+			'href' => "groups/all?filter=categories",
+			'priority' => 100,
+		);
+
+		$return[] = ElggMenuItem::factory($options);
+	}
+
+	return $return;
+}
+
+// Hook into group routing to provide extra content
+function group_extender_route_groups_handler($hook, $type, $return, $params) {
+	set_input('groups_all_filter_extend', true);
+
+	// Make categories the default
+	if (!get_input('filter')) {
+		forward('groups/all?filter=categories');
+	}
+
+	// Check if we're in the 'categories' filter
+	if (is_array($return['segments']) && $return['segments'][0] == 'all' && get_input('filter') == 'categories') {
+		// Load JS
+		elgg_load_js('elgg.groupextender');	
+		
+		// all groups doesn't get link to self
+		elgg_pop_breadcrumb();
+		elgg_push_breadcrumb(elgg_echo('groups'));
+
+		elgg_register_title_button();
+		
+		$selected_tab = get_input('filter', 'categories');
+		
+		$filter = elgg_view('groups/group_sort_menu', array('selected' => $selected_tab));
+
+		$sidebar = elgg_view('groups/sidebar/find');
+		$sidebar .= elgg_view('groups/sidebar/featured');
+
+		$content = elgg_view('group-extender/group_categories');
+
+		$params = array(
+			'content' => $content,
+			'sidebar' => $sidebar,
+			'filter' => $filter,
+		);
+
+		$body = elgg_view_layout('content', $params);
+
+		echo elgg_view_page(elgg_echo('groups:all'), $body);
+		
+		return FALSE;
+	}
 	return $return;
 }
 

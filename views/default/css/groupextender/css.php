@@ -40,3 +40,38 @@
 	float: right;
 	font-size: 90%;
 }
+
+/** Group Categories on 'All' page **/
+#groups-all-categories-module {
+	float: left;
+	width: 30%;
+}
+
+#groups-all-categories-ajaxmodule li.elgg-item:hover {
+	cursor: pointer;
+	background: #eee;
+}
+
+#groups-all-categories-ajaxmodule li.elgg-item {
+	border-bottom: 0;
+	margin: 0;
+	padding-left: 4px;
+}
+
+#groups-all-categories-ajaxmodule li.elgg-item .elgg-subtext {
+	margin-bottom: 0;
+}
+
+#groups-all-categories-ajaxmodule .elgg-list {
+	border-top: 0;
+}
+
+#groups-all-group-list {
+	float: right;
+	width: 69%;
+}
+
+.category-state-selected, .category-state-selected:hover {
+	background: #ccc !important;
+}
+
