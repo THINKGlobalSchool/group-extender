@@ -42,7 +42,7 @@
 }
 
 /** Group Categories on 'All' page **/
-#groups-all-categories-module {
+#groups-all-categories-ajaxmodule {
 	float: left;
 	width: 30%;
 }

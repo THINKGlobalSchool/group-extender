@@ -11,20 +11,15 @@
  */
 
 // Categories Module
-$ajaxmodule = elgg_view('modules/genericmodule', array(
-	'view' => 'group-extender/modules/group_categories',
+$module =  elgg_view('modules/ajaxmodule', array(
+	'title' => '',
+	'subtypes' => array('group_category'),
+	'limit' => 15,
+	'module_type' => 'inline',
+	'module_class' => 'group-categories-module',
 	'module_id' => 'groups-all-categories-ajaxmodule',
-	'view_vars' => array(),
 ));
 
-$categories_module = elgg_view_module(
-	'info', 
-	'', 
-	$ajaxmodule,
-	array(
-		'id' => 'groups-all-categories-module'
-	));
-
-echo $categories_module;
+echo $module;
 
 echo "<div id='groups-all-group-list'></div>";
