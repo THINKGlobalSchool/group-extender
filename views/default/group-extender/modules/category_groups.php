@@ -1,6 +1,6 @@
 <?php
 /**
- * Group-Extender list groups in category
+ * Group-Extender list groups in category module
  * 
  * @package Group-Extender
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
@@ -24,6 +24,7 @@ $content = elgg_list_entities_from_relationship(array(
 	'inverse_relationship' => TRUE,
 	'types' => 'group',
 	'full_view' => FALSE,
+	'limit' => 15,
 ));
 
 if (!$content) {

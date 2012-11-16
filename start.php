@@ -119,6 +119,7 @@ function group_extender_init() {
 	elgg_register_ajax_view('group-extender/forms/current_tabs');
 	elgg_register_ajax_view('group-extender/group_tabs');
 	elgg_register_ajax_view('group-extender/admin/category_groups');
+	elgg_register_ajax_view('group-extender/category_groups');
 	elgg_register_ajax_view('group-extender/modules/groups');
 	elgg_register_ajax_view('group-extender/modules/group');
 	elgg_register_ajax_view('group-extender/modules/category_groups');
