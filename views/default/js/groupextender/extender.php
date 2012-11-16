@@ -71,6 +71,8 @@ elgg.groupextender.categories_populated_module = function(event, type, params, v
 	
 	if (category_module.length) {
 		var count = 0;
+		category_module.find('ul.elgg-list-entity').prepend("<li id='elgg-object-groups-all' class='elgg-item category-state-selected'><div class='elgg-image-block clearfix'><div class='elgg-body'><h3>" + elgg.echo('group-extender:label:allgroups') + "</h3><div class='elgg-subtext'></div></div></div></li>");
+
 		category_module.find('li.elgg-item').each(function() {
 			// Extract guid from list item
 			var id = $(this).attr('id');

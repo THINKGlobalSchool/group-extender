@@ -28,10 +28,11 @@ if (!$title) {
 // New Category
 if (!$category_guid) {
 	$category = new ElggObject();
-	$category->access_id = ACCESS_LOGGED_IN;
+	$category->access_id = ACCESS_PUBLIC;
 	$category->subtype = 'group_category';
 } else { // Editing
 	$category = get_entity($category_guid);
+	$category->access_id = ACCESS_PUBLIC;
 	if (!elgg_instanceof($category, 'object', 'group_category')) {
 		register_error(elgg_echo('group-extender:error:editcategory'));
 		forward(REFERER);

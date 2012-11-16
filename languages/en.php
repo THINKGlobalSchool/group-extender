@@ -65,6 +65,7 @@ $english = array(
 	'group-extender:label:noactivity' => 'No Activity',
 	'group-extender:label:add' => 'Add',
 	'group-extender:label:refresh' => 'Refresh',
+	'group-extender:label:allgroups' => 'All Groups',
 	
 	// Tab labels
 	'group-extender:tab:activity' => 'Activity',

@@ -19,15 +19,12 @@ if (!$category) {
 
 $linked_title = "<h3 style='padding-top: 14px;'><a href=\"{$category->getURL()}\" title=\"" . htmlentities($category->title) . "\">{$category->title}</a></h3>";
 
-
-if (!elgg_in_context('widgets')) {
-	$metadata = elgg_view_menu('entity', array(
-        'entity' => $category,
-        'handler' => 'group_category',
-        'sort_by' => 'priority',
-        'class' => 'elgg-menu-hz',
-	));
-}
+$metadata = elgg_view_menu('entity', array(
+       'entity' => $category,
+       'handler' => 'group_category',
+       'sort_by' => 'priority',
+       'class' => 'elgg-menu-hz',
+));
 
 if ($full) {
 	// I don't think we ever get here..

@@ -99,10 +99,10 @@ function group_extender_init() {
 
 	// Group category actions
 	$action_base = elgg_get_plugins_path() . 'group-extender/actions/group_category';
-	elgg_register_action("group_category/save", "$action_base/save.php");
-	elgg_register_action("group_category/delete", "$action_base/delete.php");
-	elgg_register_action("group_category/addgroup", "$action_base/addgroup.php");
-	elgg_register_action("group_category/removegroup", "$action_base/removegroup.php");	
+	elgg_register_action("group_category/save", "$action_base/save.php", 'admin');
+	elgg_register_action("group_category/delete", "$action_base/delete.php", 'admin');
+	elgg_register_action("group_category/addgroup", "$action_base/addgroup.php", 'admin');
+	elgg_register_action("group_category/removegroup", "$action_base/removegroup.php", 'admin');	
 	
 	// Pagesetup event handler
 	elgg_register_event_handler('pagesetup', 'system', 'group_extender_submenus');
@@ -244,9 +244,8 @@ function groups_extender_handle_edit_tabs_page($guid) {
  * Group categories entity plugin hook
  */
 function groupcategories_setup_entity_menu($hook, $type, $return, $params) {
-
 	$entity = $params['entity'];
-	
+
 	if (!elgg_instanceof($entity, 'object', 'group_category')) {
 		return $return;
 	}
@@ -260,7 +259,7 @@ function groupcategories_setup_entity_menu($hook, $type, $return, $params) {
 		'priority' => 2,
 	);
 	$return[] = ElggMenuItem::factory($options);
-	
+
 	$options = array(
 		'name' => 'delete',
 		'text' => elgg_view_icon('delete'),
