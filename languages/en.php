@@ -69,6 +69,9 @@ $english = array(
 	'group-extender:label:enabled' => 'Enable this category (setting this to no will low-level disable!)',
 	'group-extender:label:addtocategory' => 'Add to: %s',
 	'group-extender:label:removefromcategory' => 'Remove from: %s',
+	'group-extender:label:classcategory' => 'Global Class Category',
+	'group-extender:label:classgroups' => 'Classes',
+	'group-extender:label:othergroups' => 'Other Groups',
 	
 	// Tab labels
 	'group-extender:tab:activity' => 'Activity',

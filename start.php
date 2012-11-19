@@ -25,6 +25,7 @@ function group_extender_init() {
 	$ge_js = elgg_get_simplecache_url('js', 'groupextender/extender');
 	elgg_register_simplecache_view('js/groupextender/extender');
 	elgg_register_js('elgg.groupextender', $ge_js);
+	elgg_load_js('elgg.groupextender');
 
 	// Register group extender tabs JS
 	$tabs_js = elgg_get_simplecache_url('js', 'groupextender/tabs');
@@ -82,7 +83,10 @@ function group_extender_init() {
 	elgg_register_plugin_hook_handler('route', 'groups', 'group_extender_route_groups_handler');
 	
 	// Set up group admin hover menu
-	elgg_register_plugin_hook_handler('register', 'menu:group_hover', 'group_extender_hover_menu_setup', 9999);
+	elgg_register_plugin_hook_handler('register', 'menu:group_hover', 'group_extender_hover_menu_setup');
+	
+	// Set up group class filter menu
+	elgg_register_plugin_hook_handler('register', 'menu:groups_class_other_menu', 'group_extender_class_filter_menu_setup');
 
 	// Tab actions
 	$action_base = elgg_get_plugins_path() . 'group-extender/actions/group-extender';
@@ -127,6 +131,16 @@ function group_extender_init() {
 	elgg_register_ajax_view('group-extender/modules/group');
 	elgg_register_ajax_view('group-extender/modules/category_groups');
 	elgg_register_ajax_view('group-extender/modules/group_categories');
+	elgg_register_ajax_view('group-extender/modules/filter_class_groups');
+	
+	// Override plugin views if we have a class category defined
+	if (elgg_get_plugin_setting('class_category', 'group-extender')) {
+		// Override groups home page module
+		elgg_set_view_location('tgstheme/modules/groups', elgg_get_plugins_path() . "group-extender/overrides/");
+
+		// Override parentportal child groups module
+		elgg_set_view_location('parentportal/child_groups', elgg_get_plugins_path() . "group-extender/overrides/");
+	}	
 }
 
 /**
@@ -135,8 +149,7 @@ function group_extender_init() {
  * @param array $page Array of page elements, forwarded by the page handling mechanism
  */
 function group_extender_page_handler($page) {
-		// Load extender JS
-		elgg_load_js('elgg.groupextender');		
+		// Load extender JS		
 		elgg_load_js('elgg.groupextender.tabs');		
 		
 		// Load tab CSS
@@ -362,7 +375,7 @@ function group_extender_hover_menu_setup($hook, $type, $return, $params) {
 		$relationship = GROUP_CATEGORY_RELATIONSHIP;
 		$db_prefix = elgg_get_config('dbprefix');
 
-		// SQL to get categorie this group DOESN'T belong too
+		// SQL to get categories this group DOESN'T belong too
 		$options['wheres'][] = "NOT EXISTS (
 					SELECT 1 FROM {$db_prefix}entity_relationships
 						WHERE guid_one = '$group->guid'
@@ -409,6 +422,33 @@ function group_extender_hover_menu_setup($hook, $type, $return, $params) {
 		
 		access_show_hidden_entities($access_status);
 	}
+	
+	return $return;
+}
+
+/**
+ * Set up the groups class/other filter menu
+ */
+function group_extender_class_filter_menu_setup($hook, $type, $return, $params) {
+	$options = array(
+		'name' => 'class_groups',
+		'text' => elgg_echo('group-extender:label:classgroups'),
+		'href' => '#class-groups',
+		'priority' => 1,
+		'class' => 'groups-class-filter-menu-item',
+		'selected' => TRUE,
+	);
+	$return[] = ElggMenuItem::factory($options);
+
+	$options = array(
+		'name' => 'other_groups',
+		'text' => elgg_echo('group-extender:label:othergroups'),
+		'href' => '#other-groups',
+		'priority' => 2,
+		'class' => 'groups-class-filter-menu-item',
+	);
+	
+	$return[] = ElggMenuItem::factory($options);
 	
 	return $return;
 }

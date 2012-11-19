@@ -24,6 +24,9 @@ elgg.groupextender.init = function() {
 	
 	// Register click handler for group category hover menu items
 	$(document).delegate('.group-category-add-hover-menu-item, .group-category-remove-hover-menu-item', 'click', elgg.groupextender.groupCategoryHoverClick);
+	
+	// Register click handler for group class/other filter menu items
+	$(document).delegate('.groups-class-filter-menu-item', 'click', elgg.groupextender.classFilterClick);
 }
 
 // Change handler for group select 
@@ -176,6 +179,18 @@ elgg.groupextender.groupCategoryHoverClick = function(event) {
 		}
 	});
 
+	event.preventDefault();
+}
+
+// Register click handler for group class/other filter menu items
+elgg.groupextender.classFilterClick = function(event) {
+	$('.groups-class-filter-menu-item').parent().removeClass('elgg-state-selected');
+	$(this).parent().addClass('elgg-state-selected');
+
+	$('.groups-class-filter-container').hide();
+	
+	$($(this).attr('href')).show();
+	
 	event.preventDefault();
 }
 
