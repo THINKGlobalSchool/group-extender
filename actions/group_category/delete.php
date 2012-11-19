@@ -15,11 +15,16 @@ $category_guid = get_input('guid');
 
 $category = get_entity($category_guid);
 
+$access_status = access_get_show_hidden_status();
+access_show_hidden_entities(true);
+
 if (elgg_instanceof($category, 'object', 'group_category') && $category->delete()) {
 	// Success
 	system_message(elgg_echo('group-extender:success:deletecategory'));
 	forward('admin/groupextender/categories');	
 }
+
+access_show_hidden_entities($access_status);
 
 // Error
 register_error(elgg_echo('group-extender:error:deletecategory'));

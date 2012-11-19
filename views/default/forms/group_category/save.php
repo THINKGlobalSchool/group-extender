@@ -14,6 +14,7 @@
 $title = elgg_extract('title', $vars, '');
 $guid = elgg_extract('guid', $vars, NULL);
 $description = elgg_extract('description', $vars, '');
+$enabled = elgg_extract('enabled', $vars, 'yes');
 
 // Check if we've got an entity, if so, we're editing.
 if ($guid) {
@@ -36,6 +37,16 @@ $description_input = elgg_view("input/longtext", array(
 	'value' => $description
 ));
 
+$hidden_label = elgg_echo('group-extender:label:enabled');
+$hidden_input = elgg_view('input/dropdown', array(
+	'name' => 'enabled', 
+	'value' => $enabled,
+	'options_values' => array(
+		'yes' => elgg_echo('option:yes'),
+		'no' => elgg_echo('option:no'),
+	)
+));
+
 $submit_input = elgg_view('input/submit', array(
 	'name' => 'submit', 
 	'value' => elgg_echo('save')
@@ -52,6 +63,10 @@ $form_body = <<<HTML
 	<div>
 		<label>$description_label</label><br />
         $description_input
+	</div><br />
+	<div>
+		<label>$hidden_label</label><br />
+        $hidden_input
 	</div><br />
 	<div class='elgg-foot'>
 		$submit_input

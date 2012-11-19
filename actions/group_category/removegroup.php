@@ -23,6 +23,9 @@ if (!$group) {
 	forward(REFERER);
 }
 
+$access_status = access_get_show_hidden_status();
+access_show_hidden_entities(true);
+
 // Get category entity
 $category = get_entity($category_guid);
 
@@ -40,4 +43,6 @@ if (groupcategories_remove_group($category, $group)) {
 	// There was an error
 	register_error(elgg_echo('group-extender:error:removegroup'));
 }
+
+access_show_hidden_entities($access_status);
 forward(REFERER);

@@ -21,6 +21,9 @@ elgg.groupextender.init = function() {
 
 	// Preset links
 	$('.groupdashboard-preset-link').live('click', elgg.groupextender.presetClick);
+	
+	// Register click handler for group category hover menu items
+	$(document).delegate('.group-category-add-hover-menu-item, .group-category-remove-hover-menu-item', 'click', elgg.groupextender.groupCategoryHoverClick);
 }
 
 // Change handler for group select 
@@ -124,6 +127,56 @@ elgg.groupextender.category_load_groups = function(category_guid) {
 			$('#groups-all-group-list').html(data);
 		},
 	});
+}
+
+// Click handler for group category hover items
+elgg.groupextender.groupCategoryHoverClick = function(event) {
+	var action = '';
+	var data = '';
+	var old_class = '';
+	var new_class = '';
+	
+	// HREF is in the format: #group_guid:category_guid
+	var href = $(this).attr('href');
+	var group_guid = href.substring(1, href.indexOf(':'));
+	var category_guid = href.substring(href.indexOf(':') + 1);
+	
+	if ($(this).hasClass('group-category-add-hover-menu-item')) {
+		action = elgg.get_site_url() + 'action/group_category/addgroup';
+		data = {'members[]' : group_guid, category_guid : category_guid};
+		new_class = 'group-category-remove-hover-menu-item';
+		old_class = 'group-category-add-hover-menu-item';
+		new_text = $(this).html().replace("Add to:", "Remove from:");
+	} else if ($(this).hasClass('group-category-remove-hover-menu-item')) {
+		action = elgg.get_site_url() + 'action/group_category/removegroup';
+		field_name = 'group_guid';
+		data = {group_guid : group_guid, category_guid : category_guid};
+		new_class = 'group-category-add-hover-menu-item';
+		old_class = 'group-category-remove-hover-menu-item';
+		new_text = $(this).html().replace("Remove from:", "Add to:");
+	}
+	
+	var $_this = $(this);
+
+	// Add/remove the group
+	elgg.action(action, {
+		data: data,
+		success: function(json) {
+			// Replace link 
+			if (json.status >= 0) {
+				// Move link to add/remove section
+				$_this.closest('.elgg-menu-hover-admin')
+					.find("." + new_class + ":last")
+					.parent()
+					.after($_this.parent());
+				
+				// Replace classes and update text
+				$_this.removeClass(old_class).addClass(new_class).html(new_text);
+			}
+		}
+	});
+
+	event.preventDefault();
 }
 
 elgg.register_hook_handler('init', 'system', elgg.groupextender.init);

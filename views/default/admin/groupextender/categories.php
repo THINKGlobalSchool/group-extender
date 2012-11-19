@@ -27,10 +27,11 @@ $add_category = elgg_view('output/url', array(
 $module =  elgg_view('modules/ajaxmodule', array(
 	'title' => elgg_echo('group-extender:label:currentcategories'),
 	'subtypes' => array('group_category'),
-	'limit' => 15,
+	'limit' => 0,
 	'module_type' => 'inline',
 	'module_class' => 'group-categories-module',
 	'module_id' => 'category-list',
+	'access_show_hidden_entities' => TRUE,
 ));
 
 $content = <<<HTML

@@ -14,6 +14,9 @@
 $groups = get_input('members');
 $category_guid = (int)sanitise_string(get_input('category_guid'));
 
+$access_status = access_get_show_hidden_status();
+access_show_hidden_entities(true);
+
 // Check for group
 if (empty($groups)) {
 	register_error(elgg_echo('group-extender:error:grouprequired'));
@@ -50,4 +53,6 @@ foreach ($groups as $guid) {
 		register_error(elgg_echo('group-extender:error:invalidgroup', array($guid)));
 	}
 }
+
+access_show_hidden_entities($access_status);
 forward(REFERER);
