@@ -12,6 +12,10 @@
 
 $guid = elgg_extract('guid', $vars, NULL);
 
+
+$access_status = access_get_show_hidden_status();
+access_show_hidden_entities(true);
+
 $category = get_entity($guid);
 
 if (!$category) {
@@ -73,3 +77,5 @@ $groups_label = elgg_echo('group-extender:label:groups');
 $groups_module = elgg_view_module('inline', $groups_label, $content);
 
 echo $group_form_module . $groups_module;
+
+access_show_hidden_entities($access_status);

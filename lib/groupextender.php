@@ -342,6 +342,10 @@ function group_extender_get_dashboard() {
 function groupcategories_get_edit_content($type, $guid = NULL) {	
 	elgg_push_breadcrumb(elgg_echo('admin:groupextender:categories'), elgg_get_site_url() . 'admin/groupextender/categories');
 	if ($type == 'edit') {
+
+		$access_status = access_get_show_hidden_status();
+		access_show_hidden_entities(true);
+		
 		$category = get_entity($guid);
 		elgg_push_breadcrumb($category->title, $category->getURL());
 		elgg_push_breadcrumb(elgg_echo('edit'));
@@ -358,7 +362,9 @@ function groupcategories_get_edit_content($type, $guid = NULL) {
 	$content = elgg_view('navigation/breadcrumbs');
 	
 	$content .= elgg_view_form('group_category/save', array('name' => 'category-edit-form', 'id' => 'category-edit-form'), $form_vars);
-	
+
+	access_show_hidden_entities($access_status);
+
 	echo $content;
 }
 
@@ -376,6 +382,7 @@ function groupcategories_prepare_form_vars($category = NULL) {
 		'title' => '',
 		'description' => '',
 		'guid' => NULL,
+		'enabled' => '',
 	);
 
 	if ($category) {

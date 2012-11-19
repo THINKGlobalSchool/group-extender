@@ -80,6 +80,9 @@ function group_extender_init() {
 
 	// extend groups page handler
 	elgg_register_plugin_hook_handler('route', 'groups', 'group_extender_route_groups_handler');
+	
+	// Set up group admin hover menu
+	elgg_register_plugin_hook_handler('register', 'menu:group_hover', 'group_extender_hover_menu_setup', 9999);
 
 	// Tab actions
 	$action_base = elgg_get_plugins_path() . 'group-extender/actions/group-extender';
@@ -337,6 +340,76 @@ function group_extender_route_groups_handler($hook, $type, $return, $params) {
 		
 		return FALSE;
 	}
+	return $return;
+}
+
+/**
+ * Set up the group hover menu
+ */
+function group_extender_hover_menu_setup($hook, $type, $return, $params) {
+	if (elgg_is_admin_logged_in()) {
+		
+		$group = $params['entity'];
+		
+		// General catgory options
+		$options = array(
+			'types' => 'object',
+			'subtypes' => 'group_category',
+			'limit' => 0,
+		);
+
+		// Group category relationship
+		$relationship = GROUP_CATEGORY_RELATIONSHIP;
+		$db_prefix = elgg_get_config('dbprefix');
+
+		// SQL to get categorie this group DOESN'T belong too
+		$options['wheres'][] = "NOT EXISTS (
+					SELECT 1 FROM {$db_prefix}entity_relationships
+						WHERE guid_one = '$group->guid'
+						AND relationship = '$relationship'
+						AND guid_two = e.guid
+				)";
+
+		$access_status = access_get_show_hidden_status();
+		access_show_hidden_entities(true);
+
+		$categories = elgg_get_entities($options);
+	
+		// Add 'add to category' menu items
+		foreach ($categories as $category) {
+			$options = array(
+				'name' => 'add_to_category_' . $category->guid,
+				'text' => elgg_echo('group-extender:label:addtocategory', array($category->title)),
+				'href' => '#' . $group->guid . ':' . $category->guid,
+				'section' => 'admin',
+				'class' => 'group-category-add-hover-menu-item',
+			);
+			$return[] = ElggMenuItem::factory($options);
+		}
+		
+		$options['wheres'] = NULL;
+		$options['relationship'] = GROUP_CATEGORY_RELATIONSHIP;
+		$options['relationship_guid'] = $group->guid;
+		$options['inverse_relationship'] = FALSE;
+		
+		$categories = elgg_get_entities_from_relationship($options);
+		
+		// Add 'remove from category' menu items
+		foreach ($categories as $category) {
+			$options = array(
+				'name' => 'remove_from_category_' . $category->guid,
+				'text' => elgg_echo('group-extender:label:removefromcategory', array($category->title)),
+				'href' => '#' . $group->guid . ':' . $category->guid,
+				'section' => 'admin',
+				'class' => 'group-category-remove-hover-menu-item',
+			);
+			$return[] = ElggMenuItem::factory($options);
+		}
+		
+		
+		access_show_hidden_entities($access_status);
+	}
+	
 	return $return;
 }
 
