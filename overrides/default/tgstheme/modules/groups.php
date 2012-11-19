@@ -1,0 +1,105 @@
+<?php
+/**
+ * Group-Extender Groups Homepage Module Replacement
+ * 
+ * @package Group-Extender
+ * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
+ * @author Jeff Tilson
+ * @copyright THINK Global School 2010 - 2012
+ * @link http://www.thinkglobalschool.com/
+ * 
+ */
+
+$user = elgg_get_logged_in_user_entity();
+
+// Get db prefix for custom joins
+$db_prefix = elgg_get_config('dbprefix');
+
+$limit = elgg_extract('limit', $vars, 10);
+$offset = elgg_extract('offset', $vars, 0);
+
+$params = array(
+	'type' => 'group',
+	'relationship' => 'member',
+	'relationship_guid' => $user->guid,
+	'inverse_relationship' => FALSE,
+	'full_view' => FALSE,
+	'group_by' => 'ec.container_guid',
+	'order_by' => 'ec.time_updated DESC',
+	'limit' => $limit,
+	'offset' => $offset,
+);
+
+// Need to throw in a new select as well
+$params['selects'][] = 'ec.time_updated';
+
+// This is the magic join that grabs the entities of a group ordered by time_updated
+$params['joins'][] = "JOIN (
+	SELECT DISTINCT xyz.container_guid, xyz.time_updated
+	FROM {$db_prefix}entities xyz
+	ORDER BY xyz.time_updated DESC
+) ec on ec.container_guid = e.guid";
+
+
+
+// Category relationship
+$class_category_guid = elgg_get_plugin_setting('class_category', 'group-extender');
+$relationship = GROUP_CATEGORY_RELATIONSHIP;
+
+// SQL to determine if this group is NOT in classes category
+$params['wheres'][] = "NOT EXISTS (
+			SELECT 1 FROM {$db_prefix}entity_relationships
+				WHERE guid_one = e.guid
+				AND relationship = '$relationship'
+				AND guid_two = '$class_category_guid'
+)";
+
+$params['count'] = FALSE;
+$other_groups = elgg_get_entities_from_relationship($params);
+
+// Get and count class groups
+$params['wheres'] = NULL;
+
+// SQL to determine if this class IS in the class category
+$params['wheres'][] = "EXISTS (
+			SELECT 1 FROM {$db_prefix}entity_relationships
+				WHERE guid_one = e.guid
+				AND relationship = '$relationship'
+				AND guid_two = '$class_category_guid'
+)";
+
+$params['count'] = FALSE;
+$class_groups = elgg_get_entities_from_relationship($params);
+
+
+// Build 'other' groups content
+foreach($other_groups as $group) {
+	$other_content .= elgg_view('tgstheme/group_listing', array('group' => $group));
+}
+
+// Build 'class' groups content
+foreach($class_groups as $group) {
+	$class_content .= elgg_view('tgstheme/group_listing', array('group' => $group));
+}
+
+// Main content
+$content = elgg_view_menu('groups_class_other_menu', array(
+	'sort_by' => 'priority',
+	'class' => 'elgg-menu-hz elgg-menu-filter elgg-menu-filter-default'
+));
+
+$content .= "<div id='other-groups' class='groups-class-filter-container' style='display: none;'>$other_content</div>";
+$content .= "<div id='class-groups' class='groups-class-filter-container'>$class_content</div>";
+
+// All my groups link
+$content .= "<span class='groups-widget-viewall'>" . elgg_view('output/url', array(
+	'text' => elgg_echo('tgstheme:label:allmygroups'),
+	'value' => elgg_get_site_url() . 'groups/member/' . elgg_get_logged_in_user_entity()->username,
+)) . "</span>";
+
+// Module options
+$options = array(
+	'class' => 'tgstheme-module tgstheme-groups-module',
+);
+
+echo elgg_view_module('featured', elgg_echo('groups'), $content, $options);
