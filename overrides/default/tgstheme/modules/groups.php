@@ -82,6 +82,17 @@ foreach($class_groups as $group) {
 	$class_content .= elgg_view('tgstheme/group_listing', array('group' => $group));
 }
 
+// No results content
+$no_results = "<h3 class='center'>" . elgg_echo('group-extender:label:noresults') . "</h3>"; 
+
+if (!$class_content) {
+	$class_content = $no_results;
+}
+
+if (!$other_content) {
+	$other_content = $no_results;
+}
+
 // Main content
 $content = elgg_view_menu('groups_class_other_menu', array(
 	'sort_by' => 'priority',
