@@ -16,6 +16,9 @@ elgg.groupextender.getCategoryGroupsURL = 'ajax/view/group-extender/category_gro
 
 // General init
 elgg.groupextender.init = function() {
+	// Init move/copy lightbox
+	elgg.groupextender.initMoveCopyLightbox();
+	
 	// Register change handler for group select
 	$('#groups-dashboard-group-select').change(elgg.groupextender.groupSelectChange);
 
@@ -27,6 +30,12 @@ elgg.groupextender.init = function() {
 	
 	// Register click handler for group class/other filter menu items
 	$(document).delegate('.groups-class-filter-menu-item', 'click', elgg.groupextender.classFilterClick);
+	
+	// Register click handler for move to group submit button
+	$(document).delegate('.ge-move-to-group-submit', 'click', elgg.groupextender.moveToGroupClick);
+
+	// Register click handler for copy to group submit button
+	$(document).delegate('.ge-copy-to-group-submit', 'click', elgg.groupextender.copyToGroupClick);
 }
 
 // Change handler for group select 
@@ -194,5 +203,97 @@ elgg.groupextender.classFilterClick = function(event) {
 	event.preventDefault();
 }
 
+/**
+ * Init lightboxes (can be called manually)
+ */
+elgg.groupextender.initMoveCopyLightbox = function() {
+	$('.group-extender-move-copy-lightbox').colorbox({
+		'initialWidth' : '50',
+		'initialHeight' : '50',
+		'title' : function() {
+			return "<h2>" + $(this).attr('title') + "</h2>";
+		},
+		'onComplete' : function() {
+			$(this).colorbox.resize();
+		},
+		'onOpen' : function() {
+			$(this).removeClass('cboxElement');
+		},
+		'onClosed' : function() {
+			$(this).addClass('cboxElement');
+		}
+	});	
+}
+
+// Click handler for move to group submit button
+elgg.groupextender.moveToGroupClick = function(event) {	
+	var confirmText = elgg.echo('question:areyousure');
+	if (confirm(confirmText)) {
+		var $_this = $(this);
+		
+		$_this.attr('disabled', 'DISABLED');
+
+		var $form = $(this).closest('form');
+		var values = {};
+		$.each($form.serializeArray(), function(i, field) {
+		    values[field.name] = field.value;
+		});
+
+		// Add/remove the group
+		elgg.action($form.attr('action'), {
+			data: values,
+			success: function(json) {
+				if (json.status >= 0) {
+					// Remove link from actions menu
+					var $link = $('#ge-move-to-group-' + values.entity_guid);
+					var $menu = $link.closest('.tgstheme-entity-menu-actions');
+					var width = $menu.width();
+					$link.parent().remove();
+					$menu.width(width);
+				} else {
+					// Error..
+					$_this.removeAttr('disabled');
+				}
+				$.colorbox.close();
+			}
+		});
+	}
+	
+	event.preventDefault();
+}
+
+// Click handler for copy to group submit button
+elgg.groupextender.copyToGroupClick = function(event) {	
+	var confirmText = elgg.echo('question:areyousure');
+	if (confirm(confirmText)) {
+		var $_this = $(this);
+		
+		$_this.attr('disabled', 'DISABLED');
+		
+		var $form = $(this).closest('form');
+		var values = {};
+		$.each($form.serializeArray(), function(i, field) {
+		    values[field.name] = field.value;
+		});
+
+		// Add/remove the group
+		elgg.action($form.attr('action'), {
+			data: values,
+			success: function(json) {
+				if (json.status >= 0) {
+					// Do nothing
+				} else {
+					// Error..
+					$_this.removeAttr('disabled');
+				}
+				$.colorbox.close();
+			}
+		});
+	}
+	
+	event.preventDefault();
+}
+
 elgg.register_hook_handler('init', 'system', elgg.groupextender.init);
 elgg.register_hook_handler('populated', 'modules', elgg.groupextender.categories_populated_module);
+elgg.register_hook_handler('tab_loaded', 'todo_dashboard', elgg.groupextender.initMoveCopyLightbox);

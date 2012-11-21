@@ -322,6 +322,86 @@ function group_extender_get_name_search() {
 	echo elgg_view_page($title, $body);
 }
 
+/**
+ * Helper function that recursively clones sub pages
+ * NOTE: This is unused, and untested
+ * 
+ * @param int $parent_guid      The original parent guid
+ * @param int $new_parent_guid  New parent guid
+ * @param int $container_guid   New container guid (optional)
+ * @return bool 
+ */
+/*
+function group_extender_clone_sub_pages_recursive($parent_guid, $new_parent_guid, $container_guid = NULL) {
+	// Get sub pages for given parent_guid
+	$sub_pages = elgg_get_entities_from_metadata(array(
+		'type' => 'object', 
+		'subtype' => 'page',
+		'limit' => 0,
+		'metadata_name' => 'parent_guid',
+		'metadata_value' => $parent_guid,
+	));
+	
+	$return = TRUE;
+
+	foreach ($sub_pages as $page) {
+		$new_page = clone $page;
+		
+		// If we're setting a new container guid, update it
+		if ($container_guid) {
+			$new_page->container_guid = $container_guid;
+		}
+		
+		// Save new page and trigger groupcopy hook
+		$params = array('entity' => $page, 'new_entity' => $new_page);
+		$return &= $new_page->save() && elgg_trigger_plugin_hook('groupcopy', 'entity', $params, TRUE);
+
+		// All good? Recursively clone subpages
+		if ($return) {
+			group_extender_clone_sub_pages_recursive($page->guid, $new_page->guid, $container_guid);
+		}
+	}
+	
+	return $return;
+}*/
+
+/**
+ * Helper function that recursively moves sub pages to a new container guid
+ * 
+ * @param ElggObject $parent Page parent entity
+ * @return bool 
+ */
+function group_extender_move_sub_pages_recursive($parent) {	
+	$parent_guid = $parent->guid;
+	$container_guid = $parent->container_guid;
+
+	// Get sub pages for given parent_guid
+	$sub_pages = elgg_get_entities_from_metadata(array(
+		'type' => 'object', 
+		'subtype' => 'page',
+		'limit' => 0,
+		'metadata_name' => 'parent_guid',
+		'metadata_value' => $parent_guid,
+	));
+
+	$return = TRUE;
+
+	foreach ($sub_pages as $page) {		
+		$page->container_guid = $container_guid;
+		
+		// Save new page and trigger groupcopy hook
+		$params = array('entity' => $page);
+		$return &= $page->save() && elgg_trigger_plugin_hook('groupmove', 'entity', $params, TRUE);
+
+		// All good? Recursively move subpages
+		if ($return) {
+			group_extender_move_sub_pages_recursive($page);
+		}
+	}
+
+	return $return;
+}
+
 /** Group Dashboard Content **/
 
 function group_extender_get_dashboard() {

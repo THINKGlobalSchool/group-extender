@@ -52,6 +52,12 @@ function group_extender_init() {
 	elgg_register_simplecache_view('js/groupextender/grouppicker');
 	elgg_register_js('elgg.grouppicker', $gp_js);
 
+	// Register colorbox JS
+	$cb_js = elgg_get_simplecache_url('js', 'colorbox');
+	elgg_register_simplecache_view('js/colorbox');
+	elgg_register_js('colorbox', $cb_js);
+	elgg_load_js('colorbox');
+	
 	// Register my own page handler
 	elgg_register_page_handler('groups','group_extender_page_handler');
 
@@ -72,12 +78,15 @@ function group_extender_init() {
 	
 	// Fix group profile ECML
 	elgg_register_plugin_hook_handler('get_views', 'ecml', 'group_extender_ecml_views_hook');
+
+	// General Group Extender entity menu hook
+	elgg_register_plugin_hook_handler('register', 'menu:entity', 'group_extender_setup_entity_menu');
 	
 	// Group categories entity menu hook
 	elgg_register_plugin_hook_handler('register', 'menu:entity', 'groupcategories_setup_entity_menu', 9999);
 	
 	// Hook into filter menu
-	elgg_register_plugin_hook_handler('register', 'menu:filter', 'group_extender_setup_group_filter_menu', 9999);
+	elgg_register_plugin_hook_handler('register', 'menu:filter', 'group_extender_setup_group_filter_menu');
 
 	// extend groups page handler
 	elgg_register_plugin_hook_handler('route', 'groups', 'group_extender_route_groups_handler');
@@ -87,6 +96,15 @@ function group_extender_init() {
 	
 	// Set up group class filter menu
 	elgg_register_plugin_hook_handler('register', 'menu:groups_class_other_menu', 'group_extender_class_filter_menu_setup');
+
+	// Register some initial copyable types
+	//elgg_register_plugin_hook_handler('cangroupcopy', 'entity', 'group_extender_can_group_copy_handler');
+	
+	// Register a handler for core subtype copying
+	//elgg_register_plugin_hook_handler('groupcopy', 'entity', 'group_extender_group_copy_handler');
+	
+	// Register a handler for core subtype's group move functionality
+	elgg_register_plugin_hook_handler('groupmove', 'entity', 'group_extender_group_move_handler');
 
 	// Tab actions
 	$action_base = elgg_get_plugins_path() . 'group-extender/actions/group-extender';
@@ -109,7 +127,12 @@ function group_extender_init() {
 	elgg_register_action("group_category/save", "$action_base/save.php", 'admin');
 	elgg_register_action("group_category/delete", "$action_base/delete.php", 'admin');
 	elgg_register_action("group_category/addgroup", "$action_base/addgroup.php", 'admin');
-	elgg_register_action("group_category/removegroup", "$action_base/removegroup.php", 'admin');	
+	elgg_register_action("group_category/removegroup", "$action_base/removegroup.php", 'admin');
+	
+	// Group Content Actions
+	$action_base = elgg_get_plugins_path() . 'group-extender/actions/groups';
+	elgg_register_action("groups/movecontent", "$action_base/movecontent.php");
+	elgg_register_action("groups/copycontent", "$action_base/copycontent.php");	
 	
 	// Pagesetup event handler
 	elgg_register_event_handler('pagesetup', 'system', 'group_extender_submenus');
@@ -132,6 +155,8 @@ function group_extender_init() {
 	elgg_register_ajax_view('group-extender/modules/category_groups');
 	elgg_register_ajax_view('group-extender/modules/group_categories');
 	elgg_register_ajax_view('group-extender/modules/filter_class_groups');
+	elgg_register_ajax_view('group-extender/popup/move');
+	elgg_register_ajax_view('group-extender/popup/copy');
 	
 	// Override plugin views if we have a class category defined
 	if (elgg_get_plugin_setting('class_category', 'group-extender')) {
@@ -161,7 +186,6 @@ function group_extender_page_handler($page) {
 		
 		// Load tgsembed JS/CSS
 		if (elgg_is_active_plugin('tgsembed')) {
-			elgg_load_js('colorbox');
 			elgg_load_js('jQuery-File-Upload');
 			elgg_load_js('elgg.tgsembed');
 			elgg_load_css('elgg.tgsembed');
@@ -291,6 +315,65 @@ function groupcategories_setup_entity_menu($hook, $type, $return, $params) {
 }
 
 /**
+ * Customize entity menu and add group extender actions
+ */
+function group_extender_setup_entity_menu($hook, $type, $return, $params) {
+	$entity = $params['entity'];
+	
+	// Ignore these subtypes for move/copy
+	$exceptions = array(
+		'forum',
+		'forum_topic',
+		'forum_reply',
+		'image',
+		'announcement',
+		'book',
+		'page', // Only parent pages can be moved to group
+	);
+
+	// Check to make sure we can move/copy this entity
+	if (elgg_instanceof($entity, 'object') && !in_array($entity->getSubtype(), $exceptions) && (elgg_is_admin_logged_in() || $entity->owner_guid == elgg_get_logged_in_user_guid())) {	
+		
+		// Determine which entity subtypes can be copied
+		$params = array('entity' => $entity);
+		$copy_subtypes = elgg_trigger_plugin_hook('cangroupcopy', 'entity', $params, array());	
+		
+		// Move menu item	
+		$options = array(
+			'name' => 'move_to_group',
+			'text' => elgg_echo('group-extender:label:movetogroup'),
+			'title' => elgg_echo('group-extender:label:movetogroup'),
+			'href' => elgg_get_site_url() . 'ajax/view/group-extender/popup/move?guid=' . $entity->guid,
+			'class' => 'ge-move-to-group',
+			'link_class' => 'group-extender-move-copy-lightbox',
+			'section' => 'actions',
+			'priority' => 800,
+			'id' => "ge-move-to-group-{$entity->guid}",
+		);
+		$return[] = ElggMenuItem::factory($options);
+		
+		if (in_array($entity->getSubtype(), $copy_subtypes)) {
+			// Entity if allowed to copy, so add copy menu item
+			$options = array(
+				'name' => 'copy_to_group',
+				'text' => elgg_echo('group-extender:label:copytogroup'),
+				'title' => elgg_echo('group-extender:label:copytogroup'),
+				'href' => elgg_get_site_url() . 'ajax/view/group-extender/popup/copy?guid=' . $entity->guid,
+				'class' => 'ge-copy-to-group',
+				'link_class' => 'group-extender-move-copy-lightbox',
+				'section' => 'actions',
+				'priority' => 800,
+				'id' => "ge-copy-to-group-{$entity->guid}",
+			);
+			$return[] = ElggMenuItem::factory($options);
+		}
+	}
+	
+	
+	return $return;
+}
+
+/**
  * Hook into menu filter to find and extend the groups nav menu
  */
 function group_extender_setup_group_filter_menu($hook, $type, $return, $params) {
@@ -312,7 +395,10 @@ function group_extender_setup_group_filter_menu($hook, $type, $return, $params) 
 
 // Hook into group routing to provide extra content
 function group_extender_route_groups_handler($hook, $type, $return, $params) {
-	set_input('groups_all_filter_extend', true);
+	// Add filter extend context
+	if (is_array($return['segments']) && $return['segments'][0] == 'all') {
+		set_input('groups_all_filter_extend', true); 
+	}
 
 	// Make categories the default
 	if (is_array($return['segments']) && $return['segments'][0] == 'all' && !get_input('filter')) {
@@ -321,8 +407,6 @@ function group_extender_route_groups_handler($hook, $type, $return, $params) {
 
 	// Check if we're in the 'categories' filter
 	if (is_array($return['segments']) && $return['segments'][0] == 'all' && get_input('filter') == 'categories') {
-		//var_dump('here');
-		//die;
 		// Load JS
 		elgg_load_js('elgg.groupextender');	
 		
@@ -452,6 +536,48 @@ function group_extender_class_filter_menu_setup($hook, $type, $return, $params) 
 	
 	return $return;
 }
+
+/**
+ * Set up intitial (core) group copyable subtypes
+ */
+function group_extender_can_group_copy_handler($hook, $type, $return, $params) {
+	// Core subtypes
+	$return[] = 'blog';
+	$return[] = 'bookmarks';
+
+	return $return;
+}
+
+/**
+ * Set up intitial (core) group copyable subtypes
+ */
+function group_extender_group_copy_handler($hook, $type, $return, $params) {
+	$new_entity = $params['new_entity'];
+	
+	if ($new_entity->getSubtype() == 'page_top') {
+		//$original_page = $params['entity'];
+		//group_extender_clone_sub_pages_recursive($original_page->guid, $new_entity->guid, $new_entity->container_guid);
+		//$new_entity->delete();
+		//return false;
+	}
+
+	return $return;
+}
+
+/**
+ * Handle extra tasks after moving core entities
+ */
+function group_extender_group_move_handler($hook, $type, $return, $params) {
+	$entity = $params['entity'];
+	
+	// Need to move all page subpages
+	if ($entity->getSubtype() == 'page_top') {
+		return group_extender_move_sub_pages_recursive($entity);
+	}
+
+	return $return;
+}
+
 
 /**
  * Setup Group Extender Submenus
