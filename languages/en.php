@@ -72,6 +72,11 @@ $english = array(
 	'group-extender:label:classcategory' => 'Global Class Category',
 	'group-extender:label:classgroups' => 'Classes',
 	'group-extender:label:othergroups' => 'Other Groups',
+	'group-extender:label:movetogroup' => 'Move to Group',
+	'group-extender:label:copytogroup' => 'Copy to Group',
+	'group-extender:label:move' => 'Move',
+	'group-extender:label:copy' => 'Copy',
+	'group-extender:label:selectgroup' => 'Select Group',
 	
 	// Tab labels
 	'group-extender:tab:activity' => 'Activity',
@@ -83,6 +88,7 @@ $english = array(
 	
 	// Messages
 	'group-extender:error:invalidgroup' => 'Invalid Group',
+	'group-extender:error:invalidentity' => 'Invalid Entity',
 	'group-extender:error:invalidcategory' => 'Invalid Category',
 	'group-extender:error:invalidtab' => 'Invalid Tab',
 	'group-extender:error:invalidpriority' => 'Invalid Priority',
@@ -97,6 +103,8 @@ $english = array(
 	'group-extender:error:existingcategory' => '%s is already a part of the category %s',
 	'group-extender:error:addgroup' => 'There was an error adding the group to the category',
 	'group-extender:error:removegroup' => 'There was an error removing the group from the category',
+	'group-extender:error:move' => 'There was an error moving the item to group: %s',
+	'group-extender:error:copy' => 'There was an error copying the item to group: %s',
 	'group-extender:success:addgroup' => 'Successfully added group to category: %s',
 	'group-extender:success:removegroup' => 'Successfully removed group from category: %s',
 	'group-extender:success:savetab' => 'Successfully saved group tab',
@@ -105,6 +113,8 @@ $english = array(
 	'group-extender:success:savecategory' => 'Successfully saved category',
 	'group-extender:success:deletecategory' => 'Successfully deleted category',
 	'group-extender:success:dashboardsettings' => 'Group Dashboard Settings Saved',
+	'group-extender:success:move' => 'Successfully moved item to group: %s',
+	'group-extender:success:copy' => 'Successfully copied item to group: %s',
 );
 
 add_translation('en',$english);
