@@ -104,6 +104,58 @@
 	margin-top: 6px;
 }
 
+/* Groups topbar item and hover */
+.elgg-menu-item-groups-topbar-hover-menu {
+	height: 40px;
+}
+
+.elgg-menu-item-groups-topbar-hover-menu > a { 
+	border-left: 1px solid #DB1730; 
+	padding: 2px 15px 0 10px !important;
+}
+
+.elgg-menu-item-groups-topbar-hover-menu:hover #groups-topbar-hover {
+	display: block;
+}
+
+#groups-topbar-hover {
+	position: absolute;
+	top: 32px;
+	left: 0;
+	background: #ffffff;
+	-webkit-border-radius: 0 0 4px 4px;
+	-moz-border-radius: 0 0 4px 4px;
+	border-radius: 0 0 4px 4px;
+	border: 1px solid #999;
+	border-top: 0px;
+	min-width: 300px;
+	display: none;
+}
+
+#groups-topbar-hover ul li {
+	border-bottom: 1px dotted #CCC;
+}
+
+#groups-topbar-hover ul li:hover {
+	background: #2D3F46
+}
+
+#groups-topbar-hover ul li:hover  .elgg-body a {
+	color: #FFFFFF;
+}
+
+#groups-topbar-hover ul li:last-child {
+	-webkit-border-radius: 0 0 4px 4px;
+	-moz-border-radius: 0 0 4px 4px;
+	border-radius: 0 0 4px 4px;
+}
+
+#groups-topbar-hover .elgg-image-block {
+	padding: 4px 0 6px;
+	margin: 0px;
+}
+
+
 /*
     ColorBox Core Style:
     The following CSS is consistent between example themes and should not be altered.
