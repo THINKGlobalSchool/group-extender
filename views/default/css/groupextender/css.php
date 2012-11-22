@@ -99,6 +99,11 @@
 	width: 150px;
 }
 
+.ge-move-out-of-group {
+	float: right;
+	margin-top: 6px;
+}
+
 /*
     ColorBox Core Style:
     The following CSS is consistent between example themes and should not be altered.

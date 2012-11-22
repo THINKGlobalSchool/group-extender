@@ -73,6 +73,9 @@ $english = array(
 	'group-extender:label:classgroups' => 'Classes',
 	'group-extender:label:othergroups' => 'Other Groups',
 	'group-extender:label:movetogroup' => 'Move to Group',
+	'group-extender:label:movetoanothergroup' => 'Move to Another Group',
+	'group-extender:label:moveoutofgroup' => 'Move out of Group',
+	'group-extender:label:moveoutconfirm' => 'You are about to move this item to your personal profile. Do you wish to continue?',
 	'group-extender:label:copytogroup' => 'Copy to Group',
 	'group-extender:label:move' => 'Move',
 	'group-extender:label:copy' => 'Copy',
@@ -104,6 +107,7 @@ $english = array(
 	'group-extender:error:addgroup' => 'There was an error adding the group to the category',
 	'group-extender:error:removegroup' => 'There was an error removing the group from the category',
 	'group-extender:error:move' => 'There was an error moving the item to group: %s',
+	'group-extender:error:moveout' => 'There was an error moving the item out of the group',
 	'group-extender:error:copy' => 'There was an error copying the item to group: %s',
 	'group-extender:success:addgroup' => 'Successfully added group to category: %s',
 	'group-extender:success:removegroup' => 'Successfully removed group from category: %s',
@@ -114,6 +118,7 @@ $english = array(
 	'group-extender:success:deletecategory' => 'Successfully deleted category',
 	'group-extender:success:dashboardsettings' => 'Group Dashboard Settings Saved',
 	'group-extender:success:move' => 'Successfully moved item to group: %s',
+	'group-extender:success:moveout' => 'Successfully moved item out of group',
 	'group-extender:success:copy' => 'Successfully copied item to group: %s',
 );
 
