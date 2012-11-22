@@ -338,11 +338,17 @@ function group_extender_setup_entity_menu($hook, $type, $return, $params) {
 		$params = array('entity' => $entity);
 		$copy_subtypes = elgg_trigger_plugin_hook('cangroupcopy', 'entity', $params, array());	
 		
+		if (elgg_instanceof($entity->getContainerEntity(), 'group')) {
+			$move_text = elgg_echo('group-extender:label:movetoanothergroup');
+		} else {
+			$move_text = elgg_echo('group-extender:label:movetogroup');
+		}
+		
 		// Move menu item	
 		$options = array(
 			'name' => 'move_to_group',
-			'text' => elgg_echo('group-extender:label:movetogroup'),
-			'title' => elgg_echo('group-extender:label:movetogroup'),
+			'text' => $move_text,
+			'title' => $move_text,
 			'href' => elgg_get_site_url() . 'ajax/view/group-extender/popup/move?guid=' . $entity->guid,
 			'class' => 'ge-move-to-group',
 			'link_class' => 'group-extender-move-copy-lightbox',

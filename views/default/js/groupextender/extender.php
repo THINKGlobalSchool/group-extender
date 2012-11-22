@@ -36,6 +36,9 @@ elgg.groupextender.init = function() {
 
 	// Register click handler for copy to group submit button
 	$(document).delegate('.ge-copy-to-group-submit', 'click', elgg.groupextender.copyToGroupClick);
+	
+	// Register click handler for move out of group link
+	$(document).delegate('.ge-move-out-of-group', 'click', elgg.groupextender.moveOutOfGroupClick);
 }
 
 // Change handler for group select 
@@ -279,6 +282,41 @@ elgg.groupextender.copyToGroupClick = function(event) {
 		// Add/remove the group
 		elgg.action($form.attr('action'), {
 			data: values,
+			success: function(json) {
+				if (json.status >= 0) {
+					// Do nothing
+				} else {
+					// Error..
+					$_this.removeAttr('disabled');
+				}
+				$.colorbox.close();
+			}
+		});
+	}
+	
+	event.preventDefault();
+}
+
+// Click handler for move out of group click
+elgg.groupextender.moveOutOfGroupClick = function(event) {	
+	var confirmText = elgg.echo('group-extender:label:moveoutconfirm');
+	if (confirm(confirmText)) {
+		var $_this = $(this);
+		
+		$_this.attr('disabled', 'DISABLED');
+		
+		var $form = $(this).closest('form');
+		var values = {};
+		$.each($form.serializeArray(), function(i, field) {
+		    values[field.name] = field.value;
+		});
+
+		// Add/remove the group
+		elgg.action($form.attr('action'), {
+			data: {
+				entity_guid: values.entity_guid,
+				reset_owner: 1,
+			},
 			success: function(json) {
 				if (json.status >= 0) {
 					// Do nothing

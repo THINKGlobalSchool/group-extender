@@ -54,6 +54,15 @@ $entity_hidden = elgg_view('input/hidden', array(
 	'value' => $entity->guid,
 ));
 
+// If already contained by a group, add a link to remove and return item to 'profile'
+if (elgg_instanceof($entity->getContainerEntity(), 'group')) {
+	$remove_group_link = elgg_view('output/url', array(
+		'text' => elgg_echo('group-extender:label:moveoutofgroup'),
+		'href' => '#',
+		'class' => 'ge-move-out-of-group',
+	));
+}
+
 $content = <<<HTML
 	<div>
 		<label>$select_group_label</label><br />
@@ -61,6 +70,7 @@ $content = <<<HTML
 	</div>
 	<div class='elgg-foot'>
 		$submit_input
+		$remove_group_link
 		$entity_hidden
 	</div>
 HTML;
