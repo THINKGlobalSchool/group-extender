@@ -89,7 +89,7 @@ function group_extender_init() {
 	elgg_register_plugin_hook_handler('register', 'menu:filter', 'group_extender_setup_group_filter_menu');
 
 	// extend groups page handler
-	elgg_register_plugin_hook_handler('route', 'groups', 'group_extender_route_groups_handler');
+	elgg_register_plugin_hook_handler('route', 'groups', 'group_extender_route_groups_handler', 100);
 	
 	// Set up group admin hover menu
 	elgg_register_plugin_hook_handler('register', 'menu:group_hover', 'group_extender_hover_menu_setup');
