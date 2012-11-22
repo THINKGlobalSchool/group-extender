@@ -19,8 +19,10 @@ if (elgg_is_admin_logged_in()) {
 		'entity' => $vars['entity'],
 	);
 
-	echo elgg_view_icon('hover-menu');
-	echo elgg_view_menu('group_hover', $params);
+	if (!$vars['hide_menu']) {
+		echo elgg_view_icon('hover-menu');
+		echo elgg_view_menu('group_hover', $params);	
+	}
 
 	echo "</div>";
 }

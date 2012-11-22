@@ -69,7 +69,7 @@ function group_extender_init() {
 
 	// Extend owner_block for easy group navigator
 	if (elgg_is_logged_in()) {
-		elgg_extend_view('page/elements/owner_block', 'group-extender/navigator', 499);
+		//elgg_extend_view('page/elements/owner_block', 'group-extender/navigator', 499);
 	}
 	
 	elgg_extend_view('groups/edit', 'group-extender/group_tools_extra_js', 9999999999);
@@ -105,6 +105,11 @@ function group_extender_init() {
 	
 	// Register a handler for core subtype's group move functionality
 	elgg_register_plugin_hook_handler('groupmove', 'entity', 'group_extender_group_move_handler');
+	
+	if (elgg_is_logged_in()) {
+		elgg_register_plugin_hook_handler('register', 'menu:topbar', 'group_extender_topbar_menu_setup', 9001);
+	}
+
 
 	// Tab actions
 	$action_base = elgg_get_plugins_path() . 'group-extender/actions/group-extender';
@@ -584,6 +589,29 @@ function group_extender_group_move_handler($hook, $type, $return, $params) {
 	return $return;
 }
 
+/**
+ * Set up groups topbar items
+ */
+function group_extender_topbar_menu_setup($hook, $type, $return, $params) {
+	// Link to my groups
+	$href = elgg_get_site_url() . 'groups/member/' . elgg_get_logged_in_user_entity()->username;
+
+	// Add 'groups' topbar menu
+	$text = "<span class='elgg-icon elgg-icon-users'></span>" . elgg_echo("groups");	
+	$text .= elgg_view('group-extender/groupshover');
+
+	// Add todo item
+	$options = array(
+		'name' => 'groups_topbar_hover_menu',
+		'href' => $href,
+		'text' => $text,
+		'priority' => 2000,
+		'title' => elgg_echo("groups"),
+	);
+	$return[] = ElggMenuItem::factory($options);
+	
+	return $return;
+}
 
 /**
  * Setup Group Extender Submenus

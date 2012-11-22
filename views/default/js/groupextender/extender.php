@@ -39,6 +39,7 @@ elgg.groupextender.init = function() {
 	
 	// Register click handler for move out of group link
 	$(document).delegate('.ge-move-out-of-group', 'click', elgg.groupextender.moveOutOfGroupClick);
+	
 }
 
 // Change handler for group select 
