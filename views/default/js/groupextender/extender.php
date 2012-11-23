@@ -40,6 +40,10 @@ elgg.groupextender.init = function() {
 	// Register click handler for move out of group link
 	$(document).delegate('.ge-move-out-of-group', 'click', elgg.groupextender.moveOutOfGroupClick);
 	
+	// Groups hover menu item
+	$(".elgg-menu-item-groups-topbar-hover-menu").mouseenter(function(event) {
+		$('#groups-topbar-hover').appendTo($(this));
+	});
 }
 
 // Change handler for group select 
