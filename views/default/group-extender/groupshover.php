@@ -31,12 +31,14 @@ foreach ($groups as $group) {
 	$params = array(
 		'entity' => $group,
 		'metadata' => '',
-		'subtitle' => $group->briefdescription,
+		//'subtitle' => $group->briefdescription,
 	);
 	$params = $params + $vars;
 	$list_body = elgg_view('group/elements/summary', $params);
+	
+	$group_url = $group->getURL();
 
-	$group_content .= "<li>" . elgg_view_image_block($icon, $list_body, $vars) . "</li>";
+	$group_content .= "<li onclick='javascript:window.location.href=\"$group_url\"' class='groups-hover-pointer'>" . elgg_view_image_block($icon, $list_body, $vars) . "</li>";
 }
 
 $content = <<<HTML

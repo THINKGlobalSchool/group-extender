@@ -142,6 +142,7 @@
 
 #groups-topbar-hover ul li:hover  .elgg-body a {
 	color: #FFFFFF;
+	text-decoration: none;
 }
 
 #groups-topbar-hover ul li:last-child {
@@ -155,6 +156,9 @@
 	margin: 0px;
 }
 
+.groups-hover-pointer {
+	cursor: pointer;
+}
 
 /*
     ColorBox Core Style:
