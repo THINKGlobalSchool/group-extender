@@ -54,6 +54,9 @@ elgg.groupextender.tabs.init = function() {
 	});
 	
 	elgg.groupextender.tabs.processHash();
+
+	// Hide the google search description on google search click
+	$("input.gsc-search-button").live('click', elgg.groupextender.tabs.googleSearchSubmit);
 }
 
 // Teardown function
@@ -78,7 +81,7 @@ elgg.groupextender.tabs.customTabClick = function(event) {
 	// Trigger a hook to watch for tab changes
 	var params = {
 		target_id: $(this).attr('href'),
-		source: $(this)
+		source: $(this),
 	};
 	
 	elgg.trigger_hook('geTabClicked', 'clicked', params);
@@ -89,17 +92,9 @@ elgg.groupextender.tabs.customTabClick = function(event) {
 	event.preventDefault();
 }
 
-// Hook into the clicked hook and perform extra processing for custom search tabs
-elgg.groupextender.tabs.customSearchTabClicked = function(hook, type, params, options) {
-	// @TODO this will change when we have multple searches (probably)
-	if ($(params.target_id).find('.googlesearch-module').length) {
-		// If we have a googlesearch module, fire the description positioner.. this is hacky..
-		$('.googlesearch-module').resize(function(event) {
-			if ($('.googlesearch-desc').is(':visible')) {
-				$('.googlesearch-desc').hide();
-			}
-		});
-	}
+// Hook into google search submit
+elgg.groupextender.tabs.googleSearchSubmit = function(event) {
+	$('.googlesearch-desc').hide();
 }
 
 // Hook into the clicked hook and perform extra processing for tag dashboard tabs
@@ -401,7 +396,6 @@ elgg.groupextender.tabs.processHash = function(todo_guid) {
 }
 
 elgg.register_hook_handler('init', 'system', elgg.groupextender.tabs.init);
-elgg.register_hook_handler('geTabClicked', 'clicked', elgg.groupextender.tabs.customSearchTabClicked);
 elgg.register_hook_handler('geTabClicked', 'clicked', elgg.groupextender.tabs.tagdashboardTabClicked);
 elgg.register_hook_handler('geTabTypeChanged', 'geChanged', elgg.groupextender.tabs.tagTypeChanged);
 elgg.register_hook_handler('geTabTypeLoaded', 'static', elgg.groupextender.tabs.staticContentSelected);
