@@ -97,9 +97,13 @@ elgg.groupextender.setGroupSelectValues = function(values) {
 // Categories module populated handler
 elgg.groupextender.categories_populated_module = function(event, type, params, value) {
 	var category_module = $('#groups-all-categories-ajaxmodule');
-	
-	if (category_module.length) {
+
+	// Only set up module if we're dealing with the categories module, and it isn't already initted
+	if (category_module.length && !category_module.data('initted')) {
 		var count = 0;
+
+		// Set initted
+		category_module.data('initted', true);
 		
 		var $entity_list = category_module.find('ul.elgg-list-entity');
 		
@@ -416,5 +420,5 @@ elgg.groupextender.unarchiveGroup = function(event) {
 }
 
 elgg.register_hook_handler('init', 'system', elgg.groupextender.init);
-elgg.register_hook_handler('populated', 'modules', elgg.groupextender.categories_populated_module);
+elgg.register_hook_handler('generic_populated', 'modules', elgg.groupextender.categories_populated_module);
 elgg.register_hook_handler('tab_loaded', 'todo_dashboard', elgg.groupextender.initMoveCopyLightbox);

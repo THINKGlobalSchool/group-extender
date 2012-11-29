@@ -16,6 +16,7 @@ $description = get_input('description');
 $hidden = get_input('hidden', 0);
 $category_guid = get_input('category_guid', NULL);
 $enabled = get_input('enabled', 'yes');
+$order_priority = get_input('order_priority', NULL);
 
 // Create Sticky form
 elgg_make_sticky_form('category-edit-form');
@@ -46,6 +47,7 @@ if (!$category_guid) {
 
 $category->title = $title;
 $category->description = $description;
+$category->order_priority = $order_priority;
 
 // Try saving
 if (!$category->save()) {

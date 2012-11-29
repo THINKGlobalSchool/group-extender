@@ -21,4 +21,5 @@ $ajaxmodule = elgg_view('modules/genericmodule', array(
 
 echo $ajaxmodule;
 
-echo "<script>elgg.modules.genericmodule.init();</script>";
+// Init the groups list module specifically
+echo "<script>elgg.modules.genericmodule.populateContainer($('#groups-all-groups-ajaxmodule'));</script>";
