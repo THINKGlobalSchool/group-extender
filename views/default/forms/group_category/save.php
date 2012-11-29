@@ -15,6 +15,7 @@ $title = elgg_extract('title', $vars, '');
 $guid = elgg_extract('guid', $vars, NULL);
 $description = elgg_extract('description', $vars, '');
 $enabled = elgg_extract('enabled', $vars, 'yes');
+$order_priority = elgg_extract('order_priority', $vars, 1);
 
 // Check if we've got an entity, if so, we're editing.
 if ($guid) {
@@ -47,6 +48,12 @@ $hidden_input = elgg_view('input/dropdown', array(
 	)
 ));
 
+$priority_label = elgg_echo('group-extender:label:orderpriority');
+$priority_input = elgg_view('input/text', array(
+	'name' => 'order_priority',
+	'value' => $order_priority,
+));
+
 $submit_input = elgg_view('input/submit', array(
 	'name' => 'submit', 
 	'value' => elgg_echo('save')
@@ -67,6 +74,10 @@ $form_body = <<<HTML
 	<div>
 		<label>$hidden_label</label><br />
         $hidden_input
+	</div><br />
+	<div>
+		<label>$priority_label</label><br />
+        $priority_input
 	</div><br />
 	<div class='elgg-foot'>
 		$submit_input

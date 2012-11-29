@@ -29,7 +29,7 @@ if ($guid == 'all') {
 			'inverse_relationship' => TRUE,
 			'types' => 'group',
 			'full_view' => FALSE,
-			'limit' => 15,
+			'limit' => 15
 		));
 	} else {
 		$content .= elgg_echo('group-extender:error:invalidcategory');

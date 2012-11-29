@@ -463,6 +463,7 @@ function groupcategories_prepare_form_vars($category = NULL) {
 		'description' => '',
 		'guid' => NULL,
 		'enabled' => '',
+		'order_priority' => '',
 	);
 
 	if ($category) {
