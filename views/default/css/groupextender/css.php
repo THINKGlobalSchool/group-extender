@@ -160,6 +160,12 @@
 	cursor: pointer;
 }
 
+/* Group title menu styles */
+
+.elgg-menu-title .elgg-menu-item-archived {
+	color: #AAAAAA;
+}
+
 /*
     ColorBox Core Style:
     The following CSS is consistent between example themes and should not be altered.

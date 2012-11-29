@@ -44,6 +44,12 @@ elgg.groupextender.init = function() {
 	$(".elgg-menu-item-groups-topbar-hover-menu").mouseenter(function(event) {
 		$('#groups-topbar-hover').appendTo($(this));
 	});
+
+	// Register click handler for archive group menu item
+	$(document).delegate('.elgg-menu-item-archive-group > a', 'click', elgg.groupextender.archiveGroup);
+
+	// Register click handler for unarchive group menu item
+	$(document).delegate('.elgg-menu-item-unarchive-group > a', 'click', elgg.groupextender.unarchiveGroup);
 }
 
 // Change handler for group select 
@@ -334,6 +340,78 @@ elgg.groupextender.moveOutOfGroupClick = function(event) {
 		});
 	}
 	
+	event.preventDefault();
+}
+
+// Click handler for archive group menu item
+elgg.groupextender.archiveGroup = function(event) {
+	// Get group guid (from href)
+	var group_guid = $(this).attr('href').substring(1);
+
+	var $_this = $(this);
+
+	// Confirm.
+	if (confirm(elgg.echo('group-extender:label:confirmarchive'))) {
+
+		$_this.attr('disabled', 'DISABLED');
+
+		// Archive action
+		elgg.action(elgg.get_site_url() + "action/groups/archive", {
+			data: {
+				group_guid: group_guid
+			},
+			success: function(json) {
+				if (json.status >= 0) {
+					// Swap menu items
+					$_this.parent().removeClass('elgg-menu-item-archive-group');
+					$_this.parent().addClass('elgg-menu-item-unarchive-group');
+
+					// Swap text
+					$_this.html(elgg.echo('group-extender:label:unarchivegroup'));
+				} else {
+					// Error..
+				}
+				$_this.removeAttr('disabled');
+			}
+		});
+	}
+
+	event.preventDefault();
+}
+
+// Click handler for unarchive group menu item
+elgg.groupextender.unarchiveGroup = function(event) {
+	// Get group guid (from href)
+	var group_guid = $(this).attr('href').substring(1);
+
+	var $_this = $(this);
+
+	// Confirm.
+	if (confirm(elgg.echo('group-extender:label:confirmunarchive'))) {
+
+		$_this.attr('disabled', 'DISABLED');
+
+		// Archive action
+		elgg.action(elgg.get_site_url() + "action/groups/unarchive", {
+			data: {
+				group_guid: group_guid
+			},
+			success: function(json) {
+				if (json.status >= 0) {
+					// Swap menu items
+					$_this.parent().removeClass('elgg-menu-item-unarchive-group');
+					$_this.parent().addClass('elgg-menu-item-archive-group');
+
+					// Swap text
+					$_this.html(elgg.echo('group-extender:label:archivegroup'));
+				} else {
+					// Error..
+				}
+				$_this.removeAttr('disabled');
+			}
+		});
+	}
+
 	event.preventDefault();
 }
 

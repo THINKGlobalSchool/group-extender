@@ -17,6 +17,7 @@ if (elgg_is_admin_logged_in()) {
 
 	$params = array(
 		'entity' => $vars['entity'],
+		'sort_by' => 'priority',
 	);
 
 	if (!$vars['hide_menu']) {
