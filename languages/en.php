@@ -70,6 +70,7 @@ $english = array(
 	'group-extender:label:addtocategory' => 'Add to: %s',
 	'group-extender:label:removefromcategory' => 'Remove from: %s',
 	'group-extender:label:classcategory' => 'Global Class Category',
+	'group-extender:label:archivecategory' => 'Archive Category',
 	'group-extender:label:classgroups' => 'Classes',
 	'group-extender:label:othergroups' => 'Other Groups',
 	'group-extender:label:movetogroup' => 'Move to Group',
@@ -80,7 +81,14 @@ $english = array(
 	'group-extender:label:move' => 'Move',
 	'group-extender:label:copy' => 'Copy',
 	'group-extender:label:selectgroup' => 'Select Group',
-	
+	'group-extender:label:archivegroup' => 'Archive Group',
+	'group-extender:label:unarchivegroup' => 'Unarchive Group',
+	'group-extender:label:confirmarchive' => 'Are you sure you want to archive this group?',
+	'group-extender:label:confirmunarchive' => 'Are you sure you want to unarchive this group?',
+	'group-extender:label:enablegroupdropdown' => 'Enable group topbar dropdown',
+	'group-extender:label:archived' => 'Archived',
+	'group-extender:label:archivedgroup' => 'archived group',
+
 	// Tab labels
 	'group-extender:tab:activity' => 'Activity',
 	'group-extender:tab:customsearch' => 'Custom Search',
@@ -109,6 +117,8 @@ $english = array(
 	'group-extender:error:move' => 'There was an error moving the item to group: %s',
 	'group-extender:error:moveout' => 'There was an error moving the item out of the group',
 	'group-extender:error:copy' => 'There was an error copying the item to group: %s',
+	'group-extender:error:removeusers' => 'There was an error removing users from the group',
+	'group-extender:error:addusers' => 'There was an error adding users to the group',
 	'group-extender:success:addgroup' => 'Successfully added group to category: %s',
 	'group-extender:success:removegroup' => 'Successfully removed group from category: %s',
 	'group-extender:success:savetab' => 'Successfully saved group tab',
@@ -120,6 +130,8 @@ $english = array(
 	'group-extender:success:move' => 'Successfully moved item to group: %s',
 	'group-extender:success:moveout' => 'Successfully moved item out of group',
 	'group-extender:success:copy' => 'Successfully copied item to group: %s',
+	'group-extender:success:grouparchived' => 'Successfully archived group',
+	'group-extender:success:groupunarchived' => 'Successfully unarchived group',
 );
 
 add_translation('en',$english);

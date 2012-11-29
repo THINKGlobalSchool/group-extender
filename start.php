@@ -16,7 +16,7 @@ elgg_register_event_handler('init', 'system', 'group_extender_init');
 // Init
 function group_extender_init() {
 	define('GROUP_CATEGORY_RELATIONSHIP', 'group_memberof_category');
-	
+
 	// Register library
 	elgg_register_library('elgg:groupextender', elgg_get_plugins_path() . "group-extender/lib/groupextender.php");
 	elgg_load_library('elgg:groupextender');
@@ -41,7 +41,7 @@ function group_extender_init() {
 	$t_css = elgg_get_simplecache_url('css', 'groupextender/tabs');
 	elgg_register_simplecache_view('css/groupextender/tabs');
 	elgg_register_css('elgg.groupextender.tabs', $t_css);
-	
+
 	// Register admin css
 	$ga_css = elgg_get_simplecache_url('css', 'groupextender/admin');
 	elgg_register_simplecache_view('css/groupextender/admin');
@@ -88,28 +88,21 @@ function group_extender_init() {
 	// Hook into filter menu
 	elgg_register_plugin_hook_handler('register', 'menu:filter', 'group_extender_setup_group_filter_menu');
 
+	// Hook into title menu
+	elgg_register_plugin_hook_handler("register", "menu:title", "group_extender_menu_title_handler");
+
 	// extend groups page handler
 	elgg_register_plugin_hook_handler('route', 'groups', 'group_extender_route_groups_handler', 100);
 	
 	// Set up group admin hover menu
 	elgg_register_plugin_hook_handler('register', 'menu:group_hover', 'group_extender_hover_menu_setup');
 	
-	// Set up group class filter menu
-	elgg_register_plugin_hook_handler('register', 'menu:groups_class_other_menu', 'group_extender_class_filter_menu_setup');
-
-	// Register some initial copyable types
-	//elgg_register_plugin_hook_handler('cangroupcopy', 'entity', 'group_extender_can_group_copy_handler');
-	
-	// Register a handler for core subtype copying
-	//elgg_register_plugin_hook_handler('groupcopy', 'entity', 'group_extender_group_copy_handler');
-	
 	// Register a handler for core subtype's group move functionality
 	elgg_register_plugin_hook_handler('groupmove', 'entity', 'group_extender_group_move_handler');
 	
-	if (elgg_is_logged_in()) {
+	if (elgg_is_logged_in() && (int)elgg_get_plugin_setting('enable_topbar_dropdown', 'group-extender')) {
 		elgg_register_plugin_hook_handler('register', 'menu:topbar', 'group_extender_topbar_menu_setup', 9001);
 	}
-
 
 	// Tab actions
 	$action_base = elgg_get_plugins_path() . 'group-extender/actions/group-extender';
@@ -138,6 +131,8 @@ function group_extender_init() {
 	$action_base = elgg_get_plugins_path() . 'group-extender/actions/groups';
 	elgg_register_action("groups/movecontent", "$action_base/movecontent.php");
 	elgg_register_action("groups/copycontent", "$action_base/copycontent.php");	
+	elgg_register_action("groups/archive", "$action_base/archive.php", 'admin');
+	elgg_register_action("groups/unarchive", "$action_base/unarchive.php", 'admin');
 	
 	// Pagesetup event handler
 	elgg_register_event_handler('pagesetup', 'system', 'group_extender_submenus');
@@ -164,7 +159,10 @@ function group_extender_init() {
 	elgg_register_ajax_view('group-extender/popup/copy');
 	
 	// Override plugin views if we have a class category defined
-	if (elgg_get_plugin_setting('class_category', 'group-extender')) {
+	if ((int)elgg_get_plugin_setting('class_category', 'group-extender')) {
+		// Set up group class filter menu
+		elgg_register_plugin_hook_handler('register', 'menu:groups_class_other_menu', 'group_extender_class_filter_menu_setup');
+
 		// Override groups home page module
 		elgg_set_view_location('tgstheme/modules/groups', elgg_get_plugins_path() . "group-extender/overrides/");
 
@@ -378,8 +376,21 @@ function group_extender_setup_entity_menu($hook, $type, $return, $params) {
 			);
 			$return[] = ElggMenuItem::factory($options);
 		}
+	} else if (elgg_instanceof($entity, 'group')) {
+		// Modify menu for archived groups
+		if ($entity->archived) {
+			foreach ($return as $idx => $item) {
+				if ($item->getName() == 'membership') {
+					$item->setText(elgg_echo('group-extender:label:archivedgroup'));
+				}
+
+				// Unset members and feature items
+				if ($item->getName() == 'members' || $item->getName() == 'feature') {
+					unset($return[$idx]);
+				}
+			}
+		}
 	}
-	
 	
 	return $return;
 }
@@ -401,6 +412,38 @@ function group_extender_setup_group_filter_menu($hook, $type, $return, $params) 
 		$return[] = ElggMenuItem::factory($options);
 	}
 
+	return $return;
+}
+
+/**
+ * Hook into title menu to modify group buttons
+ */
+function group_extender_menu_title_handler($hook, $type, $return, $params) {	
+	$page_owner = elgg_get_page_owner_entity();
+	$user = elgg_get_logged_in_user_entity();
+
+	if (!empty($return) && is_array($return)){
+		if (elgg_in_context("groups") && elgg_instanceof($page_owner, 'group') && $page_owner->archived) {
+			// Only hide menu items if not an admin
+			if (!elgg_is_admin_logged_in()) {
+				foreach ($return as $idx => $item) {
+					if (in_array($item->getName(), array('groups:invite', 'groups:join', 'groups:edit', 'groups:leave'))) {
+						unset($return[$idx]);
+					}
+				}
+			}
+
+			// Add 'archived' to menu
+			$options = array(
+				'name' => 'archived',
+				'text' => elgg_echo('group-extender:label:archived'),
+				'href' => FALSE,
+				'priority' => 0,
+			);
+			$return[] = ElggMenuItem::factory($options);
+		}
+	}
+	
 	return $return;
 }
 
@@ -485,12 +528,18 @@ function group_extender_hover_menu_setup($hook, $type, $return, $params) {
 	
 		// Add 'add to category' menu items
 		foreach ($categories as $category) {
+			// Skip archived if configured
+			if ($category->guid == (int)elgg_get_plugin_setting('archive_category', 'group-extender')) {
+				continue;
+			}
+
 			$options = array(
 				'name' => 'add_to_category_' . $category->guid,
 				'text' => elgg_echo('group-extender:label:addtocategory', array($category->title)),
 				'href' => '#' . $group->guid . ':' . $category->guid,
 				'section' => 'admin',
 				'class' => 'group-category-add-hover-menu-item',
+				'priority' => 200,
 			);
 			$return[] = ElggMenuItem::factory($options);
 		}
@@ -504,18 +553,46 @@ function group_extender_hover_menu_setup($hook, $type, $return, $params) {
 		
 		// Add 'remove from category' menu items
 		foreach ($categories as $category) {
+			// Skip archived if configured
+			if ($category->guid == (int)elgg_get_plugin_setting('archive_category', 'group-extender')) {
+				continue;
+			}
+
 			$options = array(
 				'name' => 'remove_from_category_' . $category->guid,
 				'text' => elgg_echo('group-extender:label:removefromcategory', array($category->title)),
 				'href' => '#' . $group->guid . ':' . $category->guid,
 				'section' => 'admin',
 				'class' => 'group-category-remove-hover-menu-item',
+				'priority' => 200,
 			);
 			$return[] = ElggMenuItem::factory($options);
 		}
 		
-		
 		access_show_hidden_entities($access_status);
+
+		// Show Archive item if configured
+		if ((int)elgg_get_plugin_setting('archive_category', 'group-extender')) {
+			if (!$group->archived) {
+				$options = array(
+					'name' => 'archive_group',
+					'text' => elgg_echo('group-extender:label:archivegroup', array($category->title)),
+					'href' => '#' . $group->guid,
+					'section' => 'admin',
+					'priority' => 100,
+				);
+				$return[] = ElggMenuItem::factory($options);
+			} else {
+				$options = array(
+					'name' => 'unarchive_group',
+					'text' => elgg_echo('group-extender:label:unarchivegroup', array($category->title)),
+					'href' => '#' . $group->guid,
+					'section' => 'admin',
+					'priority' => 105,
+				);
+				$return[] = ElggMenuItem::factory($options);
+			}
+		}
 	}
 	
 	return $return;
