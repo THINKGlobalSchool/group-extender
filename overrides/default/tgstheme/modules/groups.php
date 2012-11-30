@@ -54,10 +54,9 @@ $params['wheres'][] = "NOT EXISTS (
 				AND guid_two = '$class_category_guid'
 )";
 
-$params['count'] = FALSE;
 $other_groups = elgg_get_entities_from_relationship($params);
 
-// Get and count class groups
+// Get class groups
 $params['wheres'] = NULL;
 
 // SQL to determine if this class IS in the class category
@@ -68,9 +67,7 @@ $params['wheres'][] = "EXISTS (
 				AND guid_two = '$class_category_guid'
 )";
 
-$params['count'] = FALSE;
 $class_groups = elgg_get_entities_from_relationship($params);
-
 
 // Build 'other' groups content
 foreach($other_groups as $group) {
@@ -93,14 +90,22 @@ if (!$other_content) {
 	$other_content = $no_results;
 }
 
-// Main content
-$content = elgg_view_menu('groups_class_other_menu', array(
-	'sort_by' => 'priority',
-	'class' => 'elgg-menu-hz elgg-menu-filter elgg-menu-filter-default'
-));
+$hidden_style = "style='display: none;'";
 
-$content .= "<div id='other-groups' class='groups-class-filter-container' style='display: none;'>$other_content</div>";
-$content .= "<div id='class-groups' class='groups-class-filter-container'>$class_content</div>";
+// Only show tabs if there are class groups
+if (count($class_groups)) {
+	// Main content
+	$content = elgg_view_menu('groups_class_other_menu', array(
+		'sort_by' => 'priority',
+		'class' => 'elgg-menu-hz elgg-menu-filter elgg-menu-filter-default'
+	));
+	$hide_other_groups = $hidden_style;
+} else {
+	$hide_class_groups = $hidden_style;
+}
+
+$content .= "<div id='other-groups' class='groups-class-filter-container' $hide_other_groups>$other_content</div>";
+$content .= "<div id='class-groups' class='groups-class-filter-container' $hide_class_groups>$class_content</div>";
 
 // All my groups link
 $content .= "<span class='groups-widget-viewall'>" . elgg_view('output/url', array(
