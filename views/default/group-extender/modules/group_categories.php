@@ -18,7 +18,6 @@ $options = array(
 	'order_by_metadata' => array('name' => 'order_priority'),
 );
 
-set_input('blah', 'blah');
 $content = elgg_list_entities_from_metadata($options);
 
 echo $content;

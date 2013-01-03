@@ -21,10 +21,35 @@ $custom_input = elgg_view('input/text', array(
 	'value' => $tab['params']['custom_tags'],
 ));
 
-// Hidden param input
-$param_hidden = elgg_view('input/hidden', array(
-	'name' => 'add_param',
+$column_label = elgg_echo('tagdashboards:label:columns');
+$column_input = elgg_view('input/checkbox', array(
+	'name' => 'one_column',
+	'checked' => $tab['params']['one_column'] == 'on',
+	'class' => 'tagdashboards-check-column',
+));
+
+// Hidden params inputs
+$custom_param_hidden = elgg_view('input/hidden', array(
+	'name' => 'add_param[]',
 	'value' => 'custom_tags',
 ));
 
-echo "<div><label>$custom_label</label>$custom_input</div>$param_hidden";
+$column_param_hidden = elgg_view('input/hidden', array(
+	'name' => 'add_param[]',
+	'value' => 'one_column',
+));
+
+$content = <<<HTML
+	<div>
+		<label>$custom_label</label>
+		$custom_input
+	</div><br />
+	<div>
+		<label>$column_label</label>
+		$column_input
+	</div>
+	$custom_param_hidden
+	$column_param_hidden
+HTML;
+
+echo $content;

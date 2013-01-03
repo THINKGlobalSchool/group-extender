@@ -20,6 +20,11 @@ $tab_id = elgg_extract('tab_id', $vars);
 $tab = group_extender_get_tab_by_id($group, $tab_id);
 
 $custom = string_to_tag_array($tab['params']['custom_tags']);
+$one_column = $tab['params']['one_column'];
+
+if ($one_column == 'on') {
+	$no_float = 'no-float';
+}
 
 // Get subtypes
 $subtypes = tagdashboards_get_entity_subtypes_from_metadata(array(
@@ -66,7 +71,7 @@ $content .= <<<HTML
 			$td_container_guid_input
 			$td_custom_input
 		</div>
-		<div class='tagdashboards-content-container'></div>
+		<div class='tagdashboards-content-container $no_float'></div>
 	</div>
 HTML;
 
