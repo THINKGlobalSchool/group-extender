@@ -714,6 +714,7 @@ function group_extender_submenus() {
  */
 function group_extender_ecml_views_hook($hook, $type, $return, $params) {
 	$return['groups/profile/fields'] = elgg_echo('groups:ecml:groupprofile');
+	$return['group-extender/tabs/static'] = elgg_echo('static_tab');
 
 	return $return;
 }
