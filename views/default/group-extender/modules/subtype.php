@@ -45,3 +45,8 @@ if (!$content) {
 } else {
 	echo $content;
 }
+
+// init move/copy lightboxes
+$js = "<script type='text/javascript'>elgg.groupextender.initMoveCopyLightbox();</script>";
+
+echo $js;

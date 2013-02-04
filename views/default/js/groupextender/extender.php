@@ -16,6 +16,7 @@ elgg.groupextender.getCategoryGroupsURL = 'ajax/view/group-extender/category_gro
 
 // General init
 elgg.groupextender.init = function() {
+
 	// Init move/copy lightbox
 	elgg.groupextender.initMoveCopyLightbox();
 	
@@ -30,15 +31,6 @@ elgg.groupextender.init = function() {
 	
 	// Register click handler for group class/other filter menu items
 	$(document).delegate('.groups-class-filter-menu-item', 'click', elgg.groupextender.classFilterClick);
-	
-	// Register click handler for move to group submit button
-	$(document).delegate('.ge-move-to-group-submit', 'click', elgg.groupextender.moveToGroupClick);
-
-	// Register click handler for copy to group submit button
-	$(document).delegate('.ge-copy-to-group-submit', 'click', elgg.groupextender.copyToGroupClick);
-	
-	// Register click handler for move out of group link
-	$(document).delegate('.ge-move-out-of-group', 'click', elgg.groupextender.moveOutOfGroupClick);
 	
 	// Groups hover menu item
 	$(".elgg-menu-item-groups-topbar-hover-menu").mouseenter(function(event) {
@@ -225,6 +217,22 @@ elgg.groupextender.classFilterClick = function(event) {
  * Init lightboxes (can be called manually)
  */
 elgg.groupextender.initMoveCopyLightbox = function() {
+	// Make sure events are only delegated once
+	$(document).undelegate('.ge-move-to-group-submit', 'click');
+	$(document).undelegate('.ge-copy-to-group-submit', 'click');
+	$(document).undelegate('.ge-move-out-of-group', 'click');
+	$('.group-extender-move-copy-lightbox').die();
+
+
+	// Register click handler for move to group submit button
+	$(document).delegate('.ge-move-to-group-submit', 'click', elgg.groupextender.moveToGroupClick);
+
+	// Register click handler for copy to group submit button
+	$(document).delegate('.ge-copy-to-group-submit', 'click', elgg.groupextender.copyToGroupClick);
+	
+	// Register click handler for move out of group link
+	$(document).delegate('.ge-move-out-of-group', 'click', elgg.groupextender.moveOutOfGroupClick);
+
 	$('.group-extender-move-copy-lightbox').colorbox({
 		'initialWidth' : '50',
 		'initialHeight' : '50',
