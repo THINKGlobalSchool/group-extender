@@ -25,6 +25,11 @@ $options = array(
 
 $groups = elgg_get_entities_from_relationship($options);
 
+// If user doesn't belong to any groups, bail
+if (!count($groups)) {
+	return;
+}
+
 foreach ($groups as $group) {
 	$icon = elgg_view_entity_icon($group, 'tiny', array('hide_menu' => true));
 	
