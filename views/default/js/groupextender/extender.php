@@ -158,10 +158,8 @@ elgg.groupextender.groupCategoryHoverClick = function(event) {
 	var old_class = '';
 	var new_class = '';
 	
-	// HREF is in the format: #group_guid:category_guid
-	var href = $(this).attr('href');
-	var group_guid = href.substring(1, href.indexOf(':'));
-	var category_guid = href.substring(href.indexOf(':') + 1);
+	var group_guid = $(this).data('group_guid');
+	var category_guid = $(this).data('category_guid');
 	
 	if ($(this).hasClass('group-category-add-hover-menu-item')) {
 		action = elgg.get_site_url() + 'action/group_category/addgroup';
