@@ -562,7 +562,8 @@ function group_extender_hover_menu_setup($hook, $type, $return, $params) {
 			$options = array(
 				'name' => 'remove_from_category_' . $category->guid,
 				'text' => elgg_echo('group-extender:label:removefromcategory', array($category->title)),
-				'href' => '#' . $group->guid . ':' . $category->guid,
+				'data-group_guid' => $group->guid,
+				'data-category_guid' => $category->guid,
 				'section' => 'admin',
 				'class' => 'group-category-remove-hover-menu-item',
 				'priority' => 200,
