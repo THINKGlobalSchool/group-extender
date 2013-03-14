@@ -105,11 +105,22 @@ elgg.groupextender.tabs.tagdashboardTabClicked = function(hook, type, params, op
 	}
 }
 
-
 // Master click handler for all save events
 elgg.groupextender.tabs.tabSaveClick = function(event) {
 	// Get form inputs
 	var $form = $(this).closest('form');
+
+	var params = {
+		'trigger': $(this),
+		'form': $form
+	};
+
+	// Trigger a hook to allow intercepting the save buttons
+	if (!elgg.trigger_hook('geTabSave', 'clicked', params)) {
+		event.preventDefault();
+		return false;
+	}
+
 	var values = {};
 	$.each($form.serializeArray(), function(i, field) {
 	    values[field.name] = field.value;
@@ -162,6 +173,28 @@ elgg.groupextender.tabs.tabSaveClick = function(event) {
 	event.preventDefault();
 }
 
+// Hook into rss tab save click and validate RSS feed
+elgg.groupextender.tabs.rssTabSaveClick = function(hook, type, params, value) {
+	var feed_url_input = params.form.find('input[name="feed_url"]');
+	if (feed_url_input.length && !feed_url_input.data('valid_feed')) {
+		elgg.action('rss/validate', {
+			data: {
+				feed_url: feed_url_input.val()
+			}, 
+			success: function(result) {
+				if (result.status == 0) {
+					feed_url_input.data('valid_feed', 1);
+					params.trigger.trigger('click');
+				} else {
+					// Invalid feed
+				}
+			}
+		});
+		return false;
+	}
+	return value;
+}
+
 // Click handler for refresh tab click
 elgg.groupextender.tabs.tabRefreshClick = function(event) {
 	// Get form inputs
@@ -181,6 +214,7 @@ elgg.groupextender.tabs.tabRefreshClick = function(event) {
 		elgg.groupextender.tabs.init();
 		
 		elgg.modules.genericmodule.init();
+		elgg.rss.initFeeds();
 		elgg.tagdashboards.init();
 	});
 
@@ -397,6 +431,7 @@ elgg.groupextender.tabs.processHash = function(todo_guid) {
 
 elgg.register_hook_handler('init', 'system', elgg.groupextender.tabs.init);
 elgg.register_hook_handler('geTabClicked', 'clicked', elgg.groupextender.tabs.tagdashboardTabClicked);
+elgg.register_hook_handler('geTabSave', 'clicked', elgg.groupextender.tabs.rssTabSaveClick);
 elgg.register_hook_handler('geTabTypeChanged', 'geChanged', elgg.groupextender.tabs.tagTypeChanged);
 elgg.register_hook_handler('geTabTypeLoaded', 'static', elgg.groupextender.tabs.staticContentSelected);
 elgg.register_hook_handler('geGetFormValues', 'values', elgg.groupextender.tabs.staticContentFormValue);

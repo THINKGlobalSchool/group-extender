@@ -96,6 +96,7 @@ $english = array(
 	'group-extender:tab:subtype' => 'Content Type',
 	'group-extender:tab:tagdashboard' => 'Tag Dashboard',
 	'group-extender:tab:static' => 'Static Content',
+	'group-extender:tab:rss' => 'RSS Feed',
 	'group-extender:tab:admin' => 'Customize Tabs',
 	
 	// Messages

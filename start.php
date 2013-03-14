@@ -140,8 +140,14 @@ function group_extender_init() {
 	// Whitelist ajax views
 	elgg_register_ajax_view('group-extender/modules/activity');
 	elgg_register_ajax_view('group-extender/modules/subtype');
+	elgg_register_ajax_view('group-extender/modules/groups');
+	elgg_register_ajax_view('group-extender/modules/group');
+	elgg_register_ajax_view('group-extender/modules/category_groups');
+	elgg_register_ajax_view('group-extender/modules/group_categories');
+	elgg_register_ajax_view('group-extender/modules/filter_class_groups');
 	elgg_register_ajax_view('group-extender/forms/edit_tab');
 	elgg_register_ajax_view('group-extender/forms/edit_subtype');
+	elgg_register_ajax_view('group-extender/forms/edit_rss');
 	elgg_register_ajax_view('group-extender/forms/edit_static');
 	elgg_register_ajax_view('group-extender/forms/edit_tagdashboard');
 	elgg_register_ajax_view('group-extender/forms/edit_activity');
@@ -150,11 +156,6 @@ function group_extender_init() {
 	elgg_register_ajax_view('group-extender/group_tabs');
 	elgg_register_ajax_view('group-extender/admin/category_groups');
 	elgg_register_ajax_view('group-extender/category_groups');
-	elgg_register_ajax_view('group-extender/modules/groups');
-	elgg_register_ajax_view('group-extender/modules/group');
-	elgg_register_ajax_view('group-extender/modules/category_groups');
-	elgg_register_ajax_view('group-extender/modules/group_categories');
-	elgg_register_ajax_view('group-extender/modules/filter_class_groups');
 	elgg_register_ajax_view('group-extender/popup/move');
 	elgg_register_ajax_view('group-extender/popup/copy');
 	
