@@ -199,6 +199,11 @@ function group_extender_get_tab_types() {
 	if (elgg_is_active_plugin('tagdashboards')) {
 		$types['tagdashboard'] = elgg_echo('group-extender:tab:tagdashboard');
 	}
+
+	// Include tagdashboards if enabled
+	if (elgg_is_active_plugin('rss')) {
+		$types['rss'] = elgg_echo('group-extender:tab:rss');
+	}
 	
 	return $types;
 }

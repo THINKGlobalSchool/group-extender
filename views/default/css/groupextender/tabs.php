@@ -37,3 +37,7 @@ table.group-extender-edit-tab-table td.group-extender-tab-priority span#ge-loade
 	width: 650px;
 	min-height: 350px;
 }
+
+.group-extender-rss-container {
+	margin-top: 10px;
+}
