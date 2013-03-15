@@ -17,8 +17,14 @@ $group_guid = elgg_extract('group_guid', $vars);
 
 $feed_tab_type = $tab['params']['feed_tab_type'];
 
+// Default to 'all' for new tabs
+if (!$feed_tab_type) {
+	$feed_tab_type = 'all';
+}
+
 $group_feed_input_class = $feed_tab_type == 'group_feed' ? '' : 'hidden';
 $feed_url_input_class = $feed_tab_type == 'url' ? '' : 'hidden';
+$all_feeds_input_class = $feed_tab_type == 'all' ? '' : 'hidden';
 
 // Get group rss feeds
 $group_rss_feeds = elgg_get_entities(array(
@@ -73,10 +79,21 @@ $url_options = array(
 $url_label = elgg_echo('group-extender:label:useurl');
 $url_input = elgg_view('input/url', $url_options);
 
+$consolidate_label = elgg_echo('group-extender:label:consolidatefeeds');
+$consolidate_input = elgg_view('input/checkbox', array(
+	'name' => 'consolidate_all',
+	'checked' => $tab['params']['consolidate_all'] == 'on',
+));
+
 // Hidden param inputs
 $param_url_hidden = elgg_view('input/hidden', array(
 	'name' => 'add_param[]',
 	'value' => 'feed_url',
+));
+
+$param_url_hidden = elgg_view('input/hidden', array(
+	'name' => 'add_param[]',
+	'value' => 'consolidate_all',
 ));
 
 $param_guid_hidden = elgg_view('input/hidden', array(
@@ -89,7 +106,6 @@ $param_tab_type_hidden = elgg_view('input/hidden', array(
 	'value' => 'feed_tab_type',
 ));
 
-
 $content = <<<HTML
 <div>
 	<label>$feed_tab_type_label</label>
@@ -99,6 +115,11 @@ $content = <<<HTML
 	<br />
 	<label>$url_label</label>
 	$url_input
+</div>
+<div class='_rsstabtype_all _rsstabtype $all_feeds_input_class'>
+	<br />
+	<label>$consolidate_label</label>
+	$consolidate_input
 </div>
 $select_feed_content
 $param_url_hidden

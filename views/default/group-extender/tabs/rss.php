@@ -27,23 +27,44 @@ switch ($tab['params']['feed_tab_type']) {
 		));
 
 		if (count($rss_feeds)) {
-			foreach ($rss_feeds as $feed) {
-				$sources[$feed->title] = $feed->feed_url;
+			if ($tab['params']['consolidate_all'] != 'on') {
+				foreach ($rss_feeds as $feed) {
+					$feed_output = elgg_view('rss/feed', array(
+						'sources' => array($feed->title => $feed->feed_url)
+					));
+
+					$feed_content .= elgg_view_module('featured', $feed->title, $feed_output, array(
+						'class' => 'group-extender-rss-module',
+					));
+				}
+
+				$feed_content = "<div class='group-extender-rss-modules-container'>$feed_content</div>";
+
+			} else {
+				$sources = array();
+				foreach ($rss_feeds as $feed) {
+					$sources[$feed->title] = $feed->feed_url;
+				}
+
+				$feed_content = elgg_view('rss/feed', array('sources' => $sources));
 			}
+
+			
 		} else {
-			// Nothing here.. just let feeds display no results
-			$sources = array(null);
+			$feed_content = "<h3 class='center'>" . elgg_echo('rss:label:noresults') . "</h3>";
 		}
 		break;
 	case 'url':
-		$sources = array($tab['title'] => $tab['params']['feed_url']);
+		$feed_content = elgg_view('rss/feed', array(
+			'sources' => array($tab['title'] => $tab['params']['feed_url'])
+		));
 		break;
 	case 'group_feed':
 		$rss_feed = get_entity($tab['params']['rss_feed_guid']);
-		$sources = array($rss_feed->title => $rss_feed->feed_url);
+		$feed_content = elgg_view('rss/feed', array(
+			'sources' => array($rss_feed->title => $rss_feed->feed_url)
+		));
 		break;
 }
 
-echo "<div class='group-extender-rss-container'>" . elgg_view('rss/feed', array(
-	'sources' => $sources,
-)) . '</div>';
+echo "<div class='group-extender-rss-container'>$feed_content</div>";

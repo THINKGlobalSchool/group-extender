@@ -180,7 +180,7 @@ elgg.groupextender.tabs.tabSaveClick = function(event) {
 elgg.groupextender.tabs.rssTabSaveClick = function(hook, type, params, value) {
 	switch (params.form.find('select[name="feed_tab_type"]').val()) {
 		case 'all':
-		case 'group_geed':
+		case 'group_feed':
 			return value;
 			break;
 		case 'url':

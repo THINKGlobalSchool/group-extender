@@ -94,6 +94,7 @@ $english = array(
 	'group-extender:label:useurl' => 'Use feed at URL',
 	'group-extender:label:whichfeed' => 'Which Feed?',
 	'group-extender:label:selectfeed' => 'Select Feed',
+	'group-extender:label:consolidatefeeds' => 'Consolidate Feeds?',
 
 	// Tab labels
 	'group-extender:tab:activity' => 'Activity',
