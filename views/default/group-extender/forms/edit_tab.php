@@ -26,7 +26,7 @@ if (!elgg_instanceof($group, 'group') || !$group->canEdit()) {  // Check valid g
 	                                               
 	if ($tab_id && group_extender_get_tab_by_id($group, $tab_id)) {
 		$tab = group_extender_get_tab_by_id($group, $tab_id); // Editing
-		
+	
 		$title = $tab['title'];
 		
 		$module_title = elgg_echo('group-extender:label:edittab');
@@ -39,7 +39,8 @@ if (!elgg_instanceof($group, 'group') || !$group->canEdit()) {  // Check valid g
 			'value' => $tab_id,
 		));
 
-		$edit_type_content = elgg_view("group-extender/forms/edit_{$form_type}", array('tab' => $tab));
+		$edit_type_content = "<div>" . elgg_view("group-extender/forms/edit_{$form_type}", array('group_guid' => $group_guid, 'tab' => $tab)) . "</div>";
+		$save_label = elgg_echo('save');
 		
 	} else { 
 		// New Tab
@@ -53,6 +54,7 @@ if (!elgg_instanceof($group, 'group') || !$group->canEdit()) {  // Check valid g
 		
 		$type_content = "<div><label>$type_label</label><br />$type_input</div>";
 		$edit_type_content = "<div id='group-extender-extended-type-content'></div>";
+		$save_label = elgg_echo('group-extender:label:add');
 	}
 
 	// Can save title
@@ -65,7 +67,7 @@ if (!elgg_instanceof($group, 'group') || !$group->canEdit()) {  // Check valid g
 	// Save input
 	$save_input = elgg_view('input/submit', array(
 		'name' => $form_type,
-		'value' => elgg_echo('group-extender:label:add'),
+		'value' => $save_label,
 		'id' => "group-extender-tab-save-submit",
 	));
 
