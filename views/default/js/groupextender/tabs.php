@@ -32,6 +32,9 @@ elgg.groupextender.tabs.init = function() {
 	// Change handler for tab type change
 	$(document).delegate('#group-extender-tab-type-select', 'change', elgg.groupextender.tabs.tabTypeChange);
 
+	// Change handler for rss feed tab type change
+	$(document).delegate('select[name="feed_tab_type"]', 'change', elgg.groupextender.tabs.rssTabTypeChange);
+
 	// Set up submission dialog
 	$(".group-extender-lightbox").fancybox({
 		'onComplete': function() {
@@ -175,23 +178,32 @@ elgg.groupextender.tabs.tabSaveClick = function(event) {
 
 // Hook into rss tab save click and validate RSS feed
 elgg.groupextender.tabs.rssTabSaveClick = function(hook, type, params, value) {
-	var feed_url_input = params.form.find('input[name="feed_url"]');
-	if (feed_url_input.length && !feed_url_input.data('valid_feed')) {
-		elgg.action('rss/validate', {
-			data: {
-				feed_url: feed_url_input.val()
-			}, 
-			success: function(result) {
-				if (result.status == 0) {
-					feed_url_input.data('valid_feed', 1);
-					params.trigger.trigger('click');
-				} else {
-					// Invalid feed
-				}
+	switch (params.form.find('select[name="feed_tab_type"]').val()) {
+		case 'all':
+		case 'group_geed':
+			return value;
+			break;
+		case 'url':
+			var $feed_url_input = params.form.find('input[name="feed_url"]');
+			if ($feed_url_input.length && !$feed_url_input.data('valid_feed')) {
+				elgg.action('rss/validate', {
+					data: {
+						feed_url: $feed_url_input.val()
+					}, 
+					success: function(result) {
+						if (result.status == 0) {
+							$feed_url_input.data('valid_feed', 1);
+							params.trigger.trigger('click');
+						} else {
+							// Invalid feed
+						}
+					}
+				});
+				return false;
 			}
-		});
-		return false;
+			break;
 	}
+
 	return value;
 }
 
@@ -289,9 +301,13 @@ elgg.groupextender.tabs.refreshableClick = function(event) {
 	event.preventDefault();
 }
 
-// Click handler for tab type change clicks
+// Change handler for tab type select
 elgg.groupextender.tabs.tabTypeChange = function(event) {
+	// Get tab type
 	var type = $(this).val();
+
+	// Get group guid to pass to forms
+	var group_guid = $(this).closest('form').find('input[name="group_guid"]').val();
 	
 	// Params for tab type change hook
 	var params = {
@@ -302,7 +318,7 @@ elgg.groupextender.tabs.tabTypeChange = function(event) {
 	// Allow further customization of tab type content on change
 	elgg.trigger_hook('geTabTypeChanged', 'geChanged', params);
 	
-	var url = elgg.normalize_url('ajax/view/group-extender/forms/edit_' + type);
+	var url = elgg.normalize_url('ajax/view/group-extender/forms/edit_' + type + '?group_guid=' + group_guid);
 	
 	var $container = $('#group-extender-extended-type-content');
 	
@@ -322,8 +338,19 @@ elgg.groupextender.tabs.tabTypeChange = function(event) {
 	event.preventDefault();
 }
 
+// Change handler for rss feed tab type change
+elgg.groupextender.tabs.rssTabTypeChange = function(event) {
+	var type = $(this).val();
+		
+	$(this).closest('form').find('._rsstabtype').hide();
+
+	$(this).closest('form').find('._rsstabtype_' + type).show();
+
+	event.preventDefault();
+}
+
 // Hook handler for tab type select for static content
-elgg.groupextender.tabs.tagTypeChanged = function(hook, type, params, options) {
+elgg.groupextender.tabs.staticTabTypeChanged = function(hook, type, params, options) {
 	if (params.tab_type != 'static') {
 		// Fix tinymce control
 		if (typeof(tinyMCE) !== 'undefined') {
@@ -432,7 +459,7 @@ elgg.groupextender.tabs.processHash = function(todo_guid) {
 elgg.register_hook_handler('init', 'system', elgg.groupextender.tabs.init);
 elgg.register_hook_handler('geTabClicked', 'clicked', elgg.groupextender.tabs.tagdashboardTabClicked);
 elgg.register_hook_handler('geTabSave', 'clicked', elgg.groupextender.tabs.rssTabSaveClick);
-elgg.register_hook_handler('geTabTypeChanged', 'geChanged', elgg.groupextender.tabs.tagTypeChanged);
+elgg.register_hook_handler('geTabTypeChanged', 'geChanged', elgg.groupextender.tabs.staticTabTypeChanged);
 elgg.register_hook_handler('geTabTypeLoaded', 'static', elgg.groupextender.tabs.staticContentSelected);
 elgg.register_hook_handler('geGetFormValues', 'values', elgg.groupextender.tabs.staticContentFormValue);
 elgg.register_hook_handler('geTabSaved', 'cleanup', elgg.groupextender.tabs.staticContentCleanup);
