@@ -49,4 +49,5 @@ table.group-extender-edit-tab-table td.group-extender-tab-priority span#ge-loade
 }
 
 .group-extender-rss-module {
+	display: inline-block;
 }
