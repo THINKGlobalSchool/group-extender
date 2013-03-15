@@ -41,3 +41,12 @@ table.group-extender-edit-tab-table td.group-extender-tab-priority span#ge-loade
 .group-extender-rss-container {
 	margin-top: 10px;
 }
+
+.group-extender-rss-modules-container {
+	-moz-column-count: 2;
+	-webkit-column-count: 2;
+	column-count: 2;
+}
+
+.group-extender-rss-module {
+}
