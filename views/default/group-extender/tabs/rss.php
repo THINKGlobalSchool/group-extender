@@ -19,21 +19,42 @@ $tab = group_extender_get_tab_by_id($group, $tab_id);
 
 switch ($tab['params']['feed_tab_type']) {
 	case 'all':
-		$rss_feeds = elgg_get_entities(array(
+		$options = array(
 			'type' => 'object',
 			'subtype' => 'rss_feed',
 			'container_guid' => $group->guid,
-			'limit' => 0
-		));
+			'limit' => 0,
+		);
+
+		// If a tag is supplied, restrict it
+		if (!empty($tab['params']['tag'])) {
+			$options['metadata_name_value_pairs'] = array('name' => 'tags', 'value' => $tab['params']['tag']);
+		}
+
+		$rss_feeds = elgg_get_entities_from_metadata($options);
 
 		if (count($rss_feeds)) {
 			if ($tab['params']['consolidate_all'] != 'on') {
 				foreach ($rss_feeds as $feed) {
 					$feed_output = elgg_view('rss/feed', array(
-						'sources' => array($feed->title => $feed->feed_url)
+						'sources' => array($feed->title => $feed->feed_url),
+						'class' => 'elgg-rss-feed-module',
+						'max' => 5,
 					));
 
-					$feed_content .= elgg_view_module('featured', $feed->title, $feed_output, array(
+					$module_title = elgg_view('output/url', array(
+						'text' => $feed->title,
+						'href' => $feed->feed_link,
+						'target' => '_blank',
+					));
+
+					$module_title .= elgg_view('output/url', array(
+						'text' => elgg_echo('group-extender:label:viewall'),
+						'class' => 'right',
+						'href' => $feed->getURL(),
+					));
+
+					$feed_content .= elgg_view_module('featured', $module_title, $feed_output, array(
 						'class' => 'group-extender-rss-module',
 					));
 				}

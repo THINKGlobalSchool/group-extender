@@ -85,6 +85,13 @@ $consolidate_input = elgg_view('input/checkbox', array(
 	'checked' => $tab['params']['consolidate_all'] == 'on',
 ));
 
+// Tag label/input
+$tag_label = elgg_echo('group-extender:label:showtag');
+$tag_input = elgg_view('input/text', array(
+	'name' => 'tag',
+	'value' => $tab['params']['tag'],
+));
+
 // Hidden param inputs
 $param_url_hidden = elgg_view('input/hidden', array(
 	'name' => 'add_param[]',
@@ -106,6 +113,11 @@ $param_tab_type_hidden = elgg_view('input/hidden', array(
 	'value' => 'feed_tab_type',
 ));
 
+$param_tag_hidden = elgg_view('input/hidden', array(
+	'name' => 'add_param[]',
+	'value' => 'tag',
+));
+
 $content = <<<HTML
 <div>
 	<label>$feed_tab_type_label</label>
@@ -120,11 +132,15 @@ $content = <<<HTML
 	<br />
 	<label>$consolidate_label</label>
 	$consolidate_input
+	<br /><br />
+	<label>$tag_label</label>
+	$tag_input
 </div>
 $select_feed_content
 $param_url_hidden
 $param_guid_hidden
 $param_tab_type_hidden
+$param_tag_hidden
 HTML;
 
 echo $content;

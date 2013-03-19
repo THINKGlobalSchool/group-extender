@@ -89,12 +89,13 @@ $english = array(
 	'group-extender:label:archived' => 'Archived',
 	'group-extender:label:archivedgroup' => 'archived group',
 	'group-extender:label:orderpriority' => 'Priority (for ordering)',
-	'group-extender:label:allgroupfeeds' => 'Use all group feeds',
-	'group-extender:label:selectrssfeed' => 'Use group rss feed',
-	'group-extender:label:useurl' => 'Use feed at URL',
+	'group-extender:label:allgroupfeeds' => 'Use all feeds from this group',
+	'group-extender:label:selectrssfeed' => 'Use single feed from group',
+	'group-extender:label:useurl' => 'Enter Feed URL manually',
 	'group-extender:label:whichfeed' => 'Which Feed?',
 	'group-extender:label:selectfeed' => 'Select Feed',
-	'group-extender:label:consolidatefeeds' => 'Consolidate Feeds?',
+	'group-extender:label:consolidatefeeds' => 'Combine all feeds into one',
+	'group-extender:label:viewall' => 'View All',
 
 	// Tab labels
 	'group-extender:tab:activity' => 'Activity',
