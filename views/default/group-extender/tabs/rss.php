@@ -42,7 +42,11 @@ switch ($tab['params']['feed_tab_type']) {
 						'max' => 5,
 					));
 
-					$module_title = elgg_view('output/url', array(
+					$module_title = elgg_view('output/img', array(
+						'src' => 'mod/rss/graphics/feed-icon-14x14.png',
+					));
+
+					$module_title .= elgg_view('output/url', array(
 						'text' => $feed->title,
 						'href' => $feed->feed_link,
 						'target' => '_blank',
@@ -67,7 +71,16 @@ switch ($tab['params']['feed_tab_type']) {
 					$sources[$feed->title] = $feed->feed_url;
 				}
 
-				$feed_content = elgg_view('rss/feed', array('sources' => $sources));
+				$title = elgg_echo('group-extender:label:combinedfeed');
+
+				if (!empty($tab['params']['tag'])) {
+					$title .= elgg_echo('group-extender:label:withtag', array($tab['params']['tag']));
+				}
+
+				$feed_content = elgg_view('rss/feed', array(
+					'sources' => $sources,
+					'title' => $title,
+				));
 			}
 
 			
@@ -77,13 +90,19 @@ switch ($tab['params']['feed_tab_type']) {
 		break;
 	case 'url':
 		$feed_content = elgg_view('rss/feed', array(
-			'sources' => array($tab['title'] => $tab['params']['feed_url'])
+			'sources' => array($tab['title'] => $tab['params']['feed_url']),
+			'title' => $tab['title']
 		));
 		break;
 	case 'group_feed':
 		$rss_feed = get_entity($tab['params']['rss_feed_guid']);
 		$feed_content = elgg_view('rss/feed', array(
-			'sources' => array($rss_feed->title => $rss_feed->feed_url)
+			'sources' => array($rss_feed->title => $rss_feed->feed_url),
+			'title' => elgg_view('output/url', array(
+				'text' => $rss_feed->title,
+				'href' => $rss_feed->feed_link,
+				'target' => '_blank'
+			))
 		));
 		break;
 }
