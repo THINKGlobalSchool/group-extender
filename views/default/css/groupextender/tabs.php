@@ -46,8 +46,10 @@ table.group-extender-edit-tab-table td.group-extender-tab-priority span#ge-loade
 	-moz-column-count: 2;
 	-webkit-column-count: 2;
 	column-count: 2;
+	display: block;
 }
 
 .group-extender-rss-module {
 	display: inline-block;
+	margin: 4px;
 }
