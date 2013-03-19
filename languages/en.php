@@ -96,6 +96,8 @@ $english = array(
 	'group-extender:label:selectfeed' => 'Select Feed',
 	'group-extender:label:consolidatefeeds' => 'Combine all feeds into one',
 	'group-extender:label:viewall' => 'View All',
+	'group-extender:label:combinedfeed' => 'Combined Feed',
+	'group-extender:label:withtag' => ' with tag: %s',
 
 	// Tab labels
 	'group-extender:tab:activity' => 'Activity',

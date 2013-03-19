@@ -49,6 +49,12 @@ table.group-extender-edit-tab-table td.group-extender-tab-priority span#ge-loade
 	display: block;
 }
 
+.group-extender-rss-modules-container img {
+	vertical-align: -3px;
+	margin-right: 3px;
+	border: 1px solid #EEEEEE;
+}
+
 .group-extender-rss-module {
 	display: inline-block;
 	margin: 4px;
