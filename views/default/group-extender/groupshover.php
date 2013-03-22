@@ -43,7 +43,7 @@ foreach ($groups as $group) {
 	
 	$group_url = $group->getURL();
 
-	$group_content .= "<li onclick='javascript:window.location.href=\"$group_url\"' class='groups-hover-pointer'>" . elgg_view_image_block($icon, $list_body, $vars) . "</li>";
+	$group_content .= "<li onclick='javascript:window.location.href=\"$group_url\";return false;' class='groups-hover-pointer'>" . elgg_view_image_block($icon, $list_body, $vars) . "</li>";
 }
 
 $content = <<<HTML
