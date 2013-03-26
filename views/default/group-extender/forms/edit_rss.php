@@ -98,7 +98,7 @@ $param_url_hidden = elgg_view('input/hidden', array(
 	'value' => 'feed_url',
 ));
 
-$param_url_hidden = elgg_view('input/hidden', array(
+$param_consolidate_hidden = elgg_view('input/hidden', array(
 	'name' => 'add_param[]',
 	'value' => 'consolidate_all',
 ));
@@ -138,6 +138,7 @@ $content = <<<HTML
 </div>
 $select_feed_content
 $param_url_hidden
+$param_consolidate_hidden
 $param_guid_hidden
 $param_tab_type_hidden
 $param_tag_hidden

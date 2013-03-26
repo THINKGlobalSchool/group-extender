@@ -41,6 +41,8 @@ if ($add_param) {
 	}
 }
 
+echo json_encode($tab_params);
+
 // Check for tab id
 if ($tab_id) {	// Updating tab
 	$current_tabs = group_extender_get_tabs($group);
