@@ -391,7 +391,10 @@ function group_extender_move_sub_pages_recursive($parent) {
 
 	$return = TRUE;
 
-	foreach ($sub_pages as $page) {		
+	foreach ($sub_pages as $page) {	
+		// Update access
+		group_extender_update_moved_entity_access($page, $container_guid);
+
 		$page->container_guid = $container_guid;
 		
 		// Save new page and trigger groupcopy hook
@@ -405,6 +408,37 @@ function group_extender_move_sub_pages_recursive($parent) {
 	}
 
 	return $return;
+}
+
+/**
+ * Update an entities access level upon moveing to/from a group
+ * 
+ * @param ElggEntity the entity being moved
+ * @param int        the guid we're moving to
+ * @return bool
+ */
+function group_extender_update_moved_entity_access($entity, $new_container) {
+	$core_access = array(
+		ACCESS_LOGGED_IN,
+		ACCESS_PUBLIC,
+		ACCESS_PRIVATE,
+		ACCESS_FRIENDS
+	);
+
+	$new_container = get_entity($new_container);
+
+	// If the access level is something other than a core access level
+	if (!in_array($entity->access_id, $core_access)) {
+		// If we're moving to a gorup
+		if (elgg_instanceof($new_container, 'group')) {
+			// Set access level to that groups acl
+			$entity->access_id = $new_container->group_acl;
+		} else {
+			// Moving back to entity, set to logged in
+			$entity->access_id = ACCESS_LOGGED_IN;
+		}
+		$entity->save();
+	}
 }
 
 /** Group Dashboard Content **/

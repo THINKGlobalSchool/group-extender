@@ -23,6 +23,7 @@ if (!elgg_instanceof($entity, 'object') || ($entity->owner_guid != elgg_get_logg
 	forward(REFERER);
 }
 
+
 // If group guid was supplied
 if ($group_guid) {
 	// Check for valid group and that user is a member (or is admin)
@@ -30,12 +31,18 @@ if ($group_guid) {
 		register_error(elgg_echo('group-extender:error:invalidgroup'));
 		forward(REFERER);
 	}
+
+	// Update access
+	group_extender_update_moved_entity_access($entity, $group->guid);
 	
 	// Set new container
 	$entity->container_guid = $group->guid;
 	$success = elgg_echo('group-extender:success:move', array($group->name));
 	$error = elgg_echo('group-extender:error:move', array($group->name));
 } else if ($reset_owner) {
+	// Update access
+	group_extender_update_moved_entity_access($entity, $entity->owner_guid);
+
 	// Set container to owner
 	$entity->container_guid = $entity->owner_guid;
 	$success = elgg_echo('group-extender:success:moveout');
