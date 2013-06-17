@@ -30,6 +30,7 @@ $english = array(
 	'group-extender:title:groupdashboard' => 'Group Dashboard',
 	
 	// Labels
+	'group-extender:label:mygroups' => 'My Groups',
 	'group-extender:label:editgrouptabs' => 'Edit Group Tabs',
 	'group-extender:label:type' => 'Tab Type',
 	'group-extender:label:priority' => 'Priority',
