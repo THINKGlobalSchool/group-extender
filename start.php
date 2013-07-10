@@ -8,6 +8,8 @@
  * @copyright THINK Global School 2010 - 2012
  * @link http://www.thinkglobalschool.com/
  * 
+ * OVERRIDES:
+ *   * groups/sidebar/find
  */
 
 // Register init
@@ -74,7 +76,7 @@ function group_extender_init() {
 	
 	elgg_extend_view('groups/edit', 'group-extender/group_tools_extra_js', 9999999999);
 	
-	elgg_extend_view('groups/sidebar/find', 'group-extender/sidebar/find_name');
+	//elgg_extend_view('groups/sidebar/find', 'group-extender/sidebar/find_name');
 	
 	// Fix group profile ECML
 	elgg_register_plugin_hook_handler('get_views', 'ecml', 'group_extender_ecml_views_hook');
