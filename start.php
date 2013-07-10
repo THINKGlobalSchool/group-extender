@@ -75,6 +75,9 @@ function group_extender_init() {
 	}
 	
 	elgg_extend_view('groups/edit', 'group-extender/group_tools_extra_js', 9999999999);
+
+	// Extend featured sidebar
+	elgg_extend_view('groups/sidebar/featured', 'group-extender/featured', 499);
 	
 	//elgg_extend_view('groups/sidebar/find', 'group-extender/sidebar/find_name');
 	
@@ -171,7 +174,10 @@ function group_extender_init() {
 
 		// Override parentportal child groups module
 		elgg_set_view_location('parentportal/child_groups', elgg_get_plugins_path() . "group-extender/overrides/");
-	}	
+	}
+
+	// Override some group view locations (to get around group_tools plugin)
+	elgg_set_view_location('groups/sidebar/featured', elgg_get_plugins_path() . "group-extender/overrides/");	
 }
 
 /**
