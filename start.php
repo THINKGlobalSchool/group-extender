@@ -96,6 +96,9 @@ function group_extender_init() {
 	// Hook into title menu
 	elgg_register_plugin_hook_handler("register", "menu:title", "group_extender_menu_title_handler");
 
+	// Hook into page menu
+	elgg_register_plugin_hook_handler('prepare', 'menu:page', 'group_extender_page_menu_handler');
+
 	// extend groups page handler
 	elgg_register_plugin_hook_handler('route', 'groups', 'group_extender_route_groups_handler', 100);
 	
@@ -453,6 +456,23 @@ function group_extender_menu_title_handler($hook, $type, $return, $params) {
 		}
 	}
 	
+	return $return;
+}
+
+/**
+ * Hook into page menu to fix selected issues
+ */
+function group_extender_page_menu_handler($hook, $type, $return, $params) {	
+	if (elgg_get_context() == 'groups') {
+		foreach ($return['default'] as $item) {
+			if ($item->getName() == 'groups:all') {
+				if (strstr(full_url(),'groups/all')) {
+					$item->setSelected(true);
+				}
+			}
+		}
+	}
+
 	return $return;
 }
 
