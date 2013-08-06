@@ -77,7 +77,10 @@ if (!$success) {
 }
 
 // Unset archived
-$group->archived = FALSE;
+elgg_delete_metadata(array(
+	'guid' => $group->guid,
+	'metadata_name' => 'archived',
+));
 
 access_show_hidden_entities($access_status);
 

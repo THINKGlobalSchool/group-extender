@@ -112,6 +112,9 @@ function group_extender_init() {
 		elgg_register_plugin_hook_handler('register', 'menu:topbar', 'group_extender_topbar_menu_setup', 9001);
 	}
 
+	// Hook into search improved results for groups
+	elgg_register_plugin_hook_handler('searchimproved_results', 'groups', 'group_extender_searchimproved_results_hook');
+
 	// Tab actions
 	$action_base = elgg_get_plugins_path() . 'group-extender/actions/group-extender';
 	elgg_register_action("groupextender/save_tab", "$action_base/save_tab.php");
@@ -718,6 +721,26 @@ function group_extender_topbar_menu_setup($hook, $type, $return, $params) {
 		//'title' => elgg_echo("group-extender:label:mygroups"),
 	);
 	$return[] = ElggMenuItem::factory($options);
+	
+	return $return;
+}
+
+/**
+ * Set up search improved results
+ */
+function group_extender_searchimproved_results_hook($hook, $type, $return, $params) {
+	error_log(serialize($return));
+
+	$dbprefix = elgg_get_config('dbprefix');
+	$name_metastring_id = get_metastring_id('archived');
+	if (!$name_metastring_id) {
+		return $return;
+	}
+
+	$return['wheres'] = "NOT EXISTS (
+		SELECT 1 FROM {$dbprefix}metadata md
+		WHERE md.entity_guid = e.guid
+		AND md.name_id = $name_metastring_id)";
 	
 	return $return;
 }
