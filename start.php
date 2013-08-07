@@ -729,8 +729,6 @@ function group_extender_topbar_menu_setup($hook, $type, $return, $params) {
  * Set up search improved results
  */
 function group_extender_searchimproved_results_hook($hook, $type, $return, $params) {
-	error_log(serialize($return));
-
 	$dbprefix = elgg_get_config('dbprefix');
 	$name_metastring_id = get_metastring_id('archived');
 	if (!$name_metastring_id) {
