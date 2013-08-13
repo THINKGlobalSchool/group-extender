@@ -709,7 +709,7 @@ function group_extender_topbar_menu_setup($hook, $type, $return, $params) {
 	$options = array(
 		'type' => 'group',
 		'relationship' => 'member',
-		'relationship_guid' => $user->guid,
+		'relationship_guid' => elgg_get_logged_in_user_guid(),
 		'inverse_relationship' => FALSE,
 		'full_view' => FALSE,
 		'pagination' => FALSE,
@@ -766,26 +766,6 @@ function group_extender_topbar_menu_setup($hook, $type, $return, $params) {
 	$return[] = $groups_item;
 
 	return $return;
-
-	// // Link to my groups
-	// $href = elgg_get_site_url() . 'groups/member/' . elgg_get_logged_in_user_entity()->username;
-
-	// // Add 'groups' topbar menu
-	// $text = "<span class='elgg-icon elgg-icon-users'></span>" . elgg_echo("group-extender:label:mygroups");	
-	// $text .= elgg_view('group-extender/groupshover');
-
-	// // Add groups item
-	// $options = array(
-	// 	'name' => 'groups_topbar_hover_menu',
-	// 	'href' => $href,
-	// 	'text' => $text,
-	// 	'priority' => 2000,
-	// 	'title' => elgg_echo("groups")
-	// 	//'title' => elgg_echo("group-extender:label:mygroups"),
-	// );
-	// $return[] = ElggMenuItem::factory($options);
-	
-//	return $return;
 }
 
 /**
