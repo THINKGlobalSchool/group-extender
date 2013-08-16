@@ -456,6 +456,47 @@ function group_extender_get_dashboard() {
 
 /** End Group Dashboard Content **/
 
+/** Extended page handler stuff **/
+/**
+ * Group extender members page
+ *
+ * @param int $guid Group entity GUID
+ */
+function group_extender_handle_members_page($guid) {
+
+	elgg_set_page_owner_guid($guid);
+
+	$group = get_entity($guid);
+	if (!$group || !elgg_instanceof($group, 'group')) {
+		forward();
+	}
+
+	group_gatekeeper();
+
+	$title = elgg_echo('groups:members:title', array($group->name));
+
+	elgg_push_breadcrumb($group->name, $group->getURL());
+	elgg_push_breadcrumb(elgg_echo('groups:members'));
+
+	$content = elgg_list_entities_from_relationship(array(
+		'relationship' => 'member',
+		'relationship_guid' => $group->guid,
+		'inverse_relationship' => true,
+		'type' => 'user',
+		'limit' => 28,
+	));
+
+	$params = array(
+		'content' => $content,
+		'title' => $title,
+		'filter' => '',
+	);
+	$body = elgg_view_layout('content', $params);
+
+	echo elgg_view_page($title, $body);
+}
+
+
 /** Group Categories Content **/
 
 function groupcategories_get_edit_content($type, $guid = NULL) {	

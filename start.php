@@ -218,6 +218,8 @@ function group_extender_page_handler($page) {
 			group_extender_get_name_search();
 		} else if ($page[0] == 'dashboard'){
 			group_extender_get_dashboard();
+		} else if ($page[0] == 'members') {
+			group_extender_handle_members_page($page[1]);
 		} else {
 			groups_page_handler($page);
 		}	
@@ -717,6 +719,11 @@ function group_extender_topbar_menu_setup($hook, $type, $return, $params) {
 	);
 
 	$groups = elgg_get_entities_from_relationship($options);
+
+	// If user has no groups, bail
+	if (!count($groups)) {
+		return $return;
+	}
 
 	foreach ($groups as $group) {
 		$icon = elgg_view_entity_icon($group, 'tiny', array('hide_menu' => true));
