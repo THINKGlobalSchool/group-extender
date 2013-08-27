@@ -122,6 +122,9 @@ function group_extender_init() {
 	elgg_register_action("groupextender/move_tab", "$action_base/move_tab.php");
 	elgg_register_action("group_dashboard/dashboard", "$action_base/dashboard.php");
 
+	// Manage content action
+	//elgg_register_action("group-extender/manage_content", "$action_base/manage_content.php", 'admin');
+
 	// Replace the group_tools mail action if it's enabled
 	if (elgg_is_active_plugin('group_tools')) {
 		// Unregister existing action
@@ -741,7 +744,7 @@ function group_extender_topbar_menu_setup($hook, $type, $return, $params) {
 		$group_url = $group->getURL();
 
 		elgg_register_menu_item('groups_topbar', array(
-			'name' => "group_{$group->guid}",
+			'name' => elgg_get_friendly_title($group->name) . "_{$group->guid}",
 			'href' => $group->getURL(),
 			'text' => "<div><img src='{$icon_url}'><span>{$group->name}</span></img></div>",
 		));
@@ -755,7 +758,7 @@ function group_extender_topbar_menu_setup($hook, $type, $return, $params) {
 
 	// Use ElggMenuBuilder to sort menu alphabetically
 	$builder = new ElggMenuBuilder($groups_menu);
-	$groups_menu = $builder->getMenu('text');
+	$groups_menu = $builder->getMenu('name');
 
 	$text = elgg_echo("group-extender:label:mygroups");
 	$groups_link = "<a href=\"#\" class='tgstheme-topbar-dropdown'>$text</a>";
@@ -800,6 +803,7 @@ function group_extender_submenus() {
 	if (elgg_in_context('admin')) {
 		elgg_register_admin_menu_item('administer', 'categories', 'groupextender');
 		elgg_register_admin_menu_item('administer', 'dashboard', 'groupextender');
+		elgg_register_admin_menu_item('administer', 'content', 'groupextender');
 	}
 	
 	// Display group dashboard sidebar menu item
