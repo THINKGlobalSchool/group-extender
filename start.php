@@ -224,6 +224,14 @@ function group_extender_page_handler($page) {
 		} else if ($page[0] == 'members') {
 			group_extender_handle_members_page($page[1]);
 		} else {
+			$hide_owner_block = array(
+				'member',
+				'owner',
+				'invitations'
+			);
+			if (in_array($page[0], $hide_owner_block)) {
+				set_input('owner_block_force_hidden', 1);
+			}
 			groups_page_handler($page);
 		}	
 		return true;
