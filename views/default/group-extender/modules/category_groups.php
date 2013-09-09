@@ -13,7 +13,7 @@
 $guid = elgg_extract('guid', $vars, NULL);
 
 // Load All Groups
-if ($guid == 'all') {
+if ($guid == 'all' || $guid == 'mine' || $guid == 'owned') {
 	$options = array(
 		'types' => 'group',
 		'full_view' => FALSE,
@@ -38,7 +38,16 @@ if ($guid == 'all') {
 		}
 	}
 
-	$content = elgg_list_entities_from_metadata($options);
+	// Add options for mine/owned
+	if ($guid == 'mine') {
+		$options['relationship'] = 'member';
+		$options['relationship_guid'] = elgg_get_logged_in_user_guid();
+		$options['inverse_relationship'] = false;
+	} else if ($guid == 'owned') {
+		$options['owner_guid'] = elgg_get_logged_in_user_guid();
+	}
+
+	$content = elgg_list_entities_from_relationship($options);
 } else {
 	$category = get_entity($guid);
 

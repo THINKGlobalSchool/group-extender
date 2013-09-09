@@ -115,6 +115,12 @@ function group_extender_init() {
 	// Hook into search improved results for groups
 	elgg_register_plugin_hook_handler('searchimproved_results', 'groups', 'group_extender_searchimproved_results_hook');
 
+	// Unregister groups pagesetup event handler
+	elgg_unregister_event_handler('pagesetup', 'system', 'groups_setup_sidebar_menus');
+
+	// Register new pagesetup event handler
+	elgg_register_event_handler('pagesetup', 'system', 'group_extender_setup_sidebar_menus');
+
 	// Tab actions
 	$action_base = elgg_get_plugins_path() . 'group-extender/actions/group-extender';
 	elgg_register_action("groupextender/save_tab", "$action_base/save_tab.php");
@@ -432,7 +438,7 @@ function group_extender_setup_group_filter_menu($hook, $type, $return, $params) 
 		// Add categories option
 		$options = array(
 			'name' => 'groups_categories',
-			'text' => elgg_echo('admin:groupextender:categories'),
+			'text' => elgg_echo('group-extender:label:browse'),
 			'href' => "groups/all?filter=categories",
 			'priority' => 100,
 		);
@@ -820,7 +826,7 @@ function group_extender_submenus() {
 	if (elgg_is_logged_in() && elgg_get_context() == 'groups' && !elgg_instanceof($page_owner, 'group') && elgg_get_plugin_setting('enable_dashboard', 'group-extender')) {
 		$url =  "groups/dashboard";
 		$item = new ElggMenuItem('zz-groupdashboard', elgg_echo('group-extender:title:groupdashboard'), $url);
-		elgg_register_menu_item('page', $item);
+		//elgg_register_menu_item('page', $item);
 	}
 }
 
@@ -832,4 +838,40 @@ function group_extender_ecml_views_hook($hook, $type, $return, $params) {
 	$return['group-extender/tabs/static'] = elgg_echo('static_tab');
 
 	return $return;
+}
+
+/**
+ * Configure the groups sidebar menu. Triggered on page setup
+ *
+ */
+function group_extender_setup_sidebar_menus() {
+
+	// Get the page owner entity
+	$page_owner = elgg_get_page_owner_entity();
+
+	if (elgg_in_context('group_profile')) {
+		if (elgg_is_logged_in() && $page_owner->canEdit() && !$page_owner->isPublicMembership()) {
+			$url = elgg_get_site_url() . "groups/requests/{$page_owner->getGUID()}";
+
+			$count = elgg_get_entities_from_relationship(array(
+				'type' => 'user',
+				'relationship' => 'membership_request',
+				'relationship_guid' => $page_owner->getGUID(),
+				'inverse_relationship' => true,
+				'count' => true,
+			));
+
+			if ($count) {
+				$text = elgg_echo('groups:membershiprequests:pending', array($count));
+			} else {
+				$text = elgg_echo('groups:membershiprequests');
+			}
+
+			elgg_register_menu_item('page', array(
+				'name' => 'membership_requests',
+				'text' => $text,
+				'href' => $url,
+			));
+		}
+	}
 }

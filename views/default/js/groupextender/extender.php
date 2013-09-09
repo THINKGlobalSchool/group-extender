@@ -100,18 +100,22 @@ elgg.groupextender.categories_populated_module = function(event, type, params, v
 		var $entity_list = category_module.find('ul.elgg-list-entity');
 		
 		var allgroups_item = "<li id='elgg-object-groups-all' class='elgg-item category-state-selected'><div class='elgg-image-block clearfix'><div class='elgg-body'><h3>" + elgg.echo('group-extender:label:allgroups') + "</h3><div class='elgg-subtext'></div></div></div></li>";
+		var ownedgroups_item = "<li id='elgg-object-groups-owned' class='elgg-item'><div class='elgg-image-block clearfix'><div class='elgg-body'><h3>" + elgg.echo('groups:owned') + "</h3><div class='elgg-subtext'></div></div></div></li>";
+		var mygroups_item = "<li id='elgg-object-groups-mine' class='elgg-item'><div class='elgg-image-block clearfix'><div class='elgg-body'><h3>" + elgg.echo('groups:yours') + "</h3><div class='elgg-subtext'></div></div></div></li>";
 		
 		if ($entity_list.length) {
+			$entity_list.prepend(ownedgroups_item);
+			$entity_list.prepend(mygroups_item);
 			$entity_list.prepend(allgroups_item);
 		} else {
-			category_module.find('div.content').html("<ul>" + allgroups_item + "</ul>");
+			category_module.find('div.content').html("<ul>" + allgroups_item + mygroups_item + ownedgroups_item +  "</ul>");
 		}
 
 		category_module.find('li.elgg-item').each(function() {
 			// Extract guid from list item
 			var id = $(this).attr('id');
 			var guid = id.substring(id.lastIndexOf('-') + 1);
-		
+
 			$(this).bind('click', function(event) {
 				if ($(event.target).parents(".elgg-menu-item-entity-actions").length == 0) {
 					// Load groups
