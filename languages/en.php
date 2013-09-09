@@ -25,6 +25,7 @@ $english = array(
 	'admin:groupextender:addcategory' => 'Add Category',
 	'admin:groupextender:editcategory' => 'Edit Category',
 	'admin:groupextender:dashboard' => 'Dashboard',
+	'admin:groupextender:content' => 'Manage Content',
 	
 	// Titles
 	'group-extender:title:groupdashboard' => 'Group Dashboard',
@@ -99,6 +100,11 @@ $english = array(
 	'group-extender:label:viewall' => 'View All',
 	'group-extender:label:combinedfeed' => 'Combined Feed',
 	'group-extender:label:withtag' => ' with tag: %s',
+	'group-extender:label:sourceselect' => 'Select Source Group',
+	'group-extender:label:destinationselect' => 'Select Destination Group',
+	'group-extender:label:selectcontent' => 'Select content to copy',
+	'group-extender:label:profiletabs' => 'Group Tabs',
+	'group-extender:label:browse' => 'Browse',
 
 	// Tab labels
 	'group-extender:tab:activity' => 'Activity',
@@ -111,6 +117,7 @@ $english = array(
 	
 	// Messages
 	'group-extender:error:invalidgroup' => 'Invalid Group',
+	'group-extender:error:invalidsourcedestinationgroup' => 'Invalid Source or Destination Group',
 	'group-extender:error:invalidentity' => 'Invalid Entity',
 	'group-extender:error:invalidcategory' => 'Invalid Category',
 	'group-extender:error:invalidtab' => 'Invalid Tab',
@@ -131,6 +138,8 @@ $english = array(
 	'group-extender:error:copy' => 'There was an error copying the item to group: %s',
 	'group-extender:error:removeusers' => 'There was an error removing users from the group',
 	'group-extender:error:addusers' => 'There was an error adding users to the group',
+	'group-extender:error:nocopyoptions' => 'Must select at least one copy option',
+	'group-extender:error:unknowncopyoption' => 'Unknown copy option \'%s\'',
 	'group-extender:success:addgroup' => 'Successfully added group to category: %s',
 	'group-extender:success:removegroup' => 'Successfully removed group from category: %s',
 	'group-extender:success:savetab' => 'Successfully saved group tab',
@@ -144,6 +153,7 @@ $english = array(
 	'group-extender:success:copy' => 'Successfully copied item to group: %s',
 	'group-extender:success:grouparchived' => 'Successfully archived group',
 	'group-extender:success:groupunarchived' => 'Successfully unarchived group',
+	'group-extender:success:copytabs' => 'Successfully copied group tabs',
 );
 
 add_translation('en',$english);
