@@ -30,7 +30,6 @@ if (!$tab_title) {
 // If we've got extra parameters, add them to the tab as well
 $add_param = get_input('add_param');
 
-
 if ($add_param) {
 	if (is_array($add_param)) {
 		foreach($add_param as $foo => $param) {
@@ -57,6 +56,16 @@ if ($tab_id) {	// Updating tab
 	
 	$tab['title'] = $tab_title;
 	$tab['params'] = $tab_params;
+
+	if ($tab['type'] == 'static') {
+		$content = $tab['params']['static_content'];
+		$meta_name = "tab_{$tab_id}";
+		$tab['params']['static_content_meta'] = $meta_name;
+		$group->$meta_name = $content;
+		unset($tab['params']['static_content']);
+	}
+
+	forward(REFERER);
 	
 	// Try to update tab
 	if (!group_extender_update_tab($group, $tab_id, $tab)) {
@@ -71,11 +80,21 @@ if ($tab_id) {	// Updating tab
 		'type' => $tab_type,
 		'priority' => group_extender_get_highest_tab_priority($group) +1,
 	);
-	
+
 	$tab['params'] = $tab_params;
 	
 	// Add to the group
 	$uid = group_extender_add_tab($group, $tab);
+
+	if ($tab['type'] == 'static') {
+		$content = $tab['params']['static_content'];
+		$meta_name = "tab_{$uid}";
+		$tab['params']['static_content_meta'] = $meta_name;
+		$group->$meta_name = $content;
+		unset($tab['params']['static_content']);
+		group_extender_update_tab($group, $uid, $tab);
+	}
+
 }
 
 // All good, display success and return

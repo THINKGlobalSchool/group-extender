@@ -17,5 +17,5 @@ $tab_id = elgg_extract('tab_id', $vars);
 $tab = group_extender_get_tab_by_id($group, $tab_id);
 
 echo elgg_view('output/longtext', array(
-	'value' => $tab['params']['static_content'],
+	'value' => $group->$tab['params']['static_content_meta'],
 ));

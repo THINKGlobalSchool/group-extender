@@ -97,6 +97,13 @@ function group_extender_update_tab($group, $tab_id, $tab) {
 function group_extender_remove_tab($group, $tab_id) {
 	$current_tabs = group_extender_get_tabs($group);
 
+	if ($current_tabs[$tab_id]['type'] == 'static') {
+		elgg_delete_metadata(array(
+			'guid' => $group->guid,
+			'metadata_name' => $current_tabs[$tab_id]['params']['static_content_meta'],
+		));
+	}
+
 	unset($current_tabs[$tab_id]);
 	
 	group_extender_reprioritize_tabs($current_tabs);
@@ -495,6 +502,8 @@ function group_extender_handle_members_page($guid) {
 
 	echo elgg_view_page($title, $body);
 }
+
+/** End group content management **/
 
 
 /** Group Categories Content **/
