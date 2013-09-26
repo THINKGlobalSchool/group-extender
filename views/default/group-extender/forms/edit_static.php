@@ -12,13 +12,14 @@
  */
 
 $tab = elgg_extract('tab', $vars);
+$group = get_entity(elgg_extract('group_guid', $vars));
 
 // Static content
 $content_label = elgg_echo('group-extender:label:staticcontent');
 $content_input = elgg_view('input/longtext', array(
 	'id' => 'static-content',
 	'name' => 'static_content',
-	'value' => $tab['params']['static_content'],
+	'value' => $group->$tab['params']['static_content_meta'],
 ));
 
 // Hidden param input
