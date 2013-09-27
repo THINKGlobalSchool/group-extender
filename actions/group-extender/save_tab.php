@@ -64,8 +64,6 @@ if ($tab_id) {	// Updating tab
 		$group->$meta_name = $content;
 		unset($tab['params']['static_content']);
 	}
-
-	forward(REFERER);
 	
 	// Try to update tab
 	if (!group_extender_update_tab($group, $tab_id, $tab)) {
