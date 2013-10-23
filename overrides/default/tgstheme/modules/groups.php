@@ -113,9 +113,4 @@ $content .= "<span class='groups-widget-viewall'>" . elgg_view('output/url', arr
 	'value' => elgg_get_site_url() . 'groups/member/' . elgg_get_logged_in_user_entity()->username,
 )) . "</span>";
 
-// Module options
-$options = array(
-	'class' => 'tgstheme-module tgstheme-groups-module',
-);
-
-echo elgg_view_module('featured', elgg_echo('groups'), $content, $options);
+echo $content;
