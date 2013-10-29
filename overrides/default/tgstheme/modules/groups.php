@@ -107,10 +107,4 @@ if (count($class_groups)) {
 $content .= "<div id='other-groups' class='groups-class-filter-container' $hide_other_groups>$other_content</div>";
 $content .= "<div id='class-groups' class='groups-class-filter-container' $hide_class_groups>$class_content</div>";
 
-// All my groups link
-$content .= "<span class='groups-widget-viewall'>" . elgg_view('output/url', array(
-	'text' => elgg_echo('tgstheme:label:allmygroups'),
-	'value' => elgg_get_site_url() . 'groups/member/' . elgg_get_logged_in_user_entity()->username,
-)) . "</span>";
-
 echo $content;
