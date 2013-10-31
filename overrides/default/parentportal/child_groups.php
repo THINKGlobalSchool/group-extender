@@ -35,7 +35,4 @@ $content = elgg_view_menu('groups_class_other_menu', array(
 $content .= "<div id='other-groups' class='groups-class-filter-container' style='display: none;'>$other_content</div>";
 $content .= "<div id='class-groups' class='groups-class-filter-container'>$class_content</div>";
 
-echo elgg_view_module('featured', elgg_echo("parentportal:title:childgroups"), $content, array(
-	'id' => 'parentportal-module-child-groups',
-	'class' => 'parentportal-module',
-));
+echo $content;
