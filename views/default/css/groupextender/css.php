@@ -160,6 +160,15 @@
 	cursor: pointer;
 }
 
+/* Group tab gallery override */
+.group-extender-tab-content-container ul.elgg-gallery {
+
+}
+
+.group-extender-tab-content-container ul.elgg-gallery .elgg-item {
+	padding: 4px 10px;
+}
+
 /* Group title menu styles */
 
 .elgg-menu-title .elgg-menu-item-archived {

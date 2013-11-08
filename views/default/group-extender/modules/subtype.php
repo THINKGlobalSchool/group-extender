@@ -31,6 +31,16 @@ $options = array(
 if ($options['subtype'] == 'album' || $options['subtype'] == 'image') {
 	set_input('search_viewtype', 'gallery'); 
 	$options['list_type'] = 'gallery';
+
+	// Get photos from albums contained by this group
+	if ($options['subtype'] == 'image') {
+		$dbprefix = elgg_get_config('dbprefix');
+
+		unset($options['container_guid']);
+		
+		$options['joins'] = array("JOIN {$dbprefix}entities e1 ON e1.guid = e.container_guid");
+		$options['wheres'] = array("(e1.container_guid = $group_guid)");
+	}
 }
 
 // If a tag is supplied, restrict it
