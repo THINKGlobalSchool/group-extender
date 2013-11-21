@@ -105,6 +105,12 @@ function group_extender_init() {
 	// Set up group admin hover menu
 	elgg_register_plugin_hook_handler('register', 'menu:group_hover', 'group_extender_hover_menu_setup');
 	
+	// Modify todo dashboard menu
+	if (elgg_is_active_plugin('todo')) {
+		elgg_register_plugin_hook_handler('register', 'menu:todo_dashboard', 'group_extender_todo_dashboard_menu_setup');
+		elgg_register_plugin_hook_handler('get_options', 'todo', 'group_extender_todo_get_options_handler');
+	}
+
 	// Register a handler for core subtype's group move functionality
 	elgg_register_plugin_hook_handler('groupmove', 'entity', 'group_extender_group_move_handler');
 	
@@ -648,6 +654,88 @@ function group_extender_hover_menu_setup($hook, $type, $return, $params) {
 		}
 	}
 	
+	return $return;
+}
+
+/**
+ * Add group extender options to todo dashboard menu
+ */
+function group_extender_todo_dashboard_menu_setup($hook, $type, $return, $params) {
+	// Add a group category dropwdown for todo admins
+	if (is_todo_admin() || elgg_is_admin_logged_in()) {
+		$category = get_input('category');
+
+		// Get all site categories
+		$category_entities = elgg_get_entities(array(
+			'type' => 'object',
+			'subtype' => 'group_category',
+			'limit' => 0,
+		));
+
+		$categories = array();
+
+		if (count($category_entities) >= 1) {
+			$categories[0] = '';
+
+			foreach($category_entities as $category) {
+				$categories[$category->guid] = $category->title;
+			}
+		} else {
+			$categories[''] = elgg_echo('group-extender:label:nocategories');
+		}
+
+		$category_filter_input = elgg_view('input/chosen_dropdown', array(
+			'id' => 'todo-group-categories-filter',
+			'options_values' => $categories,
+			'value' => $category,
+			'class' => 'todo-dashboard-filter',
+			'data-param' => 'category',
+			'data-disables' => '["#todo-group-filter"]',
+			'data-placeholder' => elgg_echo('group-extender:label:categoryselect')
+		));
+
+		$options = array(
+			'name' => 'group-categories-filter',
+			'href' => false,
+			'label' => elgg_echo('group-extender:label:groupcategory'),
+			'text' => $category_filter_input,
+			'encode_text' => false,
+			'section' => 'advanced',
+			'priority' => 500
+		);
+
+		$return[] = ElggMenuItem::factory($options);
+	}
+
+	return $return;
+}
+
+/**
+ * Allow getting todos by group category
+ */
+function group_extender_todo_get_options_handler($hook, $type, $return, $params) {
+	$category_guid = get_input('category', false);
+
+	$category = get_entity($category_guid);
+
+	// If we have a category
+	if (elgg_instanceof($category, 'object', 'group_category')) {
+		// Clear the container guid option
+		unset($return['container_guid']);
+
+		// Get
+		$groups = groupcategories_get_groups($category, 0);
+
+		$group_guids = array();
+
+		foreach ($groups as $group) {
+			$group_guids[] = $group->guid;
+		}
+
+		$return['container_guids'] = $group_guids;
+
+	}
+
 	return $return;
 }
 
