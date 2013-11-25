@@ -661,50 +661,55 @@ function group_extender_hover_menu_setup($hook, $type, $return, $params) {
  * Add group extender options to todo dashboard menu
  */
 function group_extender_todo_dashboard_menu_setup($hook, $type, $return, $params) {
+	$page_owner = elgg_get_page_owner_entity();
+
 	// Add a group category dropwdown for todo admins
 	if (is_todo_admin() || elgg_is_admin_logged_in()) {
-		$category = get_input('category');
+		// Only show category when not viewing a group
+		if (!elgg_instanceof($page_owner, 'group')) {
+			$category = get_input('category');
 
-		// Get all site categories
-		$category_entities = elgg_get_entities(array(
-			'type' => 'object',
-			'subtype' => 'group_category',
-			'limit' => 0,
-		));
+			// Get all site categories
+			$category_entities = elgg_get_entities(array(
+				'type' => 'object',
+				'subtype' => 'group_category',
+				'limit' => 0,
+			));
 
-		$categories = array();
+			$categories = array();
 
-		if (count($category_entities) >= 1) {
-			$categories[0] = '';
+			if (count($category_entities) >= 1) {
+				$categories[0] = '';
 
-			foreach($category_entities as $category) {
-				$categories[$category->guid] = $category->title;
+				foreach($category_entities as $category) {
+					$categories[$category->guid] = $category->title;
+				}
+			} else {
+				$categories[''] = elgg_echo('group-extender:label:nocategories');
 			}
-		} else {
-			$categories[''] = elgg_echo('group-extender:label:nocategories');
+
+			$category_filter_input = elgg_view('input/chosen_dropdown', array(
+				'id' => 'todo-group-categories-filter',
+				'options_values' => $categories,
+				'value' => $category,
+				'class' => 'todo-dashboard-filter',
+				'data-param' => 'category',
+				'data-disables' => '["#todo-group-filter"]',
+				'data-placeholder' => elgg_echo('group-extender:label:categoryselect')
+			));
+
+			$options = array(
+				'name' => 'group-categories-filter',
+				'href' => false,
+				'label' => elgg_echo('group-extender:label:groupcategory'),
+				'text' => $category_filter_input,
+				'encode_text' => false,
+				'section' => 'advanced',
+				'priority' => 500
+			);
+
+			$return[] = ElggMenuItem::factory($options);
 		}
-
-		$category_filter_input = elgg_view('input/chosen_dropdown', array(
-			'id' => 'todo-group-categories-filter',
-			'options_values' => $categories,
-			'value' => $category,
-			'class' => 'todo-dashboard-filter',
-			'data-param' => 'category',
-			'data-disables' => '["#todo-group-filter"]',
-			'data-placeholder' => elgg_echo('group-extender:label:categoryselect')
-		));
-
-		$options = array(
-			'name' => 'group-categories-filter',
-			'href' => false,
-			'label' => elgg_echo('group-extender:label:groupcategory'),
-			'text' => $category_filter_input,
-			'encode_text' => false,
-			'section' => 'advanced',
-			'priority' => 500
-		);
-
-		$return[] = ElggMenuItem::factory($options);
 	}
 
 	return $return;
