@@ -107,6 +107,7 @@ $english = array(
 	'group-extender:label:selectcontent' => 'Select content to copy',
 	'group-extender:label:profiletabs' => 'Group Tabs',
 	'group-extender:label:browse' => 'Browse',
+	'group-extender:label:postgroup' => 'Post in Group',
 
 	// Tab labels
 	'group-extender:tab:activity' => 'Activity',
