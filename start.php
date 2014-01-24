@@ -121,6 +121,19 @@ function group_extender_init() {
 	// Hook into search improved results for groups
 	elgg_register_plugin_hook_handler('searchimproved_results', 'groups', 'group_extender_searchimproved_results_hook');
 
+	// Define core save forms
+	$core_save_forms = array(
+		'forms/bookmarks/save',
+		'forms/blog/save',
+		// 'forms/file/upload',
+		// 'forms/pages/edit'
+	);
+
+	// Hook into core plugin save forms
+	foreach ($core_save_forms as $form) {
+		elgg_register_plugin_hook_handler('view', $form, 'group_extender_group_picker_handler');
+	}
+
 	// Unregister groups pagesetup event handler
 	elgg_unregister_event_handler('pagesetup', 'system', 'groups_setup_sidebar_menus');
 
@@ -901,6 +914,14 @@ function group_extender_searchimproved_results_hook($hook, $type, $return, $para
 		AND md.name_id = $name_metastring_id)";
 	
 	return $return;
+}
+
+/**
+ * Hook into core save forms to add group picker
+ */
+function group_extender_group_picker_handler($hook, $type, $return, $params) {
+	$foot_pos = strpos($return, '<div class="elgg-foot">');
+	return substr_replace($return, elgg_view('forms/group-extender/group_picker'), $foot_pos, 0);
 }
 
 /**
