@@ -34,7 +34,8 @@ JAVASCRIPT;
 		'relationship_guid' => elgg_get_logged_in_user_guid(),
 		'inverse_relationship' => FALSE,
 		'joins' => array("JOIN " . elgg_get_config("dbprefix") . "groups_entity ge ON e.guid = ge.guid"),
-		'order_by' => 'ge.name ASC'
+		'order_by' => 'ge.name ASC',
+		'limit' => 0
 	));
 
 	if (count($groups)) {
