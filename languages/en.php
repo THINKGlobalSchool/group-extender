@@ -108,6 +108,7 @@ $english = array(
 	'group-extender:label:profiletabs' => 'Group Tabs',
 	'group-extender:label:browse' => 'Browse',
 	'group-extender:label:postgroup' => 'Post in Group',
+	'group-extender:label:deleteconfirm' => 'Are you sure you want to delete this tab?',
 
 	// Tab labels
 	'group-extender:tab:activity' => 'Activity',

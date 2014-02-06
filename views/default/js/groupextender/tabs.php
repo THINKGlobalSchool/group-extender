@@ -282,12 +282,19 @@ elgg.groupextender.tabs.refreshableClick = function(event) {
 	var action_url = $(this).attr('href');
 
 	var $_this = $(this);
+
+	// Add confirmation for delete click
+	if ($_this.is('.group-extender-delete-link')) {
+		if (!confirm(elgg.echo('group-extender:label:deleteconfirm'))) {
+			return false;
+		}
+	}
 	
 	var group_guid = elgg.groupextender.tabs.extractParamByName(action_url, 'group_guid');
 	
 	$(this).replaceWith("<span id='ge-loader'>" + $(this).html() + "</span>");
 	
-	// Fire move action
+	// Fire action
 	elgg.action(action_url, {
 		data: {},
 		success: function(data) {
