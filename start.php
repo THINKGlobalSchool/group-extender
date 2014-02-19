@@ -80,6 +80,9 @@ function group_extender_init() {
 	elgg_extend_view('groups/sidebar/featured', 'group-extender/featured', 499);
 	
 	//elgg_extend_view('groups/sidebar/find', 'group-extender/sidebar/find_name');
+
+	// Extend owner block navigation menu
+	elgg_extend_view('navigation/menu/owner_block', 'group-extender/group_tabs_menu', 499);
 	
 	// Fix group profile ECML
 	elgg_register_plugin_hook_handler('get_views', 'ecml', 'group_extender_ecml_views_hook');
@@ -192,7 +195,8 @@ function group_extender_init() {
 	elgg_register_ajax_view('group-extender/forms/edit_activity');
 	elgg_register_ajax_view('group-extender/forms/edit_customsearch');
 	elgg_register_ajax_view('group-extender/forms/current_tabs');
-	elgg_register_ajax_view('group-extender/group_tabs');
+	elgg_register_ajax_view('group-extender/group_tabs_menu');
+	elgg_register_ajax_view('group-extender/group_tabs_content');
 	elgg_register_ajax_view('group-extender/admin/category_groups');
 	elgg_register_ajax_view('group-extender/category_groups');
 	elgg_register_ajax_view('group-extender/popup/move');

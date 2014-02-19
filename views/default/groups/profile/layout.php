@@ -7,11 +7,12 @@
  * @uses $vars['entity']
  */
 
+elgg_load_js('elgg.tagdashboards');
+elgg_load_css('elgg.tagdashboards');
+
 echo elgg_view('groups/profile/summary', $vars);
 if (group_gatekeeper(false)) {
-	echo "<div id='group-extender-group-tabs'>";
-	echo elgg_view('group-extender/group_tabs', array('group_guid' => $vars['entity']->guid));
-	echo "</div>";
+	echo elgg_view('group-extender/group_tabs_content', $vars);
 } else {
 	echo elgg_view('groups/profile/closed_membership');
 }
