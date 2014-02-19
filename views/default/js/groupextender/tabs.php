@@ -79,6 +79,7 @@ elgg.groupextender.tabs.customTabClick = function(event) {
 	$(this).parent().addClass('elgg-state-selected');
 
 	$('.group-extender-tab-content-container').hide();
+
 	$($(this).attr('href')).show();
 	
 	// Trigger a hook to watch for tab changes
@@ -217,18 +218,25 @@ elgg.groupextender.tabs.tabRefreshClick = function(event) {
 	    values[field.name] = field.value;
 	});
 
-	var url = elgg.normalize_url('ajax/view/group-extender/group_tabs?group_guid=' + values['group_guid']);
-	
+	var content_url = elgg.normalize_url('ajax/view/group-extender/group_tabs_content?guid=' + values['group_guid']);
+	var menu_url = elgg.normalize_url('ajax/view/group-extender/group_tabs_menu?guid=' + values['group_guid']);
+
 	$("#group-extender-group-tabs").html("<div class='elgg-ajax-loader'></div>");
 	
-	$("#group-extender-group-tabs").load(url, function() {
+	$("#group-extender-group-tabs").load(content_url, function() {
 		elgg.groupextender.tabs.destroy();
 		elgg.groupextender.tabs.init();
 		
 		elgg.modules.genericmodule.init();
 		elgg.rss.initFeeds();
-		elgg.tagdashboards.init();
+
+		if (elgg.tagdashboards != undefined) {
+			elgg.tagdashboards.init();
+		}
 	});
+
+	$("#group-extender-group-tabs-menu").html("<div class='elgg-ajax-loader'></div>");
+	$("#group-extender-group-tabs-menu").load(menu_url);
 
 	event.preventDefault();
 }

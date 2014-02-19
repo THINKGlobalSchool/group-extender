@@ -22,7 +22,7 @@ function group_extender_get_tabs($group) {
 	// If no tabs are set, include default activity
 	if (!$group_tabs) {
 		$group_tabs = array(
-			uniqid() => array(
+			'activity-default' => array(
 				'title' => elgg_echo('groups:activity'),
 				'type' => 'activity',
 				'priority' => 1,
