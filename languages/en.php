@@ -108,6 +108,9 @@ $english = array(
 	'group-extender:label:browse' => 'Browse',
 	'group-extender:label:postgroup' => 'Post in Group',
 	'group-extender:label:deleteconfirm' => 'Are you sure you want to delete this page?',
+	'group-extender:label:grouphomepage' => 'Group Homepage',
+	'group-extender:label:selecttab' => 'Select Page',
+	'group-extender:label:sethomepage' => 'Set Homepage',
 
 	// Tab labels
 	'group-extender:tab:activity' => 'Activity',
@@ -143,6 +146,7 @@ $english = array(
 	'group-extender:error:addusers' => 'There was an error adding users to the group',
 	'group-extender:error:nocopyoptions' => 'Must select at least one copy option',
 	'group-extender:error:unknowncopyoption' => 'Unknown copy option \'%s\'',
+	'group-extender:error:homepage' => 'There was an error setting the group homepage',
 	'group-extender:success:addgroup' => 'Successfully added group to category: %s',
 	'group-extender:success:removegroup' => 'Successfully removed group from category: %s',
 	'group-extender:success:savetab' => 'Successfully saved group page',
@@ -157,6 +161,7 @@ $english = array(
 	'group-extender:success:grouparchived' => 'Successfully archived group',
 	'group-extender:success:groupunarchived' => 'Successfully unarchived group',
 	'group-extender:success:copytabs' => 'Successfully copied group pages',
+	'group-extender:success:homepage' => 'Successfully set group homepage',
 );
 
 add_translation('en',$english);

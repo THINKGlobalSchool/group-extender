@@ -84,6 +84,9 @@ function group_extender_init() {
 	// Extend owner block navigation menu
 	elgg_extend_view('navigation/menu/owner_block', 'group-extender/group_tabs_menu', 499);
 	
+	// Extend group edit form
+	elgg_extend_view('groups/edit', 'forms/group-extender/group_homepage', 901);
+
 	// Fix group profile ECML
 	elgg_register_plugin_hook_handler('get_views', 'ecml', 'group_extender_ecml_views_hook');
 
@@ -107,7 +110,7 @@ function group_extender_init() {
 	
 	// Set up group admin hover menu
 	elgg_register_plugin_hook_handler('register', 'menu:group_hover', 'group_extender_hover_menu_setup');
-	
+
 	// Modify todo dashboard menu
 	if (elgg_is_active_plugin('todo')) {
 		elgg_register_plugin_hook_handler('register', 'menu:todo_dashboard', 'group_extender_todo_dashboard_menu_setup');
@@ -149,6 +152,7 @@ function group_extender_init() {
 	elgg_register_action("groupextender/delete_tab", "$action_base/delete_tab.php");
 	elgg_register_action("groupextender/move_tab", "$action_base/move_tab.php");
 	elgg_register_action("group_dashboard/dashboard", "$action_base/dashboard.php");
+	elgg_register_action("groups/homepage", "$action_base/homepage.php");
 
 	// Manage content action
 	//elgg_register_action("group-extender/manage_content", "$action_base/manage_content.php", 'admin');
@@ -261,6 +265,31 @@ function group_extender_page_handler($page) {
 			if (in_array($page[0], $hide_owner_block)) {
 				set_input('owner_block_force_hidden', 1);
 			}
+
+			if ($page[0] == 'profile' && !$_SESSION['group_homepage_forward']) {
+				$group = get_entity($page[1]);
+				if ($group->homepage) {
+					$fwd = $group->homepage;
+				} else {
+					$fwd = false;
+					$tabs = group_extender_get_tabs($group);
+
+					foreach ($tabs as $uid => $tab) {
+						if ($tab['type'] == 'activity') {
+							$fwd = $uid;
+							break;
+						}
+					}
+				}
+
+				if ($fwd) {
+					$_SESSION['group_homepage_forward'] = 1;
+					forward($group->getURL() . '#tab:' . $fwd, 'group_homepage_forward');
+				}
+			}
+
+			$_SESSION['group_homepage_forward'] = 0;
+
 			groups_page_handler($page);
 		}	
 		return true;
