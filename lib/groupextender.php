@@ -19,15 +19,24 @@
 function group_extender_get_tabs($group) {
 	$group_tabs = unserialize($group->custom_tabs);
 
+	$activity_tab = array(
+		'title' => elgg_echo('group-extender:label:about'),
+		'type' => 'activity',
+		'priority' => 0
+	);
+
 	// If no tabs are set, include default activity
 	if (!$group_tabs) {
-		$group_tabs = array(
-			'activity-default' => array(
-				'title' => elgg_echo('groups:activity'),
-				'type' => 'activity',
-				'priority' => 1,
-			)
-		);
+		$group_tabs['activity-default'] = $activity_tab;
+	} else {
+		// We've got tabs, make sure there's only one activity/about tab
+		foreach ($group_tabs as $idx => $tab) {
+			if ($tab['type'] == 'activity') {
+				unset($group_tabs[$idx]);
+			}
+		}
+
+		$group_tabs['activity-default'] = $activity_tab;
 	}
 
 	uasort($group_tabs, 'group_extender_compare_tabs');
@@ -192,7 +201,7 @@ function group_extender_change_tab_priority($group, $tab_id, $priority) {
 function group_extender_get_tab_types() {
 	// Default types
 	$types = array(
-		'activity' => elgg_echo('group-extender:tab:activity'), 
+		//'activity' => elgg_echo('group-extender:tab:activity'), 
 		'subtype' => elgg_echo('group-extender:tab:subtype'),
 		'static' => elgg_echo('group-extender:tab:static')
 	);

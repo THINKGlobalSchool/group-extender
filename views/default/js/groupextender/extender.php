@@ -16,7 +16,6 @@ elgg.groupextender.getCategoryGroupsURL = 'ajax/view/group-extender/category_gro
 
 // General init
 elgg.groupextender.init = function() {
-
 	// Init move/copy lightbox
 	elgg.groupextender.initMoveCopyLightbox();
 	

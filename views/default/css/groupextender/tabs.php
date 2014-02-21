@@ -11,10 +11,6 @@
  */
 ?>
 
-#group-extender-group-tabs-menu {
-	margin-bottom: 10px;
-}
-
 table.group-extender-edit-tab-table td.group-extender-tab-actions {
 	font-size: 85%;
 }
