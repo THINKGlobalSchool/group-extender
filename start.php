@@ -511,7 +511,7 @@ function group_extender_menu_title_handler($hook, $type, $return, $params) {
 		}
 
 		// Add group_tools mail members button to actions
-		if (elgg_in_context("groups") && elgg_is_active_plugin('group_tools') && $page_owner->canEdit()) {
+		if (elgg_in_context("groups") && elgg_is_active_plugin('group_tools') && $page_owner && $page_owner->canEdit()) {
 			$options = array(
 				'name' => 'mail',
 				'text' => elgg_echo('group_tools:menu:mail'),
