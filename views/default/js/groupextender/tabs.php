@@ -14,6 +14,7 @@ elgg.provide('elgg.groupextender.tabs');
 
 // Tabs init
 elgg.groupextender.tabs.init = function() {
+
 	// Click handler for custom group tabs
 	$(document).delegate('.group-extender-tab-menu-item', 'click', elgg.groupextender.tabs.customTabClick);
 

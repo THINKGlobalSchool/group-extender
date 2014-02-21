@@ -86,11 +86,17 @@ foreach ($group_tabs as $uid => $tab) {
 		'href' => $down_url,
 		'class' => 'group-extender-move-link',
 	));
-	
+
+	if ($tab['type'] == 'activity') {
+		$up_link = $down_link = $actions = null;
+	}
+
 	// Add 'down' link
 	if (count($group_tabs) == 1) {
 		// Nadda.
 	} else if ($i == 0) {
+		$move_links = $down_link;
+	} else if ($i == 1) {
 		$move_links = $down_link;
 	} else if ($i + 1 == count($group_tabs)) { // Add 'up' link
 		$move_links = $up_link;

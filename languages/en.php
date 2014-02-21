@@ -31,6 +31,7 @@ $english = array(
 	'group-extender:title:groupdashboard' => 'Group Dashboard',
 	
 	// Labels
+	'group-extender:label:about' => 'About',
 	'group-extender:label:mygroups' => 'My Groups',
 	'group-extender:label:editgrouptabs' => 'Edit Group Pages',
 	'group-extender:label:type' => 'Page Type',
@@ -113,13 +114,13 @@ $english = array(
 	'group-extender:label:sethomepage' => 'Set Homepage',
 
 	// Tab labels
-	'group-extender:tab:activity' => 'Activity',
+	'group-extender:tab:activity' => 'Activity/About',
 	'group-extender:tab:customsearch' => 'Custom Search',
 	'group-extender:tab:subtype' => 'Content Type',
 	'group-extender:tab:tagdashboard' => 'Tag Dashboard',
 	'group-extender:tab:static' => 'Static Content',
 	'group-extender:tab:rss' => 'RSS Feed',
-	'group-extender:tab:admin' => 'Customize Pages',
+	'group-extender:tab:admin' => 'Customize Navigation',
 	
 	// Messages
 	'group-extender:error:invalidgroup' => 'Invalid Group',

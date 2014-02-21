@@ -13,6 +13,10 @@
 
 $group = elgg_extract('group', $vars);
 
+$vars['entity'] = $group;
+
+echo elgg_view('groups/profile/summary', $vars);
+
 // Add wire form
 if (elgg_get_plugin_setting('post_from_activity_stream', 'wire-extender') == 'yes' && elgg_is_logged_in() && $group->isMember(elgg_get_logged_in_user_guid())) {
 	echo elgg_view('wire-extender/wire_form', array('group' => $group));

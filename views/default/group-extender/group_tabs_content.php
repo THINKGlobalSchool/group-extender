@@ -28,6 +28,21 @@ if ($group->canEdit()) {
 	);
 }
 
+$homepage = $group->homepage;
+
+// Check if this is the default/homepage
+if ($homepage) {
+	$default = $homepage;
+} else {
+	// No homepage set, try to find the first activity tab
+	foreach ($group_tabs as $i => $t) {
+		if ($t['type'] == 'activity') {
+			$default = $i;
+			break;
+		}
+	}
+}
+
 // Build tabs menu
 foreach ($group_tabs as $uid => $tab) {
 	if ($tab['type'] == 'tagdashboard' && $count == 0) {
@@ -40,13 +55,17 @@ foreach ($group_tabs as $uid => $tab) {
 		</script>";
 	}
 	$count++;
-	
-
 
 	$type = $group_tabs[$uid]['type'];
-	$default = $group_tabs[$uid]['priority'] == group_extender_get_lowest_tab_priority($group);
 
-	$display = !$default ? "style='display: none;'" : '';
+	// Set selected
+	if (!$default) {
+		$selected = $group_tabs[$uid]['priority'] == group_extender_get_lowest_tab_priority($group);	
+	} else {
+		$selected = $uid == $default ? true : false;
+	}
+	
+	$display = !$selected ? "style='display: none;'" : '';
 
 	$tab_content .= "<div $display id='groupextender-tab-{$uid}' class='group-extender-tab-content-container'>";
 

@@ -10,6 +10,7 @@
  * 
  * OVERRIDES:
  *   * groups/sidebar/find
+ *   * group/default
  */
 
 // Register init
@@ -104,6 +105,7 @@ function group_extender_init() {
 
 	// Hook into page menu
 	elgg_register_plugin_hook_handler('prepare', 'menu:page', 'group_extender_page_menu_handler');
+	elgg_register_plugin_hook_handler('register', 'menu:page', 'group_extender_register_page_menu_handler');
 
 	// extend groups page handler
 	elgg_register_plugin_hook_handler('route', 'groups', 'group_extender_route_groups_handler', 100);
@@ -145,6 +147,9 @@ function group_extender_init() {
 
 	// Register new pagesetup event handler
 	elgg_register_event_handler('pagesetup', 'system', 'group_extender_setup_sidebar_menus');
+
+	// Modify group owner block menu
+	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'group_extender_owner_block_menu');
 
 	// Tab actions
 	$action_base = elgg_get_plugins_path() . 'group-extender/actions/group-extender';
@@ -220,6 +225,7 @@ function group_extender_init() {
 
 	// Override some group view locations (to get around group_tools plugin)
 	elgg_set_view_location('groups/sidebar/featured', elgg_get_plugins_path() . "group-extender/overrides/");	
+	elgg_set_view_location('groups/sidebar/members', elgg_get_plugins_path() . "group-extender/overrides/");	
 }
 
 /**
@@ -228,16 +234,13 @@ function group_extender_init() {
  * @param array $page Array of page elements, forwarded by the page handling mechanism
  */
 function group_extender_page_handler($page) {
-		// Load extender JS		
-		elgg_load_js('elgg.groupextender.tabs');		
-		
-		// Load tab CSS
-		elgg_load_css('elgg.groupextender.tabs');
-		
 		// Load up tinymce
 		elgg_load_js('tinymce');
 		elgg_load_js('elgg.tinymce');
-		
+	
+		// Load tab CSS
+		elgg_load_css('elgg.groupextender.tabs');	
+
 		// Load tgsembed JS/CSS
 		if (elgg_is_active_plugin('tgsembed')) {
 			elgg_load_js('jQuery-File-Upload');
@@ -266,29 +269,10 @@ function group_extender_page_handler($page) {
 				set_input('owner_block_force_hidden', 1);
 			}
 
-			if ($page[0] == 'profile' && !$_SESSION['group_homepage_forward']) {
-				$group = get_entity($page[1]);
-				if ($group->homepage) {
-					$fwd = $group->homepage;
-				} else {
-					$fwd = false;
-					$tabs = group_extender_get_tabs($group);
-
-					foreach ($tabs as $uid => $tab) {
-						if ($tab['type'] == 'activity') {
-							$fwd = $uid;
-							break;
-						}
-					}
-				}
-
-				if ($fwd) {
-					$_SESSION['group_homepage_forward'] = 1;
-					forward($group->getURL() . '#tab:' . $fwd, 'group_homepage_forward');
-				}
+			if ($page[0] == 'profile') {
+				// Load extender JS		
+				elgg_load_js('elgg.groupextender.tabs');
 			}
-
-			$_SESSION['group_homepage_forward'] = 0;
 
 			groups_page_handler($page);
 		}	
@@ -528,6 +512,19 @@ function group_extender_menu_title_handler($hook, $type, $return, $params) {
 			);
 			$return[] = ElggMenuItem::factory($options);
 		}
+
+		// Add group_tools mail members button to actions
+		if (elgg_in_context("groups") && elgg_is_active_plugin('group_tools') && $page_owner->canEdit()) {
+			$options = array(
+				'name' => 'mail',
+				'text' => elgg_echo('group_tools:menu:mail'),
+				'href' => "groups/mail/" . $page_owner->getGUID(),
+				'priority' => 1,
+				'class' => 'elgg-button elgg-button-action',
+			);
+
+			$return[] = ElggMenuItem::factory($options);
+		}
 	}
 	
 	return $return;
@@ -547,6 +544,19 @@ function group_extender_page_menu_handler($hook, $type, $return, $params) {
 		}
 	}
 
+	return $return;
+}
+
+/**
+ * Hook into page menu to modify items
+ */
+function group_extender_register_page_menu_handler($hook, $type, $return, $params) {
+	foreach ($return as $idx => $item) {
+		// Remove mail members from page
+		if ($item->getName() == 'mail') {
+			unset($return[$idx]);
+		}
+	}
 	return $return;
 }
 
@@ -1021,4 +1031,17 @@ function group_extender_setup_sidebar_menus() {
 			));
 		}
 	}
+}
+
+/**
+ * Modify group owner block menu
+ */
+function group_extender_owner_block_menu($hook, $type, $return, $params) {
+	foreach ($return as $idx => $item) {
+		// Remove activity item
+		if ($item->getName() == 'activity') {
+			unset($return[$idx]);
+		}
+	}
+	return $return;
 }
