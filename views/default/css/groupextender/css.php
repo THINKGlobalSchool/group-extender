@@ -175,6 +175,25 @@
 	color: #AAAAAA;
 }
 
+
+/* General tab styles */
+
+.elgg-menu-page li > a.group-extender-customize-nav-link {
+	background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+	border: medium none;
+	border-radius: 0;
+	color: #91131E;
+	margin: 0;
+	padding: 0;
+	text-transform: none;
+	font-family: "Lucida Grande",​Arial,​Tahoma,​Verdana,​sans-serif;
+	text-align: center;
+}
+
+.elgg-menu-page li > a.group-extender-customize-nav-link:hover {
+	text-decoration: underline;
+}
+
 /*
     ColorBox Core Style:
     The following CSS is consistent between example themes and should not be altered.

@@ -19,16 +19,6 @@ if (!elgg_instanceof($group, 'group')) {
 
 $group_tabs = group_extender_get_tabs($group);
 
-// Add admin tab
-if ($group->canEdit()) {
-	$group_tabs['admin'] = array(
-		'title' => elgg_echo('group-extender:tab:admin'),
-		'type' => 'admin',
-		'priority' => 999,
-		'params' => NULL,
-	);
-}
-
 $count = 0;
 
 // Determine default tab
@@ -95,16 +85,18 @@ $menu = elgg_view_menu('group-extender-tab-menu', array(
 	'class' => 'elgg-menu elgg-menu-owner-block elgg-menu-owner-block-default'
 ));
 
-echo "<div id='group-extender-group-tabs-menu'>";
-echo $menu;
-echo "</div>";
+echo <<<HTML
+	<div id='group-extender-group-tabs-menu'>
+		$menu
+	</div>
+HTML;
 
 // Tabs JS won't be loaded anywhere but on the profile page, make links elsewhere behave
 $js = <<<JAVASCRIPT
 	<script type="text/javascript">
 		$(document).ready(function() {
 			if (elgg.groupextender.tabs == undefined) {
-				$('.group-extender-tab-menu-item').click(function(event) {
+				$('.group-extender-tab-menu-item, .group-extender-customize-nav-link').click(function(event) {
 					event.preventDefault();
 					var go_url = $(this).data('group_url') + "#tab:" + $(this).attr('id');
 					window.location.href = go_url;
