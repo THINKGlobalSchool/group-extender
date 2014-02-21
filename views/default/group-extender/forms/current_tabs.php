@@ -41,6 +41,8 @@ $current_tabs = <<<HTML
 		<tbody>
 HTML;
 
+$homepage = $group->homepage;
+
 // Build tabs content
 $i = 0;
 foreach ($group_tabs as $uid => $tab) {
@@ -65,7 +67,7 @@ foreach ($group_tabs as $uid => $tab) {
 		
 		$actions .= elgg_view('output/url', array(
 			'class' => 'group-extender-delete-link',
-			'text' => elgg_echo('delete'),
+			'text' => elgg_echo('delete') . "&nbsp;",
 			'href' => $delete_url,
 		));
 	}
@@ -87,20 +89,35 @@ foreach ($group_tabs as $uid => $tab) {
 		'class' => 'group-extender-move-link',
 	));
 
-	if ($tab['type'] == 'activity') {
-		$up_link = $down_link = $actions = null;
+	if ($uid != $homepage) {
+		$make_default = elgg_view('output/url', array(
+			'text' => elgg_echo('group-extender:label:make_default'),
+			'href' => elgg_add_action_tokens_to_url('action/groups/homepage' . "?group_guid={$group->guid}&page={$uid}"),
+			'class' => 'group-extender-homepage-link'
+		));
+	} else {
+		$make_default = null;
 	}
 
-	// Add 'down' link
-	if (count($group_tabs) == 1) {
-		// Nadda.
-	} else if ($i == 0) {
-		$move_links = $down_link;
-	} else if ($i == 1) {
-		$move_links = $down_link;
-	} else if ($i + 1 == count($group_tabs)) { // Add 'up' link
+	$actions .= $make_default;
+
+	if ($tab['type'] == 'activity') {
+		$up_link = $down_link = $actions = null;
+
+		// Show default on activity item if possible
+		if (count($group_tabs) != 1 && $homepage && $homepage != 'activity-default') {
+			$actions = $make_default;
+		} 
+	}
+
+	// Add 'up/down' links
+	if ($i == 0 || count($group_tabs) == 2) {
+		// None;
+	} else if ($i + 1 == count($group_tabs) && count($group_tabs) > 2) {
 		$move_links = $up_link;
-	} else { // Add both down and up
+	} else if (count($group_tabs) > 2 && $i == 1) {
+		$move_links = $down_link;
+	} else {
 		$move_links = $down_link . " " .  $up_link;
 	}
 
