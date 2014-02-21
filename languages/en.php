@@ -110,8 +110,7 @@ $english = array(
 	'group-extender:label:postgroup' => 'Post in Group',
 	'group-extender:label:deleteconfirm' => 'Are you sure you want to delete this page?',
 	'group-extender:label:grouphomepage' => 'Group Homepage',
-	'group-extender:label:selecttab' => 'Select Page',
-	'group-extender:label:sethomepage' => 'Set Homepage',
+	'group-extender:label:make_default' => 'Default',
 
 	// Tab labels
 	'group-extender:tab:activity' => 'Activity/About',

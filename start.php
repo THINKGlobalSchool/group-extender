@@ -84,9 +84,6 @@ function group_extender_init() {
 
 	// Extend owner block navigation menu
 	elgg_extend_view('navigation/menu/owner_block', 'group-extender/group_tabs_menu', 499);
-	
-	// Extend group edit form
-	elgg_extend_view('groups/edit', 'forms/group-extender/group_homepage', 901);
 
 	// Fix group profile ECML
 	elgg_register_plugin_hook_handler('get_views', 'ecml', 'group_extender_ecml_views_hook');

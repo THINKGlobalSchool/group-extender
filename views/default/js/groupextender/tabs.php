@@ -29,6 +29,9 @@ elgg.groupextender.tabs.init = function() {
 
 	// Click handler for delete links
 	$(document).delegate('.group-extender-delete-link', 'click', elgg.groupextender.tabs.refreshableClick);
+
+	// Click handler for homepage links
+	$(document).delegate('.group-extender-homepage-link', 'click', elgg.groupextender.tabs.refreshableClick);
 	
 	// Change handler for tab type change
 	$(document).delegate('#group-extender-tab-type-select', 'change', elgg.groupextender.tabs.tabTypeChange);
@@ -70,6 +73,7 @@ elgg.groupextender.tabs.destroy = function() {
 	$(document).undelegate('#group-extender-tab-save-submit', 'click');
 	$(document).undelegate('#group-extender-tab-refresh-submit', 'click');
 	$(document).undelegate('.group-extender-move-link', 'click');
+	$(document).undelegate('.group-extender-homepage-link', 'click');
 	$(document).undelegate('.group-extender-delete-link', 'click');
 	$(document).undelegate('#group-extender-tab-type-select', 'change');
 }
