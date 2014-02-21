@@ -16,7 +16,7 @@ elgg.provide('elgg.groupextender.tabs');
 elgg.groupextender.tabs.init = function() {
 
 	// Click handler for custom group tabs
-	$(document).delegate('.group-extender-tab-menu-item', 'click', elgg.groupextender.tabs.customTabClick);
+	$(document).delegate('.group-extender-tab-menu-item, .group-extender-customize-nav-link', 'click', elgg.groupextender.tabs.customTabClick);
 
 	// Click handler for all tab save submit inputs
 	$(document).delegate('#group-extender-tab-save-submit', 'click', elgg.groupextender.tabs.tabSaveClick);

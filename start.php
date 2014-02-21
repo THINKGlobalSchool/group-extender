@@ -557,6 +557,26 @@ function group_extender_register_page_menu_handler($hook, $type, $return, $param
 			unset($return[$idx]);
 		}
 	}
+
+	$page_owner = elgg_get_page_owner_entity();
+
+	if (elgg_instanceof($page_owner, 'group') && $page_owner->canEdit()) {
+
+		$options = array(
+			'name' => 'admin_edit_nav',
+			'text' => elgg_echo('group-extender:tab:admin'),
+			'href' => "#groupextender-tab-admin",
+			'class' => 'group-extender-customize-nav-link',
+			'id' => 'admin',
+			'data-group_url' => $page_owner->getURL()
+
+		);
+		$return[] = ElggMenuItem::factory($options);
+
+	}
+
+
+
 	return $return;
 }
 
