@@ -65,6 +65,23 @@ foreach ($group_tabs as $uid => $tab) {
 		$selected = $uid == $default ? true : false;
 	}
 	
+	// If new layout isn't enabled, show the old tabs
+	if (!$group->new_layout) {
+		$title = $group_tabs[$uid]['title'];
+		$priority = $group_tabs[$uid]['priority'];
+
+		// Simple tab interface for switching between feed lookup and manual entry
+		elgg_register_menu_item('group-extender-tab-menu', array(
+			'name' => "group_extender_{$title}_{$uid}",
+			'text' => $title,
+			'href' => "#groupextender-tab-{$uid}",
+			'priority' => $priority,
+			'item_class' => $selected ? 'elgg-state-selected' : '',
+			'class' => "group-extender-tab-menu-item",
+			'id' => $uid,
+		));
+	}
+
 	$display = !$selected ? "style='display: none;'" : '';
 
 	$tab_content .= "<div $display id='groupextender-tab-{$uid}' class='group-extender-tab-content-container'>";
@@ -76,5 +93,15 @@ foreach ($group_tabs as $uid => $tab) {
 }
 
 echo "<div id='group-extender-group-tabs'>";
+
+// Output tabs menu
+if (!$group->new_layout) {
+	$menu = elgg_view_menu('group-extender-tab-menu', array(
+		'sort_by' => 'priority',
+		'class' => 'elgg-menu-hz elgg-menu-filter elgg-menu-filter-default'
+	));
+	echo $menu;
+} 
+
 echo $tab_content;
 echo "</div>";

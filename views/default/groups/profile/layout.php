@@ -7,7 +7,7 @@
  * @uses $vars['entity']
  */
 ?>
-<!-- Hide the group title in full view -->
+<!-- Hide the group title in full view/tweak breadcrumbs -->
 <style type='text/css'>
 	.elgg-head > h2.elgg-heading-main {
 		display: none;
@@ -15,12 +15,21 @@
 	.elgg-head > .elgg-menu-title {
 		float: left;
 	}
+
+	.elgg-menu.elgg-breadcrumbs {
+		width: 90%;
+		top: 0;
+		float: left;
+	}
 </style>
 <?php
 elgg_load_js('elgg.tagdashboards');
 elgg_load_css('elgg.tagdashboards');
 
-//echo elgg_view('groups/profile/summary', $vars);
+if (!$vars['entity']->new_layout) {
+	echo elgg_view('groups/profile/summary', $vars);
+}
+
 if (group_gatekeeper(false)) {
 	echo elgg_view('group-extender/group_tabs_content', $vars);
 } else {

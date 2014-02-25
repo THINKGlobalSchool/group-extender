@@ -12,10 +12,12 @@ $group = elgg_extract("entity", $vars);
 if(!empty($group) && elgg_instanceof($group, "group")){
 	if($group->getPrivateSetting("group_tools:cleanup:members") != "yes"){
 		$limit = elgg_extract('limit', $vars, 14);
+
+		$members_label = elgg_echo('groups:members:more');
 		
 		$all_link = elgg_view('output/url', array(
 			'href' => 'groups/members/' . $group->getGUID(),
-			'text' => elgg_echo('groups:members:more'),
+			'text' => $members_label,
 			'is_trusted' => true,
 		));
 		

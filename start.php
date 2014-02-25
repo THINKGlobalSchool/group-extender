@@ -75,7 +75,11 @@ function group_extender_init() {
 		//elgg_extend_view('page/elements/owner_block', 'group-extender/navigator', 499);
 	}
 	
+	// Group tools extra js
 	elgg_extend_view('groups/edit', 'group-extender/group_tools_extra_js', 9999999999);
+
+	// Add nav settings form to group edit
+	elgg_extend_view('groups/edit', 'group-extender/forms/nav_settings');
 
 	// Extend featured sidebar
 	elgg_extend_view('groups/sidebar/featured', 'group-extender/featured', 499);
@@ -84,6 +88,9 @@ function group_extender_init() {
 
 	// Extend owner block navigation menu
 	elgg_extend_view('navigation/menu/owner_block', 'group-extender/group_tabs_menu', 499);
+
+	// Extend profile fields
+	elgg_extend_view('groups/profile/fields', 'group-extender/profile_fields');
 
 	// Fix group profile ECML
 	elgg_register_plugin_hook_handler('get_views', 'ecml', 'group_extender_ecml_views_hook');
@@ -142,9 +149,6 @@ function group_extender_init() {
 	// Unregister groups pagesetup event handler
 	elgg_unregister_event_handler('pagesetup', 'system', 'groups_setup_sidebar_menus');
 
-	// Register new pagesetup event handler
-	elgg_register_event_handler('pagesetup', 'system', 'group_extender_setup_sidebar_menus');
-
 	// Modify group owner block menu
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'group_extender_owner_block_menu');
 
@@ -155,6 +159,7 @@ function group_extender_init() {
 	elgg_register_action("groupextender/move_tab", "$action_base/move_tab.php");
 	elgg_register_action("group_dashboard/dashboard", "$action_base/dashboard.php");
 	elgg_register_action("groups/homepage", "$action_base/homepage.php");
+	elgg_register_action("groupextender/nav_settings", "$action_base/nav_settings.php");
 
 	// Manage content action
 	//elgg_register_action("group-extender/manage_content", "$action_base/manage_content.php", 'admin');
@@ -269,6 +274,10 @@ function group_extender_page_handler($page) {
 			if ($page[0] == 'profile') {
 				// Load extender JS		
 				elgg_load_js('elgg.groupextender.tabs');
+				elgg_load_library('elgg:groups');
+				elgg_push_breadcrumb(elgg_echo('groups'), "groups/all");
+				echo group_extender_handle_profile_page($page[1]);
+				return true;
 			}
 
 			groups_page_handler($page);
@@ -500,14 +509,14 @@ function group_extender_menu_title_handler($hook, $type, $return, $params) {
 				}
 			}
 
-			// Add 'archived' to menu
-			$options = array(
-				'name' => 'archived',
-				'text' => elgg_echo('group-extender:label:archived'),
-				'href' => FALSE,
-				'priority' => 0,
-			);
-			$return[] = ElggMenuItem::factory($options);
+			// // Add 'archived' to menu
+			// $options = array(
+			// 	'name' => 'archived',
+			// 	'text' => elgg_echo('group-extender:label:archived'),
+			// 	'href' => FALSE,
+			// 	'priority' => 0,
+			// );
+			// $return[] = ElggMenuItem::factory($options);
 		}
 
 		// Add group_tools mail members button to actions
@@ -550,29 +559,10 @@ function group_extender_page_menu_handler($hook, $type, $return, $params) {
 function group_extender_register_page_menu_handler($hook, $type, $return, $params) {
 	foreach ($return as $idx => $item) {
 		// Remove mail members from page
-		if ($item->getName() == 'mail') {
+		if ($item->getName() == 'mail' || $item->getName() == 'membership_requests') {
 			unset($return[$idx]);
 		}
 	}
-
-	$page_owner = elgg_get_page_owner_entity();
-
-	if (elgg_instanceof($page_owner, 'group') && $page_owner->canEdit()) {
-
-		$options = array(
-			'name' => 'admin_edit_nav',
-			'text' => elgg_echo('group-extender:tab:admin'),
-			'href' => "#groupextender-tab-admin",
-			'class' => 'group-extender-customize-nav-link',
-			'id' => 'admin',
-			'data-group_url' => $page_owner->getURL()
-
-		);
-		$return[] = ElggMenuItem::factory($options);
-
-	}
-
-
 
 	return $return;
 }
@@ -1012,42 +1002,6 @@ function group_extender_ecml_views_hook($hook, $type, $return, $params) {
 	$return['group-extender/tabs/static'] = elgg_echo('static_tab');
 
 	return $return;
-}
-
-/**
- * Configure the groups sidebar menu. Triggered on page setup
- *
- */
-function group_extender_setup_sidebar_menus() {
-
-	// Get the page owner entity
-	$page_owner = elgg_get_page_owner_entity();
-
-	if (elgg_in_context('group_profile')) {
-		if (elgg_is_logged_in() && $page_owner->canEdit() && !$page_owner->isPublicMembership()) {
-			$url = elgg_get_site_url() . "groups/requests/{$page_owner->getGUID()}";
-
-			$count = elgg_get_entities_from_relationship(array(
-				'type' => 'user',
-				'relationship' => 'membership_request',
-				'relationship_guid' => $page_owner->getGUID(),
-				'inverse_relationship' => true,
-				'count' => true,
-			));
-
-			if ($count) {
-				$text = elgg_echo('groups:membershiprequests:pending', array($count));
-			} else {
-				$text = elgg_echo('groups:membershiprequests');
-			}
-
-			elgg_register_menu_item('page', array(
-				'name' => 'membership_requests',
-				'text' => $text,
-				'href' => $url,
-			));
-		}
-	}
 }
 
 /**

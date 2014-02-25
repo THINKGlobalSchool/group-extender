@@ -13,7 +13,13 @@
 
 $group = elgg_extract('entity', $vars);
 
+
 if (!elgg_instanceof($group, 'group')) {
+	return;
+}
+
+// New layout switch
+if (!$group->new_layout) {
 	return;
 }
 

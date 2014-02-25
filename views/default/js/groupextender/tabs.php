@@ -314,7 +314,9 @@ elgg.groupextender.tabs.refreshableClick = function(event) {
 			if (data.status != -1) {
 				elgg.groupextender.tabs.refreshCurrentTabs(group_guid);
 			}
-			else $('#ge-loader').replaceWith($_this);
+			else {
+				$('#ge-loader').replaceWith($_this);
+			}
 		}
 	});
 	
