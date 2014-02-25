@@ -40,4 +40,4 @@ $new_tab_form = elgg_view('group-extender/forms/edit_tab', array('group_guid' =>
 
 echo $current_tabs_module;
 echo $new_tab_form;
-
+echo $nav_settings_module;

@@ -194,6 +194,28 @@
 	text-decoration: underline;
 }
 
+/** Group tools menu **/
+.elgg-menu-group-tools li a {
+	display: block;
+
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+
+	background-color: white;
+	margin: 3px 0 5px 0;
+	padding: 2px 4px 2px 8px;
+}
+.elgg-menu-group-tools li a:hover {
+	background-color: #2D3F46;
+	color: white;
+	text-decoration: none;
+}
+.elgg-menu-group-tools li.elgg-state-selected > a {
+	background: url(<?php echo elgg_get_site_url(); ?>mod/tgstheme/_graphics/badge-back.png) repeat-x bottom left #DD2036;
+	color: white;
+}
+
 /*
     ColorBox Core Style:
     The following CSS is consistent between example themes and should not be altered.

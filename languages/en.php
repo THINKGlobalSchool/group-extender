@@ -18,6 +18,7 @@ $english = array(
 	'group-extender:nogroups' => 'You haven\'t joined any groups',
 	'item:object:group_category' => 'Group Categories',
 	'group-extender:action:mail:success' => 'Message successfully sent',
+	'groups:edit' => 'Group Options',
 	
 	// Admin
 	'admin:groupextender' => 'Groups',
@@ -111,6 +112,13 @@ $english = array(
 	'group-extender:label:deleteconfirm' => 'Are you sure you want to delete this page?',
 	'group-extender:label:grouphomepage' => 'Group Homepage',
 	'group-extender:label:make_default' => 'Default',
+	'group-extender:label:managemembers' => 'Manage Members',
+	'group-extender:label:nav_settings' => 'Navigation Settings',
+	'group-extender:label:enable_new_layout' => 'Enable new layout',
+	'group-extender:label:yes' => 'Yes',
+	'group-extender:label:no' => 'No',
+	'group-extender:label:group_tools' => 'Group Tools',
+
 
 	// Tab labels
 	'group-extender:tab:activity' => 'Activity/About',
@@ -147,6 +155,7 @@ $english = array(
 	'group-extender:error:nocopyoptions' => 'Must select at least one copy option',
 	'group-extender:error:unknowncopyoption' => 'Unknown copy option \'%s\'',
 	'group-extender:error:homepage' => 'There was an error setting the group homepage',
+	'group-extender:error:nav_settings' => 'There was an error updating the group nav settings',
 	'group-extender:success:addgroup' => 'Successfully added group to category: %s',
 	'group-extender:success:removegroup' => 'Successfully removed group from category: %s',
 	'group-extender:success:savetab' => 'Successfully saved group page',
@@ -162,6 +171,7 @@ $english = array(
 	'group-extender:success:groupunarchived' => 'Successfully unarchived group',
 	'group-extender:success:copytabs' => 'Successfully copied group pages',
 	'group-extender:success:homepage' => 'Successfully set group homepage',
+	'group-extender:success:nav_settings' => 'Successfully updated group nav settings',
 );
 
 add_translation('en',$english);
