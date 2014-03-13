@@ -19,8 +19,15 @@
 function group_extender_get_tabs($group) {
 	$group_tabs = unserialize($group->custom_tabs);
 
+	if ($group->new_layout) {
+		$activity_tab_title = elgg_echo('group-extender:label:about');
+	} else {
+		$activity_tab_title = elgg_echo('group-extender:label:activity');
+	}
+
+
 	$activity_tab = array(
-		'title' => elgg_echo('group-extender:label:about'),
+		'title' => $activity_tab_title,
 		'type' => 'activity',
 		'priority' => 0
 	);
