@@ -33,6 +33,7 @@ $english = array(
 	
 	// Labels
 	'group-extender:label:about' => 'About',
+	'group-extender:label:activity' => 'Activity',
 	'group-extender:label:mygroups' => 'My Groups',
 	'group-extender:label:editgrouptabs' => 'Edit Group Pages',
 	'group-extender:label:type' => 'Page Type',
@@ -114,7 +115,7 @@ $english = array(
 	'group-extender:label:make_default' => 'Default',
 	'group-extender:label:managemembers' => 'Manage Members',
 	'group-extender:label:nav_settings' => 'Navigation Settings',
-	'group-extender:label:enable_new_layout' => 'Enable new layout',
+	'group-extender:label:enable_new_layout' => 'Show Tabs as Left Side Menu',
 	'group-extender:label:yes' => 'Yes',
 	'group-extender:label:no' => 'No',
 	'group-extender:label:group_tools' => 'Group Tools',
