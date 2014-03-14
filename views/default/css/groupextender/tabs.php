@@ -59,3 +59,15 @@ table.group-extender-edit-tab-table td.group-extender-tab-priority span#ge-loade
 	display: inline-block;
 	margin: 4px;
 }
+
+.elgg-owner-block .elgg-menu-group-extender-tab-menu li {
+	border-top: 1px solid #DDD;
+}
+
+.elgg-owner-block .elgg-menu-group-extender-tab-menu li:first-child {
+	border-top: 0;
+}
+
+.elgg-owner-block .elgg-menu-group-extender-tab-menu li.elgg-state-selected {
+	border: 0;
+} 
