@@ -755,7 +755,7 @@ function group_extender_todo_dashboard_menu_setup($hook, $type, $return, $params
 				'id' => 'todo-group-categories-filter',
 				'options_values' => $categories,
 				'value' => $category,
-				'class' => 'todo-dashboard-filter',
+				'class' => 'filtrate-filter',
 				'data-param' => 'category',
 				'data-disables' => '["#todo-group-filter"]',
 				'data-placeholder' => elgg_echo('group-extender:label:categoryselect')
