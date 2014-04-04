@@ -186,6 +186,12 @@ function group_extender_init() {
 	elgg_register_action("groups/copycontent", "$action_base/copycontent.php");	
 	elgg_register_action("groups/archive", "$action_base/archive.php", 'admin');
 	elgg_register_action("groups/unarchive", "$action_base/unarchive.php", 'admin');
+
+	// Unregister group delete action
+	elgg_unregister_action("groups/delete");
+
+	// Register new delete action
+	elgg_register_action("groups/delete", "$action_base/delete.php");
 	
 	// Pagesetup event handler
 	elgg_register_event_handler('pagesetup', 'system', 'group_extender_submenus');
