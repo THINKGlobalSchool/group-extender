@@ -39,9 +39,13 @@ elgg.groupextender.tabs.init = function() {
 	// Change handler for rss feed tab type change
 	$(document).delegate('select[name="feed_tab_type"]', 'change', elgg.groupextender.tabs.rssTabTypeChange);
 
-	// Set up submission dialog
+	// Set up group extender lightbozen
 	$(".group-extender-lightbox").fancybox({
 		'onComplete': function() {
+			// Attempt to load google doc pickers
+			if (elgg.google != undefined && elgg.google.apiLoaded == true) {
+				elgg.google.initPickers();
+			}
 			// Fix tinymce control
 			if (typeof(tinyMCE) !== 'undefined') {
 				tinyMCE.EditorManager.execCommand('mceAddControl', false, 'static-content');
@@ -393,6 +397,11 @@ elgg.groupextender.tabs.staticContentSelected = function(hook, type, params, opt
 		// Init lightbox embed if it exists
 		if (typeof(elgg.tgsembed) != 'undefined') {
 			elgg.tgsembed.initLightbox();
+		}
+
+		// Attempt to load google doc pickers
+		if (elgg.google != undefined && elgg.google.apiLoaded == true) {
+			elgg.google.initPickers();
 		}
 	}
 	return options;

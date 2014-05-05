@@ -256,6 +256,12 @@ function group_extender_page_handler($page) {
 			elgg_load_css('elgg.tgsembed');
 		}
 		
+		// Load google JS
+		elgg_load_js('elgg.googlefilepicker');
+		elgg_load_js('google-js-api');
+		elgg_load_js('google-doc-picker-client');
+		elgg_load_css('elgg.jquery.ui');
+
 		// Going to hack in a better group activity handler
 		if ($page[0] == 'activity') {
 			groups_extender_handle_activity_page($page[1]);
