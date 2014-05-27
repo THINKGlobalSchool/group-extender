@@ -26,42 +26,31 @@ function group_extender_init() {
 	
 	// Register group extender JS
 	$ge_js = elgg_get_simplecache_url('js', 'groupextender/extender');
-	elgg_register_simplecache_view('js/groupextender/extender');
 	elgg_register_js('elgg.groupextender', $ge_js);
 	elgg_load_js('elgg.groupextender');
 
 	// Register group extender tabs JS
 	$tabs_js = elgg_get_simplecache_url('js', 'groupextender/tabs');
-	elgg_register_simplecache_view('js/groupextender/tabs');
 	elgg_register_js('elgg.groupextender.tabs', $tabs_js);
 	
 	// Register group extender admin JS
 	$ga_js = elgg_get_simplecache_url('js', 'groupextender/admin');
-	elgg_register_simplecache_view('js/groupextender/admin');
 	elgg_register_js('elgg.groupextender.admin', $ga_js);
 	
 	// Register tabs css
 	$t_css = elgg_get_simplecache_url('css', 'groupextender/tabs');
-	elgg_register_simplecache_view('css/groupextender/tabs');
 	elgg_register_css('elgg.groupextender.tabs', $t_css);
 
 	// Register admin css
 	$ga_css = elgg_get_simplecache_url('css', 'groupextender/admin');
-	elgg_register_simplecache_view('css/groupextender/admin');
 	elgg_register_css('elgg.groupextender.admin', $ga_css);
 	
 	// Groups picker js
 	$gp_js = elgg_get_simplecache_url('js', 'groupextender/grouppicker');
-	elgg_register_simplecache_view('js/groupextender/grouppicker');
 	elgg_register_js('elgg.grouppicker', $gp_js);
-
-	// Register colorbox JS
-	$cb_js = elgg_get_simplecache_url('js', 'colorbox');
-	elgg_register_simplecache_view('js/colorbox');
-	elgg_register_js('colorbox', $cb_js);
-	elgg_load_js('colorbox');
 	
 	// Register my own page handler
+	elgg_unregister_page_handler('groups');
 	elgg_register_page_handler('groups','group_extender_page_handler');
 
 	// CSS
@@ -242,10 +231,6 @@ function group_extender_init() {
  * @param array $page Array of page elements, forwarded by the page handling mechanism
  */
 function group_extender_page_handler($page) {
-		// Load up tinymce
-		elgg_load_js('tinymce');
-		elgg_load_js('elgg.tinymce');
-	
 		// Load tab CSS
 		elgg_load_css('elgg.groupextender.tabs');	
 
@@ -257,10 +242,11 @@ function group_extender_page_handler($page) {
 		}
 		
 		// Load google JS
-		elgg_load_js('elgg.googlefilepicker');
-		elgg_load_js('google-js-api');
-		elgg_load_js('google-doc-picker-client');
-		elgg_load_css('elgg.jquery.ui');
+		if (elgg_is_active_plugin('googleapps')) {
+			elgg_load_js('elgg.googlefilepicker');
+			elgg_load_js('google-js-api');
+			elgg_load_js('google-doc-picker-client');
+		}
 
 		// Going to hack in a better group activity handler
 		if ($page[0] == 'activity') {
@@ -439,10 +425,9 @@ function group_extender_setup_entity_menu($hook, $type, $return, $params) {
 		$options = array(
 			'name' => 'move_to_group',
 			'text' => $move_text,
-			'title' => $move_text,
 			'href' => elgg_get_site_url() . 'ajax/view/group-extender/popup/move?guid=' . $entity->guid,
 			'class' => 'ge-move-to-group',
-			'link_class' => 'group-extender-move-copy-lightbox',
+			'link_class' => 'elgg-lightbox group-extender-move-copy-lightbox',
 			'section' => 'actions',
 			'priority' => 800,
 			'id' => "ge-move-to-group-{$entity->guid}",
@@ -454,10 +439,9 @@ function group_extender_setup_entity_menu($hook, $type, $return, $params) {
 			$options = array(
 				'name' => 'copy_to_group',
 				'text' => elgg_echo('group-extender:label:copytogroup'),
-				'title' => elgg_echo('group-extender:label:copytogroup'),
 				'href' => elgg_get_site_url() . 'ajax/view/group-extender/popup/copy?guid=' . $entity->guid,
 				'class' => 'ge-copy-to-group',
-				'link_class' => 'group-extender-move-copy-lightbox',
+				'link_class' => 'elgg-lightbox group-extender-move-copy-lightbox',
 				'section' => 'actions',
 				'priority' => 800,
 				'id' => "ge-copy-to-group-{$entity->guid}",
@@ -489,6 +473,13 @@ function group_extender_setup_entity_menu($hook, $type, $return, $params) {
 function group_extender_setup_group_filter_menu($hook, $type, $return, $params) {
 	// 'filter' menu is used elsewhere, so check for groups context, also check for filter flag (set in route handler)
 	if (elgg_in_context('groups') && get_input('groups_all_filter_extend')) {
+		// Remove items
+		foreach ($return as $idx => $item) {
+			if ($item->getName() == 'discussion') {
+				unset($return[$idx]);
+			}
+		}
+
 		// Add categories option
 		$options = array(
 			'name' => 'groups_categories',
@@ -575,7 +566,6 @@ function group_extender_register_page_menu_handler($hook, $type, $return, $param
 			unset($return[$idx]);
 		}
 	}
-
 	return $return;
 }
 
@@ -891,7 +881,6 @@ function group_extender_group_move_handler($hook, $type, $return, $params) {
  * Set up groups topbar items
  */
 function group_extender_topbar_menu_setup($hook, $type, $return, $params) {
-
 	// Group member params
 	$options = array(
 		'type' => 'group',
@@ -913,7 +902,7 @@ function group_extender_topbar_menu_setup($hook, $type, $return, $params) {
 	foreach ($groups as $group) {
 		$icon = elgg_view_entity_icon($group, 'tiny', array('hide_menu' => true));
 		
-		$icon_url = get_entity_icon_url($group, 'tiny');
+		$icon_url = $group->getIconURL('tiny');
 
 		$params = array(
 			'entity' => $group,

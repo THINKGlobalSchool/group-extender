@@ -21,8 +21,10 @@ if (!elgg_instanceof(elgg_get_page_owner_entity(), 'group') && !$guid) {
 
 	echo <<<JAVASCRIPT
 		<script type='text/javascript'>
-			// Nuke existing hidden input
-			$('input[name="container_guid"]').remove();
+			$(document).ready(function(e) {
+				// Nuke existing hidden input
+				$('input[name="container_guid"]').remove();
+			});
 		</script>
 JAVASCRIPT;
 

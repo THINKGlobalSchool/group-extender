@@ -68,7 +68,7 @@ if (!elgg_instanceof($group, 'group') || !$group->canEdit()) {  // Check valid g
 	$save_input = elgg_view('input/submit', array(
 		'name' => $form_type,
 		'value' => $save_label,
-		'id' => "group-extender-tab-save-submit",
+		'class' => "group-extender-tab-save-submit elgg-button elgg-button-submit",
 	));
 
 	// Hidden group input
@@ -95,7 +95,7 @@ HTML;
 	$form = elgg_view("input/form", array(
 		'body' => $body,
 		'id' => "group-extender-tab-edit-form-{$form_type}",
-		'action' => $vars["url"] . "action/groupextender/save_tab",
+		'action' =>  elgg_normalize_url("action/groupextender/save_tab"),
 	));
 
 	echo elgg_view_module('info', $module_title, $form, array(

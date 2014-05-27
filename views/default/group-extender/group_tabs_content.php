@@ -50,7 +50,7 @@ foreach ($group_tabs as $uid => $tab) {
 		$tab_js = "<script type='text/javascript'>
 			$(document).ready(function() {
 				var tagdb = $('#groupextender-tab-{$uid}').find('.tagdashboard-tab-container');
-				elgg.tagdashboards.init_dashboards_with_container(tagdb);
+				console.log(elgg.tagdashboards);elgg.tagdashboards.init_dashboards_with_container(tagdb);
 			});
 		</script>";
 	}

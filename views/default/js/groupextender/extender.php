@@ -5,7 +5,7 @@
  * @package Group-Extender
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Jeff Tilson
- * @copyright THINK Global School 2010 - 2012
+ * @copyright THINK Global School 2010 - 2014
  * @link http://www.thinkglobalschool.com/
  */
 ?>
@@ -20,27 +20,27 @@ elgg.groupextender.init = function() {
 	elgg.groupextender.initMoveCopyLightbox();
 	
 	// Register change handler for group select
-	$('#groups-dashboard-group-select').change(elgg.groupextender.groupSelectChange);
+	$('#groups-dashboard-group-select').on('change', elgg.groupextender.groupSelectChange);
 
 	// Preset links
-	$('.groupdashboard-preset-link').live('click', elgg.groupextender.presetClick);
+	$(document).on('click', '.groupdashboard-preset-link', elgg.groupextender.presetClick);
 	
 	// Register click handler for group category hover menu items
-	$(document).delegate('.group-category-add-hover-menu-item, .group-category-remove-hover-menu-item', 'click', elgg.groupextender.groupCategoryHoverClick);
+	$(document).on('click', '.group-category-add-hover-menu-item, .group-category-remove-hover-menu-item', elgg.groupextender.groupCategoryHoverClick);
 	
 	// Register click handler for group class/other filter menu items
-	$(document).delegate('.groups-class-filter-menu-item', 'click', elgg.groupextender.classFilterClick);
-	
+	$(document).on('click', '.groups-class-filter-menu-item', elgg.groupextender.classFilterClick);
+
+	// Register click handler for archive group menu item
+	$(document).on('click', '.elgg-menu-item-archive-group > a', elgg.groupextender.archiveGroup);
+
+	// Register click handler for unarchive group menu item
+	$(document).on('click', '.elgg-menu-item-unarchive-group > a', elgg.groupextender.unarchiveGroup);
+
 	// Groups hover menu item
 	$(".elgg-menu-item-groups-topbar-hover-menu").mouseenter(function(event) {
 		$('#groups-topbar-hover').appendTo($(this));
 	});
-
-	// Register click handler for archive group menu item
-	$(document).delegate('.elgg-menu-item-archive-group > a', 'click', elgg.groupextender.archiveGroup);
-
-	// Register click handler for unarchive group menu item
-	$(document).delegate('.elgg-menu-item-unarchive-group > a', 'click', elgg.groupextender.unarchiveGroup);
 }
 
 // Change handler for group select 
@@ -219,37 +219,18 @@ elgg.groupextender.classFilterClick = function(event) {
  */
 elgg.groupextender.initMoveCopyLightbox = function() {
 	// Make sure events are only delegated once
-	$(document).undelegate('.ge-move-to-group-submit', 'click');
-	$(document).undelegate('.ge-copy-to-group-submit', 'click');
-	$(document).undelegate('.ge-move-out-of-group', 'click');
-	$('.group-extender-move-copy-lightbox').die();
-
+	$(document).off('click', '.ge-move-to-group-submit');
+	$(document).off('click', '.ge-copy-to-group-submit');
+	$(document).off('click', '.ge-move-out-of-group');
 
 	// Register click handler for move to group submit button
-	$(document).delegate('.ge-move-to-group-submit', 'click', elgg.groupextender.moveToGroupClick);
+	$(document).on('.ge-move-to-group-submit', 'click', elgg.groupextender.moveToGroupClick);
 
 	// Register click handler for copy to group submit button
-	$(document).delegate('.ge-copy-to-group-submit', 'click', elgg.groupextender.copyToGroupClick);
+	$(document).on('.ge-copy-to-group-submit', 'click', elgg.groupextender.copyToGroupClick);
 	
 	// Register click handler for move out of group link
-	$(document).delegate('.ge-move-out-of-group', 'click', elgg.groupextender.moveOutOfGroupClick);
-
-	$('.group-extender-move-copy-lightbox').colorbox({
-		'initialWidth' : '50',
-		'initialHeight' : '50',
-		'title' : function() {
-			return "<h2>" + $(this).attr('title') + "</h2>";
-		},
-		'onComplete' : function() {
-			$(this).colorbox.resize();
-		},
-		'onOpen' : function() {
-			$(this).removeClass('cboxElement');
-		},
-		'onClosed' : function() {
-			$(this).addClass('cboxElement');
-		}
-	});	
+	$(document).on('.ge-move-out-of-group', 'click', elgg.groupextender.moveOutOfGroupClick);
 }
 
 // Click handler for move to group submit button

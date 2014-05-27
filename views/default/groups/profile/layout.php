@@ -23,8 +23,11 @@
 	}
 </style>
 <?php
-elgg_load_js('elgg.tagdashboards');
-elgg_load_css('elgg.tagdashboards');
+
+if (elgg_is_active_plugin('tagdashboards')) {
+	elgg_load_js('elgg.tagdashboards');
+	elgg_load_css('elgg.tagdashboards');
+}
 
 if (!$vars['entity']->new_layout) {
 	echo elgg_view('groups/profile/summary', $vars);

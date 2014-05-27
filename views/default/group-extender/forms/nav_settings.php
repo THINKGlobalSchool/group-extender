@@ -11,7 +11,7 @@
  */
 
 
-$group = $vars['entity'];
+$group = elgg_extract('entity', $vars);
 
 if ($group->new_layout) {
 	$new_layout = 1;
@@ -56,7 +56,7 @@ HTML;
 $form = elgg_view("input/form", array(
 	'body' => $body,
 	'id' => "",
-	'action' => $vars["url"] . "action/groupextender/nav_settings",
+	'action' => elgg_normalize_url("action/groupextender/nav_settings"),
 ));
 
 echo elgg_view_module('info', elgg_echo('group-extender:label:nav_settings'), $form);

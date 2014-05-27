@@ -10,7 +10,7 @@
  * 
  */
 
-$english = array(
+return array(
 	'group-extender:removeuser' => 'Remove from group',
 	'group-extender:cantremove' => 'Cannot remove user from group',
 	'group-extender:removed' => 'User successfully removed from group',
@@ -173,6 +173,9 @@ $english = array(
 	'group-extender:success:copytabs' => 'Successfully copied group pages',
 	'group-extender:success:homepage' => 'Successfully set group homepage',
 	'group-extender:success:nav_settings' => 'Successfully updated group nav settings',
-);
 
-add_translation('en',$english);
+	// Group tools overrides (until it's updated)
+	'groups:newest' => 'Newest',
+	'groups:popular' => 'Popular',
+	'groups:alpha' => 'Alphabetical',
+);
