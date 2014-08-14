@@ -26,6 +26,9 @@
 elgg_load_js('elgg.tagdashboards');
 elgg_load_css('elgg.tagdashboards');
 
+// Add a view to extend the top of the group profile page
+echo elgg_view('groups/profile/layout/top/extend');
+
 if (!$vars['entity']->new_layout) {
 	echo elgg_view('groups/profile/summary', $vars);
 }
