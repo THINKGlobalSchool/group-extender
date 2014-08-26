@@ -14,6 +14,7 @@ $tab_title = get_input('tab_title');
 $tab_type = get_input('tab_type');
 $group_guid = get_input('group_guid');
 $tab_id = get_input('tab_id'); // For editing
+$tab_hidden = get_input('tab_hidden', 0);
 $group = get_entity($group_guid);
 
 // Check for valid group
@@ -56,6 +57,7 @@ if ($tab_id) {	// Updating tab
 	
 	$tab['title'] = $tab_title;
 	$tab['params'] = $tab_params;
+	$tab['hidden'] = $tab_hidden;
 
 	if ($tab['type'] == 'static') {
 		$content = $tab['params']['static_content'];
@@ -77,6 +79,7 @@ if ($tab_id) {	// Updating tab
 		'title' => $tab_title,
 		'type' => $tab_type,
 		'priority' => group_extender_get_highest_tab_priority($group) +1,
+		'hidden' => $tab_hidden
 	);
 
 	$tab['params'] = $tab_params;

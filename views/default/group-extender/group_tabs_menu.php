@@ -10,7 +10,6 @@
  * 
  */
 
-
 $group = elgg_extract('entity', $vars);
 
 
@@ -45,6 +44,10 @@ if ($homepage) {
 
 // Build tabs menu
 foreach ($group_tabs as $uid => $tab) {
+	// Skip hidden tabs
+	if ($tab['hidden'] && !$group->canEdit()) {
+		continue;
+	}
 
 	if ($tab['type'] == 'tagdashboard' && $count == 0) {
 		// Need to trigger load event if tagdashboard is the first tab

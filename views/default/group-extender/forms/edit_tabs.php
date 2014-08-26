@@ -38,6 +38,15 @@ $current_tabs_module = elgg_view_module('info', $module_title, $current_tabs_con
 
 $new_tab_form = elgg_view('group-extender/forms/edit_tab', array('group_guid' => $group->guid));
 
+// Trigger a change when the new tab form loads (for first tab type)
+echo <<<JAVASCRIPT
+<script type='text/javascript'>
+	elgg.register_hook_handler('init', 'system', function() {
+		$('#group-extender-tab-type-select').change();
+	});
+</script>
+JAVASCRIPT;
+
 echo $current_tabs_module;
 echo $new_tab_form;
 echo $nav_settings_module;
