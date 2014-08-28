@@ -41,6 +41,15 @@ if ($options['subtype'] == 'album' || $options['subtype'] == 'image') {
 		$options['joins'] = array("JOIN {$dbprefix}entities e1 ON e1.guid = e.container_guid");
 		$options['wheres'] = array("(e1.container_guid = $group_guid)");
 	}
+} else if ($options['subtype'] == 'book') {	
+	$options = array(
+		'type' => 'object', 	
+		'subtype' => 'book', 
+		'full_view' => false, 
+		'relationship' => READING_LIST_RELATIONSHIP,
+		'relationship_guid' => $group->guid,
+		'inverse_relationship' => TRUE,
+	);
 }
 
 // If a tag is supplied, restrict it
