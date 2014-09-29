@@ -47,6 +47,7 @@ $english = array(
 	'group-extender:label:edittab' => 'Edit Page',
 	'group-extender:label:showsubtype' => 'Display Content',
 	'group-extender:label:showtag' => 'Restrict by tag (Optional)',
+	'group-extender:label:includeallcontent' => 'Include all site content',
 	'group-extender:label:customtags' => 'Group by tags',
 	'group-extender:label:noresults' => 'No Results',
 	'group-extender:label:up' => 'Move Up',

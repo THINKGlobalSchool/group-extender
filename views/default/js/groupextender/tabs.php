@@ -61,7 +61,9 @@ elgg.groupextender.tabs.init = function() {
 			if (typeof(tinyMCE) !== 'undefined') {
 	    		tinyMCE.EditorManager.execCommand('mceRemoveControl', false, 'static-content');
 			}
-		}
+		},
+		'hideOnOverlayClick':false,
+    	'hideOnContentClick':false
 	});
 	
 	elgg.groupextender.tabs.processHash();

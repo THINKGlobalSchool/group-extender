@@ -27,6 +27,10 @@ $options = array(
 	'full_view' => FALSE,
 );
 
+if ($tab['params']['all_content'] == 'on') {
+	unset($options['container_guid']);
+}
+
 // Workaround for photo/album views
 if ($options['subtype'] == 'album' || $options['subtype'] == 'image') {
 	set_input('search_viewtype', 'gallery'); 
@@ -39,13 +43,17 @@ if ($options['subtype'] == 'album' || $options['subtype'] == 'image') {
 		unset($options['container_guid']);
 		
 		$options['joins'] = array("JOIN {$dbprefix}entities e1 ON e1.guid = e.container_guid");
-		$options['wheres'] = array("(e1.container_guid = $group_guid)");
+		
+		if ($tab['params']['all_content'] != 'on') {
+			$options['wheres'] = array("(e1.container_guid = $group_guid)");
+		}
 	}
 }
 
 // If a tag is supplied, restrict it
 if (!empty($tab['params']['tag'])) {
 	$options['metadata_name_value_pairs'] = array('name' => 'tags', 'value' => $tab['params']['tag']);
+	$options['metadata_case_sensitive'] = FALSE;
 }
 
 $content = elgg_list_entities_from_metadata($options);

@@ -27,6 +27,22 @@ $tag_input = elgg_view('input/text', array(
 	'value' => $tab['params']['tag'],
 ));
 
+$all_content_options = array(
+	'name' => 'all_content'
+);
+
+if (!$tab['params']['tag'] || empty($tab['params']['tag'])) {
+	$all_content_options['disabled'] = 'DISABLED';
+}
+
+if ($tab['params']['all_content'] == 'on') {
+	$all_content_options['value'] = 'on';
+	$all_content_options['checked'] = 'CHECKED';	
+}
+
+$include_all_content_label = elgg_echo('group-extender:label:includeallcontent');
+$include_all_content_input = elgg_view('input/checkbox', $all_content_options);
+
 // Hidden param inputs
 $param_subtype_hidden = elgg_view('input/hidden', array(
 	'name' => 'add_param[]',
@@ -38,6 +54,11 @@ $param_tag_hidden = elgg_view('input/hidden', array(
 	'value' => 'tag',
 ));
 
+$param_include_hidden = elgg_view('input/hidden', array(
+	'name' => 'add_param[]',
+	'value' => 'all_content',
+));
+
 $content = <<<HTML
 	<div>
 		<label>$show_type_label</label><br />
@@ -47,8 +68,30 @@ $content = <<<HTML
 		<label>$tag_label</label><br />
 		$tag_input
 	</div>
+	<div>
+		<br />
+		<label>$include_all_content_label</label>
+		$include_all_content_input
+	</div>
 	$param_tag_hidden
 	$param_subtype_hidden
+	$param_include_hidden
 HTML;
 
+$script = <<<JAVASCRIPT
+	<script type='text/javascript'>
+		$(document).ready(function() {
+			$(document).delegate('input[name="tag"]', 'keyup input paste', function() {
+				if (!$(this).val()) {
+					$('input[name="all_content"]').attr('disabled','DISABLED').removeAttr('checked').removeAttr('value');
+				} else {
+					$('input[name="all_content"]').removeAttr('disabled');
+				}
+			});
+
+		});
+	</script>
+JAVASCRIPT;
+
 echo $content;
+echo $script;
