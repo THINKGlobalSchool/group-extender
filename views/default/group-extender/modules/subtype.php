@@ -48,6 +48,15 @@ if ($options['subtype'] == 'album' || $options['subtype'] == 'image') {
 			$options['wheres'] = array("(e1.container_guid = $group_guid)");
 		}
 	}
+} else if ($options['subtype'] == 'book') {	
+	$options = array(
+		'type' => 'object', 	
+		'subtype' => 'book', 
+		'full_view' => false, 
+		'relationship' => READING_LIST_RELATIONSHIP,
+		'relationship_guid' => $group->guid,
+		'inverse_relationship' => TRUE,
+	);
 }
 
 // If a tag is supplied, restrict it
@@ -56,7 +65,7 @@ if (!empty($tab['params']['tag'])) {
 	$options['metadata_case_sensitive'] = FALSE;
 }
 
-$content = elgg_list_entities_from_metadata($options);
+$content = elgg_list_entities_from_relationship($options);
 
 if (!$content) {
 	echo "<h3 class='center'>" . elgg_echo('group-extender:label:noresults') . "</h3>"; 

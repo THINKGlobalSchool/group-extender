@@ -177,6 +177,8 @@ elgg.groupextender.tabs.tabSaveClick = function(event) {
 				$.fancybox.close();
 
 				elgg.groupextender.tabs.refreshCurrentTabs(values['group_guid']);
+
+				$('#group-extender-tab-menu-itemtype-select').change();
 				
 				// Trigger a hook to provide extra cleanup after successful save
 				elgg.trigger_hook('geTabSaved', 'cleanup', {'add_param' : values['add_param']}, values);

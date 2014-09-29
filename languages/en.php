@@ -120,6 +120,7 @@ $english = array(
 	'group-extender:label:yes' => 'Yes',
 	'group-extender:label:no' => 'No',
 	'group-extender:label:group_tools' => 'Group Tools',
+	'group-extender:label:hidetab' => 'Hide this tab from group members',
 
 
 	// Tab labels

@@ -28,6 +28,8 @@ if (!elgg_instanceof($group, 'group') || !$group->canEdit()) {  // Check valid g
 		$tab = group_extender_get_tab_by_id($group, $tab_id); // Editing
 	
 		$title = $tab['title'];
+
+		$hidden = $tab['hidden'];
 		
 		$module_title = elgg_echo('group-extender:label:edittab');
 		
@@ -63,6 +65,18 @@ if (!elgg_instanceof($group, 'group') || !$group->canEdit()) {  // Check valid g
 		'name' => 'tab_title',
 		'value' => $title,
 	));
+
+	// Hide tab input
+	$hide_tab_label = elgg_echo('group-extender:label:hidetab');
+	$hide_tab_input = elgg_view('input/dropdown', array(
+		'name' => 'tab_hidden',
+		'id' => 'group-extender-tab-hidden-select',
+		'options_values' => array(
+			0 => elgg_echo('group-extender:label:no'),
+			1 => elgg_echo('group-extender:label:yes')
+		), 
+		'value' => $hidden
+	));
 	
 	// Save input
 	$save_input = elgg_view('input/submit', array(
@@ -84,6 +98,10 @@ if (!elgg_instanceof($group, 'group') || !$group->canEdit()) {  // Check valid g
 		</div>
 		$type_content
 		$edit_type_content
+		<div>
+			<label>$hide_tab_label</label>
+			$hide_tab_input
+		</div>
 		<div class='elgg-foot'>
 			$save_input
 			$refresh_input
