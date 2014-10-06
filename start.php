@@ -422,6 +422,29 @@ function group_extender_setup_entity_menu($hook, $type, $return, $params) {
 		'page', // Only parent pages can be moved to group
 	);
 
+	// Determine which entity subtypes can be copied
+	$params = array('entity' => $entity);
+	$copy_subtypes = elgg_trigger_plugin_hook('cangroupcopy', 'entity', $params, array());	
+
+	// Determine if we're allowed to copy this entity (default is object owner/admin)
+	$copy_allowed = elgg_trigger_plugin_hook('allowedgroupcopy', 'entity', $params, (elgg_is_admin_logged_in() || $entity->owner_guid == elgg_get_logged_in_user_guid()));
+
+	if (in_array($entity->getSubtype(), $copy_subtypes) && $copy_allowed) {
+		// Entity if allowed to copy, so add copy menu item
+		$options = array(
+			'name' => 'copy_to_group',
+			'text' => elgg_echo('group-extender:label:copytogroup'),
+			'title' => elgg_echo('group-extender:label:copytogroup'),
+			'href' => elgg_get_site_url() . 'ajax/view/group-extender/popup/copy?guid=' . $entity->guid,
+			'class' => 'ge-copy-to-group',
+			'link_class' => 'group-extender-move-copy-lightbox',
+			'section' => 'actions',
+			'priority' => 800,
+			'id' => "ge-copy-to-group-{$entity->guid}",
+		);
+		$return[] = ElggMenuItem::factory($options);
+	}
+
 	// Check to make sure we can move/copy this entity
 	if (elgg_instanceof($entity, 'object') && !in_array($entity->getSubtype(), $exceptions) && (elgg_is_admin_logged_in() || $entity->owner_guid == elgg_get_logged_in_user_guid())) {	
 		
@@ -448,22 +471,6 @@ function group_extender_setup_entity_menu($hook, $type, $return, $params) {
 			'id' => "ge-move-to-group-{$entity->guid}",
 		);
 		$return[] = ElggMenuItem::factory($options);
-		
-		if (in_array($entity->getSubtype(), $copy_subtypes)) {
-			// Entity if allowed to copy, so add copy menu item
-			$options = array(
-				'name' => 'copy_to_group',
-				'text' => elgg_echo('group-extender:label:copytogroup'),
-				'title' => elgg_echo('group-extender:label:copytogroup'),
-				'href' => elgg_get_site_url() . 'ajax/view/group-extender/popup/copy?guid=' . $entity->guid,
-				'class' => 'ge-copy-to-group',
-				'link_class' => 'group-extender-move-copy-lightbox',
-				'section' => 'actions',
-				'priority' => 800,
-				'id' => "ge-copy-to-group-{$entity->guid}",
-			);
-			$return[] = ElggMenuItem::factory($options);
-		}
 	} else if (elgg_instanceof($entity, 'group')) {
 		// Modify menu for archived groups
 		if ($entity->archived) {
