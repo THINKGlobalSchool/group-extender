@@ -592,6 +592,40 @@ function group_extender_handle_profile_page($guid) {
 	echo elgg_view_page($group->name, $body);
 }
 
+/**
+ * Export group member list as a CSV
+ */
+function group_extender_handle_export($guid) {
+	$group = get_entity($guid);
+	if (!elgg_instanceof($group, 'group')) {
+		register_error(elgg_echo('group-extender:error:invalidgroup'));
+		forward(REFERER);
+	}
+
+	if (!$group->canEdit()) {
+		register_error(elgg_echo('group-extender:error:accessdenied'));
+		forward(REFERER);
+	}
+
+	$members = $group->getMembers(0);
+
+
+
+	header("Content-type: text/csv");
+	header("Content-Disposition: attachment; filename={$group->guid}_members.csv");
+	header("Pragma: no-cache");
+	header("Expires: 0");
+
+	echo "Name,Email\r\n";
+
+	foreach ($members as $member) {
+		$name = addslashes($member->name);
+		$email = addslashes($member->email);
+		echo "{$name},{$email}\r\n";
+	}
+}
+
+
 /** End group content management **/
 
 

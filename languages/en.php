@@ -121,6 +121,7 @@ $english = array(
 	'group-extender:label:no' => 'No',
 	'group-extender:label:group_tools' => 'Group Tools',
 	'group-extender:label:hidetab' => 'Hide this tab from group members',
+	'group-extender:label:export' => 'Export members',
 
 
 	// Tab labels
@@ -133,6 +134,7 @@ $english = array(
 	'group-extender:tab:admin' => 'Customize Navigation',
 	
 	// Messages
+	'group-extender:error:accessdenied' => 'Access Denied',
 	'group-extender:error:invalidgroup' => 'Invalid Group',
 	'group-extender:error:invalidsourcedestinationgroup' => 'Invalid Source or Destination Group',
 	'group-extender:error:invalidentity' => 'Invalid Entity',

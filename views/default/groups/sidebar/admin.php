@@ -33,8 +33,16 @@ elgg_register_menu_item('groups:admin', array(
 elgg_register_menu_item('groups:admin', array(
 	'name' => 'mail',
 	'text' => elgg_echo('group_tools:menu:mail'),
-	'href' => "groups/mail/{$group->getGUID()}",
+	'href' => "groups/mail/{$group->getGUID()}"
 ));
+
+// Export
+elgg_register_menu_item('groups:admin', array(
+	'name' => 'export',
+	'text' => elgg_echo('group-extender:label:export'),
+	'href' => "groups/export/{$group->getGUID()}"
+));
+
 
 // Join requests
 $count = elgg_get_entities_from_relationship(array(

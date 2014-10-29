@@ -273,6 +273,8 @@ function group_extender_page_handler($page) {
 			group_extender_get_dashboard();
 		} else if ($page[0] == 'members') {
 			group_extender_handle_members_page($page[1]);
+		} else if ($page[0] == 'export') {
+			group_extender_handle_export($page[1]);
 		} else {
 			$hide_owner_block = array(
 				'member',
