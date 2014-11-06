@@ -120,6 +120,29 @@ elgg.groupextender.tabs.tagdashboardTabClicked = function(hook, type, params, op
 	}
 }
 
+// Hook into tab clicked for static tabs to load them dynamically
+elgg.groupextender.tabs.staticTabClicked = function(hook, type, params, options) {
+	var $container = $(params.target_id);
+	var type = $container.data('type');
+
+	// Check for static container
+	if (type == 'static') {
+		var group_guid = $container.data('tab_group');
+		var tab_uid = $container.data('tab_uid');
+		$container.addClass('elgg-ajax-loader');
+		elgg.get('ajax/view/group-extender/tabs/static', {
+			data: {
+				group_guid: group_guid,
+				tab_id: tab_uid
+			}, 
+			success: function(data) {
+				$container.removeClass('elgg-ajax-loader');
+				$container.html(data);
+			},
+		});
+	}
+}
+
 // Master click handler for all save events
 elgg.groupextender.tabs.tabSaveClick = function(event) {
 	// Get form inputs
@@ -493,6 +516,7 @@ elgg.groupextender.tabs.processHash = function(todo_guid) {
 
 elgg.register_hook_handler('init', 'system', elgg.groupextender.tabs.init);
 elgg.register_hook_handler('geTabClicked', 'clicked', elgg.groupextender.tabs.tagdashboardTabClicked);
+elgg.register_hook_handler('geTabClicked', 'clicked', elgg.groupextender.tabs.staticTabClicked);
 elgg.register_hook_handler('geTabSave', 'clicked', elgg.groupextender.tabs.rssTabSaveClick);
 elgg.register_hook_handler('geTabTypeChanged', 'geChanged', elgg.groupextender.tabs.staticTabTypeChanged);
 elgg.register_hook_handler('geTabTypeLoaded', 'static', elgg.groupextender.tabs.staticContentSelected);

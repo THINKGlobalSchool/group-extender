@@ -89,12 +89,15 @@ foreach ($group_tabs as $uid => $tab) {
 
 	$display = !$selected ? "style='display: none;'" : '';
 
-	$tab_content .= "<div $display id='groupextender-tab-{$uid}' class='group-extender-tab-content-container'>";
-
-	$tab_content .= elgg_view("group-extender/tabs/{$type}", array(
-		'group' => $group,
-		'tab_id' => $uid,
-	)) . "</div>";
+	$tab_content .= "<div $display id='groupextender-tab-{$uid}' data-type='{$type}' data-tab_uid='{$uid}' data-tab_group='{$group->guid}' class='group-extender-tab-content-container'>";
+	// We're going to load static tabs dynamically, because it's safe
+	if ($type != 'static') {
+		$tab_content .= elgg_view("group-extender/tabs/{$type}", array(
+			'group' => $group,
+			'tab_id' => $uid,
+		));
+	}
+	$tab_content .= "</div>";
 }
 
 echo "<div id='group-extender-group-tabs'>";
