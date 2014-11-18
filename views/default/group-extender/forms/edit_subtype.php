@@ -5,7 +5,7 @@
  * @package Group-Extender
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Jeff Tilson
- * @copyright THINK Global School 2010 - 2012
+ * @copyright THINK Global School 2010 - 2014
  * @link http://www.thinkglobalschool.com/
  * 
  * @uses $vars['tab'] Individual tab to edit
@@ -19,6 +19,16 @@ $show_type_input = elgg_view('input/dropdown', array(
 	'name' => 'subtype',
 	'options_values' => group_extender_get_group_subtypes(),
 	'value' => $tab['params']['subtype'],
+));
+
+$sort_by_label = elgg_echo('group-extender:label:sortby');
+$sort_by_input = elgg_view('input/dropdown', array(
+	'name' => 'sortby',
+	'options_values' => array(
+		'create_date' => elgg_echo('group-extender:label:create_date'),
+		'name' => elgg_echo('group-extender:label:name')
+	),
+	'value' => $tab['params']['sortby'],
 ));
 
 $tag_label = elgg_echo('group-extender:label:showtag');
@@ -49,6 +59,11 @@ $param_subtype_hidden = elgg_view('input/hidden', array(
 	'value' => 'subtype',
 ));
 
+$param_sortby_hidden = elgg_view('input/hidden', array(
+	'name' => 'add_param[]',
+	'value' => 'sortby',
+));
+
 $param_tag_hidden = elgg_view('input/hidden', array(
 	'name' => 'add_param[]',
 	'value' => 'tag',
@@ -65,6 +80,10 @@ $content = <<<HTML
 		$show_type_input
 	</div><br />
 	<div>
+		<label>$sort_by_label</label><br />
+		$sort_by_input
+	</div><br />
+	<div>
 		<label>$tag_label</label><br />
 		$tag_input
 	</div>
@@ -75,6 +94,7 @@ $content = <<<HTML
 	</div>
 	$param_tag_hidden
 	$param_subtype_hidden
+	$param_sortby_hidden
 	$param_include_hidden
 HTML;
 

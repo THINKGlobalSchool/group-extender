@@ -18,6 +18,8 @@ $group = get_entity($group_guid);
 
 $tab = group_extender_get_tab_by_id($group, $tab_id);
 
+$sort_by = $tab['params']['sortby'];
+
 $options = array(
 	'type' => 'object',
 	'subtype' => $tab['params']['subtype'],
@@ -26,6 +28,13 @@ $options = array(
 	'pagination' => TRUE,
 	'full_view' => FALSE,
 );
+
+// If sort by name supplied, add necessary SQL
+if ($sort_by == "name") {
+	$dbprefix = elgg_get_config('dbprefix');
+	$options['joins'] = "JOIN {$dbprefix}objects_entity oe on oe.guid = e.guid";
+	$options['order_by'] = "oe.title ASC";
+}
 
 if ($tab['params']['all_content'] == 'on') {
 	unset($options['container_guid']);

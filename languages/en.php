@@ -5,7 +5,7 @@
  * @package Group-Extender
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Jeff Tilson
- * @copyright THINK Global School 2010 - 2012
+ * @copyright THINK Global School 2010 - 2014
  * @link http://www.thinkglobalschool.com/
  * 
  */
@@ -122,7 +122,9 @@ $english = array(
 	'group-extender:label:group_tools' => 'Group Tools',
 	'group-extender:label:hidetab' => 'Hide this tab from group members',
 	'group-extender:label:export' => 'Export members',
-
+	'group-extender:label:sortby' => 'Sort By',
+	'group-extender:label:create_date' => 'Creation Date',
+	'group-extender:label:name' => 'Name',
 
 	// Tab labels
 	'group-extender:tab:activity' => 'Activity/About',
