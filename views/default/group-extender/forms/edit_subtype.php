@@ -26,7 +26,7 @@ $sort_by_input = elgg_view('input/dropdown', array(
 	'name' => 'sortby',
 	'options_values' => array(
 		'create_date' => elgg_echo('group-extender:label:create_date'),
-		'name' => elgg_echo('group-extender:label:name')
+		'name' => elgg_echo('group-extender:label:title')
 	),
 	'value' => $tab['params']['sortby'],
 ));

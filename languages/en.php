@@ -124,7 +124,7 @@ $english = array(
 	'group-extender:label:export' => 'Export members',
 	'group-extender:label:sortby' => 'Sort By',
 	'group-extender:label:create_date' => 'Creation Date',
-	'group-extender:label:name' => 'Name',
+	'group-extender:label:name' => 'Title',
 
 	// Tab labels
 	'group-extender:tab:activity' => 'Activity/About',
