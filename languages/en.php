@@ -79,6 +79,7 @@ $english = array(
 	'group-extender:label:removefromcategory' => 'Remove from: %s',
 	'group-extender:label:classcategory' => 'Global Class Category',
 	'group-extender:label:archivecategory' => 'Archive Category',
+	'group-extender:label:hiddencategory' => 'Hidden Category (Hidden groups will not be displayed under "All Groups" category)',
 	'group-extender:label:classgroups' => 'Classes',
 	'group-extender:label:othergroups' => 'Other Groups',
 	'group-extender:label:movetogroup' => 'Move to Group',

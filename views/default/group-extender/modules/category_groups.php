@@ -15,6 +15,21 @@ $guid = elgg_extract('guid', $vars, NULL);
 // If we have an archived category, exclude those groups from the all listing
 $archive_category = (int)elgg_get_plugin_setting('archive_category', 'group-extender');
 
+// If we have a hidden category, exclude them from the all listing
+$hidden_category = (int)elgg_get_plugin_setting('hidden_category', 'group-extender');
+
+if ($hidden_category) {
+	$hidden_groups = groupcategories_get_groups(get_entity($hidden_category), 0);
+	$hidden_guids = array();
+	foreach ($hidden_groups as $hidden) {
+		$hidden_guids[] = $hidden->guid;
+	}
+
+	if (count($hidden_guids)) {
+		$hidden_where = "e.guid NOT IN (" . implode(',', $hidden_guids) . ")";
+	}
+}
+
 if ($archive_category) {
 	global $CONFIG;
 
@@ -37,7 +52,7 @@ if ($guid == 'all' || $guid == 'mine' || $guid == 'owned') {
 	$options = array(
 		'types' => 'group',
 		'full_view' => FALSE,
-		'limit' => 15,
+		'limit' => 15
 	);
 
 	// Add options for mine/owned
@@ -50,8 +65,10 @@ if ($guid == 'all' || $guid == 'mine' || $guid == 'owned') {
 	}
 
 	if ($archived_options) {
-		$options['wheres'] = $archived_options;
+		$options['wheres'][] = $archived_options;
 	}
+
+	$options['wheres'][] = $hidden_where;
 
 	$content = elgg_list_entities_from_relationship($options);
 } else {
@@ -69,8 +86,10 @@ if ($guid == 'all' || $guid == 'mine' || $guid == 'owned') {
 
 		// Check for archive options
 		if ($archived_options && $category->guid != $archive_category) {
-			$options['wheres'] = $archived_options;
+			$options['wheres'][] = $archived_options;
 		}
+
+		$options['wheres'][] = $hidden_where;
 
 		$content = elgg_list_entities_from_relationship($options);
 	} else {
