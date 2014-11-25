@@ -19,7 +19,10 @@ $archive_category = (int)elgg_get_plugin_setting('archive_category', 'group-exte
 $hidden_category = (int)elgg_get_plugin_setting('hidden_category', 'group-extender');
 
 if ($hidden_category) {
+	access_show_hidden_entities(true);
 	$hidden_groups = groupcategories_get_groups(get_entity($hidden_category), 0);
+	access_show_hidden_entities(false);
+
 	$hidden_guids = array();
 	foreach ($hidden_groups as $hidden) {
 		$hidden_guids[] = $hidden->guid;
@@ -89,7 +92,7 @@ if ($guid == 'all' || $guid == 'mine' || $guid == 'owned') {
 			$options['wheres'][] = $archived_options;
 		}
 
-		$options['wheres'][] = $hidden_where;
+		//$options['wheres'][] = $hidden_where;
 
 		$content = elgg_list_entities_from_relationship($options);
 	} else {
