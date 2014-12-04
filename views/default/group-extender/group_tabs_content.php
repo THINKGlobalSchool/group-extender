@@ -50,15 +50,6 @@ foreach ($group_tabs as $uid => $tab) {
 		continue;
 	}
 
-	if ($tab['type'] == 'tagdashboard' && $count == 0) {
-		// Need to trigger load event if tagdashboard is the first tab
-		$tab_js = "<script type='text/javascript'>
-			$(document).ready(function() {
-				var tagdb = $('#groupextender-tab-{$uid}').find('.tagdashboard-tab-container');
-				elgg.tagdashboards.init_dashboards_with_container(tagdb);
-			});
-		</script>";
-	}
 	$count++;
 
 	$type = $group_tabs[$uid]['type'];
