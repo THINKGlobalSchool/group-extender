@@ -14,8 +14,16 @@ $guid = get_input('guid');
 
 $entity = get_entity($guid);
 
+$params = array('entity' => $entity);
+
+// Trigger a hook to allow plugins to customize the copy action
+$copy_action = elgg_trigger_plugin_hook('groupcopyaction', 'entity', $params, elgg_normalize_url('action/groups/copycontent'));
+
+$form_vars = array();
+$form_vars['action'] = $copy_action;
+
 if (elgg_instanceof($entity, 'object')) {
-	$content = elgg_view_form('groups/copycontent', array(), array('entity' => $entity));
+	$content = elgg_view_form('groups/copycontent', $form_vars, array('entity' => $entity));
 } else {
 	$content = elgg_echo('group-extender:label:invalidentity');
 }

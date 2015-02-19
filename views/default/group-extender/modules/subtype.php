@@ -18,6 +18,8 @@ $group = get_entity($group_guid);
 
 $tab = group_extender_get_tab_by_id($group, $tab_id);
 
+$sort_by = $tab['params']['sortby'];
+
 $options = array(
 	'type' => 'object',
 	'subtype' => $tab['params']['subtype'],
@@ -26,6 +28,17 @@ $options = array(
 	'pagination' => TRUE,
 	'full_view' => FALSE,
 );
+
+// If sort by name supplied, add necessary SQL
+if ($sort_by == "name") {
+	$dbprefix = elgg_get_config('dbprefix');
+	$options['joins'] = "JOIN {$dbprefix}objects_entity oe on oe.guid = e.guid";
+	$options['order_by'] = "oe.title ASC";
+}
+
+if ($tab['params']['all_content'] == 'on') {
+	unset($options['container_guid']);
+}
 
 // Workaround for photo/album views
 if ($options['subtype'] == 'album' || $options['subtype'] == 'image') {
@@ -39,16 +52,29 @@ if ($options['subtype'] == 'album' || $options['subtype'] == 'image') {
 		unset($options['container_guid']);
 		
 		$options['joins'] = array("JOIN {$dbprefix}entities e1 ON e1.guid = e.container_guid");
-		$options['wheres'] = array("(e1.container_guid = $group_guid)");
+		
+		if ($tab['params']['all_content'] != 'on') {
+			$options['wheres'] = array("(e1.container_guid = $group_guid)");
+		}
 	}
+} else if ($options['subtype'] == 'book') {	
+	$options = array(
+		'type' => 'object', 	
+		'subtype' => 'book', 
+		'full_view' => false, 
+		'relationship' => READING_LIST_RELATIONSHIP,
+		'relationship_guid' => $group->guid,
+		'inverse_relationship' => TRUE,
+	);
 }
 
 // If a tag is supplied, restrict it
 if (!empty($tab['params']['tag'])) {
 	$options['metadata_name_value_pairs'] = array('name' => 'tags', 'value' => $tab['params']['tag']);
+	$options['metadata_case_sensitive'] = FALSE;
 }
 
-$content = elgg_list_entities_from_metadata($options);
+$content = elgg_list_entities_from_relationship($options);
 
 if (!$content) {
 	echo "<h3 class='center'>" . elgg_echo('group-extender:label:noresults') . "</h3>"; 

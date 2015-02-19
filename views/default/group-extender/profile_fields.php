@@ -13,13 +13,13 @@
 $group = $vars['entity'];
 $owner = $group->getOwnerEntity();
 
-echo "<div class='{$even_odd}'>";
-echo "<b>" . elgg_echo("groups:owner") . ": </b>";
-echo elgg_view('output/url', array(
-	'text' => $owner->name,
-	'value' => $owner->getURL(),
-	'is_trusted' => true,
-));
-echo "</div>";
+// echo "<div class='{$even_odd}'>";
+// echo "<b>" . elgg_echo("groups:owner") . ": </b>";
+// echo elgg_view('output/url', array(
+// 	'text' => $owner->name,
+// 	'value' => $owner->getURL(),
+// 	'is_trusted' => true,
+// ));
+// echo "</div>";
 
 $even_odd = ($even_odd == 'even') ? 'odd' : 'even';

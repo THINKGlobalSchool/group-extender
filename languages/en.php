@@ -5,7 +5,7 @@
  * @package Group-Extender
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Jeff Tilson
- * @copyright THINK Global School 2010 - 2012
+ * @copyright THINK Global School 2010 - 2014
  * @link http://www.thinkglobalschool.com/
  * 
  */
@@ -47,6 +47,7 @@ return array(
 	'group-extender:label:edittab' => 'Edit Page',
 	'group-extender:label:showsubtype' => 'Display Content',
 	'group-extender:label:showtag' => 'Restrict by tag (Optional)',
+	'group-extender:label:includeallcontent' => 'Include all site content',
 	'group-extender:label:customtags' => 'Group by tags',
 	'group-extender:label:noresults' => 'No Results',
 	'group-extender:label:up' => 'Move Up',
@@ -78,6 +79,7 @@ return array(
 	'group-extender:label:removefromcategory' => 'Remove from: %s',
 	'group-extender:label:classcategory' => 'Global Class Category',
 	'group-extender:label:archivecategory' => 'Archive Category',
+	'group-extender:label:hiddencategory' => 'Hidden Category (Hidden groups will not be displayed under "All Groups" category)',
 	'group-extender:label:classgroups' => 'Classes',
 	'group-extender:label:othergroups' => 'Other Groups',
 	'group-extender:label:movetogroup' => 'Move to Group',
@@ -119,7 +121,11 @@ return array(
 	'group-extender:label:yes' => 'Yes',
 	'group-extender:label:no' => 'No',
 	'group-extender:label:group_tools' => 'Group Tools',
-
+	'group-extender:label:hidetab' => 'Hide this tab from group members',
+	'group-extender:label:export' => 'Export members',
+	'group-extender:label:sortby' => 'Sort By',
+	'group-extender:label:create_date' => 'Creation Date',
+	'group-extender:label:name' => 'Title',
 
 	// Tab labels
 	'group-extender:tab:activity' => 'Activity/About',
@@ -131,6 +137,7 @@ return array(
 	'group-extender:tab:admin' => 'Customize Navigation',
 	
 	// Messages
+	'group-extender:error:accessdenied' => 'Access Denied',
 	'group-extender:error:invalidgroup' => 'Invalid Group',
 	'group-extender:error:invalidsourcedestinationgroup' => 'Invalid Source or Destination Group',
 	'group-extender:error:invalidentity' => 'Invalid Entity',

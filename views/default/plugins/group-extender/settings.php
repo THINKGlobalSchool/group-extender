@@ -45,6 +45,13 @@ $archive_category_input = elgg_view('input/dropdown', array(
 		'value' => $vars['entity']->archive_category,
 ));
 
+$hidden_category_label = elgg_echo('group-extender:label:hiddencategory');
+$hidden_category_input = elgg_view('input/dropdown', array(
+		'name' => 'params[hidden_category]',
+		'options_values' => $category_options,
+		'value' => $vars['entity']->hidden_category,
+));
+
 $enable_dropdown_label = elgg_echo('group-extender:label:enablegroupdropdown');
 $enable_dropdown_input = elgg_view('input/dropdown', array(
 		'name' => 'params[enable_topbar_dropdown]',
@@ -63,6 +70,10 @@ $content = <<<HTML
 	<div>
 		<label>$archive_category_label</label><br />
 		$archive_category_input
+	</div>
+	<div>
+		<label>$hidden_category_label</label><br />
+		$hidden_category_input
 	</div>
 	<div>
 		<label>$enable_dropdown_label</label><br />

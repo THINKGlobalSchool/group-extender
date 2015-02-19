@@ -10,7 +10,6 @@
  * 
  */
 
-
 $group = elgg_extract('entity', $vars);
 
 
@@ -45,16 +44,11 @@ if ($homepage) {
 
 // Build tabs menu
 foreach ($group_tabs as $uid => $tab) {
-
-	if ($tab['type'] == 'tagdashboard' && $count == 0) {
-		// Need to trigger load event if tagdashboard is the first tab
-		$tab_js = "<script type='text/javascript'>
-			$(document).ready(function() {
-				var tagdb = $('#groupextender-tab-{$uid}').find('.tagdashboard-tab-container');
-				elgg.tagdashboards.init_dashboards_with_container(tagdb);
-			});
-		</script>";
+	// Skip hidden tabs
+	if ($tab['hidden'] && !$group->canEdit()) {
+		continue;
 	}
+
 	$count++;
 	
 	$title = $group_tabs[$uid]['title'];

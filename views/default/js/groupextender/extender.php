@@ -411,4 +411,4 @@ elgg.groupextender.unarchiveGroup = function(event) {
 
 elgg.register_hook_handler('init', 'system', elgg.groupextender.init);
 elgg.register_hook_handler('generic_populated', 'modules', elgg.groupextender.categories_populated_module);
-elgg.register_hook_handler('tab_loaded', 'todo_dashboard', elgg.groupextender.initMoveCopyLightbox);
+elgg.register_hook_handler('content_loaded', 'filtrate', elgg.groupextender.initMoveCopyLightbox);

@@ -59,7 +59,9 @@ elgg.groupextender.tabs.init = function() {
 					$.colorbox.resize();
 				});	
 			}
-		}
+		},
+		'hideOnOverlayClick':false,
+    	'hideOnContentClick':false
 	});
 		
 	elgg.groupextender.tabs.processHash();
@@ -113,6 +115,29 @@ elgg.groupextender.tabs.tagdashboardTabClicked = function(hook, type, params, op
 	var $container = $(params.target_id).find('.tagdashboard-tab-container');
 	if ($container.length) {
 		elgg.tagdashboards.init_dashboards_with_container($container);
+	}
+}
+
+// Hook into tab clicked for static tabs to load them dynamically
+elgg.groupextender.tabs.staticTabClicked = function(hook, type, params, options) {
+	var $container = $(params.target_id);
+	var type = $container.data('type');
+
+	// Check for static container
+	if (type == 'static') {
+		var group_guid = $container.data('tab_group');
+		var tab_uid = $container.data('tab_uid');
+		$container.addClass('elgg-ajax-loader');
+		elgg.get('ajax/view/group-extender/tabs/static', {
+			data: {
+				group_guid: group_guid,
+				tab_id: tab_uid
+			}, 
+			success: function(data) {
+				$container.removeClass('elgg-ajax-loader');
+				$container.html(data);
+			},
+		});
 	}
 }
 
@@ -174,6 +199,8 @@ elgg.groupextender.tabs.tabSaveClick = function(event) {
 				$.colorbox.close();
 
 				elgg.groupextender.tabs.refreshCurrentTabs(values['group_guid']);
+
+				$('#group-extender-tab-menu-itemtype-select').change();
 				
 				// Trigger a hook to provide extra cleanup after successful save
 				elgg.trigger_hook('geTabSaved', 'cleanup', {'add_param' : values['add_param']}, values);
@@ -469,6 +496,7 @@ elgg.groupextender.tabs.processHash = function(todo_guid) {
 
 elgg.register_hook_handler('init', 'system', elgg.groupextender.tabs.init);
 elgg.register_hook_handler('geTabClicked', 'clicked', elgg.groupextender.tabs.tagdashboardTabClicked);
+elgg.register_hook_handler('geTabClicked', 'clicked', elgg.groupextender.tabs.staticTabClicked);
 elgg.register_hook_handler('geTabSave', 'clicked', elgg.groupextender.tabs.rssTabSaveClick);
 //elgg.register_hook_handler('geTabTypeChanged', 'geChanged', elgg.groupextender.tabs.staticTabTypeChanged);
 elgg.register_hook_handler('geTabTypeLoaded', 'static', elgg.groupextender.tabs.staticContentSelected);
