@@ -28,11 +28,10 @@ if ($category_groups) {
 	foreach($category_groups as $group) {
 		$icon = elgg_view_entity_icon($group, 'tiny');
 		
-		$delete_button = elgg_view("output/confirmlink",array(
+		$delete_button = elgg_view("output/url",array(
 			'href' => "action/group-extender/removegroup?group_guid={$group->guid}&category_guid={$category->guid}",
 			'text' => "<span class=\"elgg-icon elgg-icon-delete right\"></span>",
 			'confirm' => elgg_echo('group-extender:removeconfirm'),
-			'text_encode' => false,
 			'id' => $group->guid,
 			'class' => 'remove-from-category',
 			'name' => $category->guid,

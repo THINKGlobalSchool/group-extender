@@ -14,6 +14,7 @@
 elgg_load_js('elgg.groupextender');		
 elgg_load_js('elgg.groupextender.admin');
 elgg_load_js('elgg.grouppicker');
+elgg_load_js('jquery.ui.autocomplete.html');
 
 // Load Admin CSS
 elgg_load_css('elgg.groupextender.admin');

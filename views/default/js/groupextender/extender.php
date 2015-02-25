@@ -5,8 +5,8 @@
  * @package Group-Extender
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Jeff Tilson
- * @copyright THINK Global School 2010 - 2014
- * @link http://www.thinkglobalschool.com/
+ * @copyright THINK Global School 2010 - 2015
+ * @link http://www.thinkglobalschool.org/
  */
 ?>
 //<script>
@@ -224,13 +224,13 @@ elgg.groupextender.initMoveCopyLightbox = function() {
 	$(document).off('click', '.ge-move-out-of-group');
 
 	// Register click handler for move to group submit button
-	$(document).on('.ge-move-to-group-submit', 'click', elgg.groupextender.moveToGroupClick);
+	$(document).on('click', '.ge-move-to-group-submit', elgg.groupextender.moveToGroupClick);
 
 	// Register click handler for copy to group submit button
-	$(document).on('.ge-copy-to-group-submit', 'click', elgg.groupextender.copyToGroupClick);
+	$(document).on('click', '.ge-copy-to-group-submit', elgg.groupextender.copyToGroupClick);
 	
 	// Register click handler for move out of group link
-	$(document).on('.ge-move-out-of-group', 'click', elgg.groupextender.moveOutOfGroupClick);
+	$(document).on('click', '.ge-move-out-of-group', elgg.groupextender.moveOutOfGroupClick);
 }
 
 // Click handler for move to group submit button
@@ -303,36 +303,33 @@ elgg.groupextender.copyToGroupClick = function(event) {
 }
 
 // Click handler for move out of group click
-elgg.groupextender.moveOutOfGroupClick = function(event) {	
-	var confirmText = elgg.echo('group-extender:label:moveoutconfirm');
-	if (confirm(confirmText)) {
-		var $_this = $(this);
-		
-		$_this.attr('disabled', 'DISABLED');
-		
-		var $form = $(this).closest('form');
-		var values = {};
-		$.each($form.serializeArray(), function(i, field) {
-		    values[field.name] = field.value;
-		});
+elgg.groupextender.moveOutOfGroupClick = function(event) {		
+	var $_this = $(this);
+	
+	$_this.attr('disabled', 'DISABLED');
+	
+	var $form = $(this).closest('form');
+	var values = {};
+	$.each($form.serializeArray(), function(i, field) {
+	    values[field.name] = field.value;
+	});
 
-		// Add/remove the group
-		elgg.action($form.attr('action'), {
-			data: {
-				entity_guid: values.entity_guid,
-				reset_owner: 1,
-			},
-			success: function(json) {
-				if (json.status >= 0) {
-					// Do nothing
-				} else {
-					// Error..
-					$_this.removeAttr('disabled');
-				}
-				$.colorbox.close();
+	// Add/remove the group
+	elgg.action($form.attr('action'), {
+		data: {
+			entity_guid: values.entity_guid,
+			reset_owner: 1,
+		},
+		success: function(json) {
+			if (json.status >= 0) {
+				// Do nothing
+			} else {
+				// Error..
+				$_this.removeAttr('disabled');
 			}
-		});
-	}
+			$.colorbox.close();
+		}
+	});
 	
 	event.preventDefault();
 }

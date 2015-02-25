@@ -5,12 +5,9 @@
  * @package Group-Extender
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Jeff Tilson
- * @copyright THINK Global School 2010 - 2014
- * @link http://www.thinkglobalschool.com/
+ * @copyright THINK Global School 2010 - 2015
+ * @link http://www.thinkglobalschool.org/
  * 
- * OVERRIDES:
- *   * groups/sidebar/find
- *   * group/default
  */
 
 // Register init
@@ -114,10 +111,6 @@ function group_extender_init() {
 
 	// Register a handler for core subtype's group move functionality
 	elgg_register_plugin_hook_handler('groupmove', 'entity', 'group_extender_group_move_handler');
-	
-	if (elgg_is_logged_in() && (int)elgg_get_plugin_setting('enable_topbar_dropdown', 'group-extender')) {
-		elgg_register_plugin_hook_handler('register', 'menu:topbar', 'group_extender_topbar_menu_setup', 9001);
-	}
 
 	// Hook into search improved results for groups
 	elgg_register_plugin_hook_handler('searchimproved_results', 'groups', 'group_extender_searchimproved_results_hook');
@@ -183,7 +176,7 @@ function group_extender_init() {
 	elgg_register_action("groups/delete", "$action_base/delete.php");
 	
 	// Pagesetup event handler
-	elgg_register_event_handler('pagesetup', 'system', 'group_extender_submenus');
+	elgg_register_event_handler('pagesetup', 'system', 'group_extender_pagesetup');
 	
 	// Whitelist ajax views
 	elgg_register_ajax_view('group-extender/modules/activity');
@@ -235,9 +228,9 @@ function group_extender_page_handler($page) {
 		// Load tab CSS
 		elgg_load_css('elgg.groupextender.tabs');	
 
-		// Load tgsembed JS/CSS
+		// // Load tgsembed JS/CSS
 		if (elgg_is_active_plugin('tgsembed')) {
-			elgg_load_js('jQuery-File-Upload');
+			//elgg_load_js('jQuery-File-Upload');
 			elgg_load_js('elgg.tgsembed');
 			elgg_load_css('elgg.tgsembed');
 		}
@@ -425,8 +418,7 @@ function group_extender_setup_entity_menu($hook, $type, $return, $params) {
 			'text' => elgg_echo('group-extender:label:copytogroup'),
 			'title' => elgg_echo('group-extender:label:copytogroup'),
 			'href' => elgg_get_site_url() . 'ajax/view/group-extender/popup/copy?guid=' . $entity->guid,
-			'class' => 'ge-copy-to-group',
-			'link_class' => 'group-extender-move-copy-lightbox',
+			'link_class' => 'elgg-lightbox group-extender-move-copy-lightbox ge-copy-to-group',
 			'section' => 'actions',
 			'priority' => 800,
 			'id' => "ge-copy-to-group-{$entity->guid}",
@@ -452,8 +444,7 @@ function group_extender_setup_entity_menu($hook, $type, $return, $params) {
 			'name' => 'move_to_group',
 			'text' => $move_text,
 			'href' => elgg_get_site_url() . 'ajax/view/group-extender/popup/move?guid=' . $entity->guid,
-			'class' => 'ge-move-to-group',
-			'link_class' => 'elgg-lightbox group-extender-move-copy-lightbox',
+			'link_class' => 'elgg-lightbox group-extender-move-copy-lightbox ge-move-to-group',
 			'section' => 'actions',
 			'priority' => 800,
 			'id' => "ge-move-to-group-{$entity->guid}",
@@ -540,7 +531,7 @@ function group_extender_menu_title_handler($hook, $type, $return, $params) {
 				'text' => elgg_echo('group_tools:menu:mail'),
 				'href' => "groups/mail/" . $page_owner->getGUID(),
 				'priority' => 1,
-				'class' => 'elgg-button elgg-button-action',
+				'link_class' => 'elgg-button elgg-button-action',
 			);
 
 			$return[] = ElggMenuItem::factory($options);
@@ -672,7 +663,7 @@ function group_extender_hover_menu_setup($hook, $type, $return, $params) {
 				'data-group_guid' => $group->guid,
 				'data-category_guid' => $category->guid,
 				'section' => 'admin',
-				'class' => 'group-category-add-hover-menu-item',
+				'link_class' => 'group-category-add-hover-menu-item',
 				'priority' => 200,
 			);
 			$return[] = ElggMenuItem::factory($options);
@@ -698,7 +689,7 @@ function group_extender_hover_menu_setup($hook, $type, $return, $params) {
 				'data-group_guid' => $group->guid,
 				'data-category_guid' => $category->guid,
 				'section' => 'admin',
-				'class' => 'group-category-remove-hover-menu-item',
+				'link_class' => 'group-category-remove-hover-menu-item',
 				'priority' => 200,
 			);
 			$return[] = ElggMenuItem::factory($options);
@@ -829,7 +820,7 @@ function group_extender_class_filter_menu_setup($hook, $type, $return, $params) 
 		'text' => elgg_echo('group-extender:label:classgroups'),
 		'href' => '#class-groups',
 		'priority' => 1,
-		'class' => 'groups-class-filter-menu-item',
+		'link_class' => 'groups-class-filter-menu-item',
 		'selected' => TRUE,
 	);
 	$return[] = ElggMenuItem::factory($options);
@@ -839,7 +830,7 @@ function group_extender_class_filter_menu_setup($hook, $type, $return, $params) 
 		'text' => elgg_echo('group-extender:label:othergroups'),
 		'href' => '#other-groups',
 		'priority' => 2,
-		'class' => 'groups-class-filter-menu-item',
+		'link_class' => 'groups-class-filter-menu-item',
 	);
 	
 	$return[] = ElggMenuItem::factory($options);
@@ -889,83 +880,11 @@ function group_extender_group_move_handler($hook, $type, $return, $params) {
 }
 
 /**
- * Set up groups topbar items
- */
-function group_extender_topbar_menu_setup($hook, $type, $return, $params) {
-	// Group member params
-	$options = array(
-		'type' => 'group',
-		'relationship' => 'member',
-		'relationship_guid' => elgg_get_logged_in_user_guid(),
-		'inverse_relationship' => FALSE,
-		'full_view' => FALSE,
-		'pagination' => FALSE,
-		'limit' => 0,
-	);
-
-	$groups = elgg_get_entities_from_relationship($options);
-
-	// If user has no groups, bail
-	if (!count($groups)) {
-		return $return;
-	}
-
-	foreach ($groups as $group) {
-		$icon = elgg_view_entity_icon($group, 'tiny', array('hide_menu' => true));
-		
-		$icon_url = $group->getIconURL('tiny');
-
-		$params = array(
-			'entity' => $group,
-			'metadata' => '',
-			//'subtitle' => $group->briefdescription,
-		);
-	
-		$list_body = elgg_view('group/elements/summary', $params);
-		
-		$group_url = $group->getURL();
-
-		elgg_register_menu_item('groups_topbar', array(
-			'name' => elgg_get_friendly_title($group->name) . "_{$group->guid}",
-			'href' => $group->getURL(),
-			'text' => "<div><img src='{$icon_url}'><span>{$group->name}</span></img></div>",
-		));
-
-		//$group_content .= "<li onclick='javascript:window.location.href=\"$group_url\";return false;' class='groups-hover-pointer'>" . elgg_view_image_block($icon, $list_body, $vars) . "</li>";
-	}
-
-	global $CONFIG;
-
-	$groups_menu = $CONFIG->menus['groups_topbar'];
-
-	// Use ElggMenuBuilder to sort menu alphabetically
-	$builder = new ElggMenuBuilder($groups_menu);
-	$groups_menu = $builder->getMenu('name');
-
-	$text = elgg_echo("group-extender:label:mygroups");
-	$groups_link = "<a href=\"#\" class='tgstheme-topbar-dropdown'>$text</a>";
-
-	$groups_item = ElggMenuItem::factory(array(
-		'name' => 'my_groups',
-		'href' => false,
-		'text' => $groups_link . elgg_view('navigation/menu/elements/section', array(
-			'class' => 'elgg-menu elgg-menu-topbar-dropdown',
-			'items' => $groups_menu['default'],
-		)), 
-		'priority' => 99998,
-	));
-
-	$return[] = $groups_item;
-
-	return $return;
-}
-
-/**
  * Set up search improved results
  */
 function group_extender_searchimproved_results_hook($hook, $type, $return, $params) {
 	$dbprefix = elgg_get_config('dbprefix');
-	$name_metastring_id = get_metastring_id('archived');
+	$name_metastring_id = elgg_get_metastring_id('archived');
 	if (!$name_metastring_id) {
 		return $return;
 	}
@@ -989,7 +908,7 @@ function group_extender_group_picker_handler($hook, $type, $return, $params) {
 /**
  * Setup Group Extender Submenus
  */
-function group_extender_submenus() {
+function group_extender_pagesetup() {
 	if (elgg_in_context('admin')) {
 		elgg_register_admin_menu_item('administer', 'categories', 'groupextender');
 		elgg_register_admin_menu_item('administer', 'dashboard', 'groupextender');
@@ -1003,6 +922,47 @@ function group_extender_submenus() {
 		$url =  "groups/dashboard";
 		$item = new ElggMenuItem('zz-groupdashboard', elgg_echo('group-extender:title:groupdashboard'), $url);
 		//elgg_register_menu_item('page', $item);
+	}
+
+	if (elgg_is_logged_in() && (int)elgg_get_plugin_setting('enable_topbar_dropdown', 'group-extender')) {
+		/** Set up group dropdown items **/
+		$options = array(
+			'type' => 'group',
+			'relationship' => 'member',
+			'relationship_guid' => elgg_get_logged_in_user_guid(),
+			'inverse_relationship' => FALSE,
+			'full_view' => FALSE,
+			'pagination' => FALSE,
+			'limit' => 0,
+		);
+
+		$groups = elgg_get_entities_from_relationship($options);
+
+		// Add groups if avialable
+		if (count($groups)) {
+			if (count($groups) > 6) {
+				$split_class = 'elgg-topbar-dropdown-split';
+			}
+			foreach ($groups as $group) {
+				$group_view = elgg_view('group/topbar', array('entity' => $group));
+				elgg_register_menu_item('topbar', array(
+					'parent_name' => 'my_groups',
+					'name' => elgg_get_friendly_title($group->name) . "_{$group->guid}",
+					'href' => $group->getURL(),
+					'text' => $group_view
+				));
+			}
+		}
+
+		// Add my groups dropdown menu
+		elgg_register_menu_item('topbar', array(
+			'name' => 'my_groups',
+			'text' => elgg_echo('group-extender:label:mygroups'),
+			'href' => "#",
+			'priority' => 800,
+			'section' => 'default',
+			'link_class' => "elgg-topbar-dropdown {$split_class}",
+		));
 	}
 }
 

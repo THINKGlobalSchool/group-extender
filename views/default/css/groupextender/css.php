@@ -5,8 +5,8 @@
  * @package Group-Extender
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Jeff Tilson
- * @copyright THINK Global School 2010 - 2014
- * @link http://www.thinkglobalschool.com/
+ * @copyright THINK Global School 2010 - 2015
+ * @link http://www.thinkglobalschool.org/
  * 
  */
 ?>
@@ -105,59 +105,17 @@
 }
 
 /* Groups topbar item and hover */
-.elgg-menu-item-groups-topbar-hover-menu {
-	height: 40px;
+.group-extender-my-groups-item {
+	width: 200px;
 }
 
-.elgg-menu-item-groups-topbar-hover-menu > a { 
-	border-left: 1px solid #DB1730; 
-	padding: 2px 15px 0 10px !important;
+.group-extender-my-groups-item > div.elgg-body {
+
 }
 
-.elgg-menu-item-groups-topbar-hover-menu:hover #groups-topbar-hover {
-	display: block;
-}
-
-#groups-topbar-hover {
-	position: absolute;
-	top: 32px;
-	left: 0;
-	background: #ffffff;
-	-webkit-border-radius: 0 0 4px 4px;
-	-moz-border-radius: 0 0 4px 4px;
-	border-radius: 0 0 4px 4px;
-	border: 1px solid #999;
-	border-top: 0px;
-	min-width: 300px;
-	display: none;
-}
-
-#groups-topbar-hover ul li {
-	border-bottom: 1px dotted #CCC;
-}
-
-#groups-topbar-hover ul li:hover {
-	background: #2D3F46
-}
-
-#groups-topbar-hover ul li:hover  .elgg-body a {
-	color: #FFFFFF;
-	text-decoration: none;
-}
-
-#groups-topbar-hover ul li:last-child {
-	-webkit-border-radius: 0 0 4px 4px;
-	-moz-border-radius: 0 0 4px 4px;
-	border-radius: 0 0 4px 4px;
-}
-
-#groups-topbar-hover .elgg-image-block {
-	padding: 4px 0 6px;
-	margin: 0px;
-}
-
-.groups-hover-pointer {
-	cursor: pointer;
+.elgg-menu-item-my-groups > a:after {
+	content: "\bb";
+	margin-left: 6px;
 }
 
 /* Group tab gallery override */
@@ -195,17 +153,11 @@
 }
 
 /** Tab/page sidebar **/
-.elgg-owner-block .elgg-menu-group-extender-tab-menu li {
-	border-top: 1px solid #DDD;
-}
+.elgg-owner-block .elgg-menu-group-extender-tab-menu li {}
 
-.elgg-owner-block .elgg-menu-group-extender-tab-menu li:first-child {
-	border-top: 0;
-}
+.elgg-owner-block .elgg-menu-group-extender-tab-menu li:first-child {}
 
-.elgg-owner-block .elgg-menu-group-extender-tab-menu li:last-child {
-	border-bottom: 1px solid #DDD;
-}
+.elgg-owner-block .elgg-menu-group-extender-tab-menu li:last-child {}
 
 /** Group tools menu **/
 .elgg-menu-group-tools li a {

@@ -74,7 +74,7 @@ foreach ($group_tabs as $uid => $tab) {
 		'href' => "#groupextender-tab-{$uid}",
 		'priority' => $priority,
 		'item_class' => $selected ? 'elgg-state-selected' : '',
-		'class' => "group-extender-tab-menu-item",
+		'link_class' => "group-extender-tab-menu-item",
 		'id' => $uid,
 		'data-group_url' => $group->getURL()
 	));

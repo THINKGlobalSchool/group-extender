@@ -607,9 +607,7 @@ function group_extender_handle_export($guid) {
 		forward(REFERER);
 	}
 
-	$members = $group->getMembers(0);
-
-
+	$members = $group->getMembers(array('limit' => '0'));
 
 	header("Content-type: text/csv");
 	header("Content-Disposition: attachment; filename={$group->guid}_members.csv");

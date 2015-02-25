@@ -34,7 +34,7 @@ if(!empty($group) && elgg_instanceof($group, "group")){
 		
 		$body .= "<div class='center mts'>$all_link</div>";
 
-		$count = $group->getMembers(0, 0, TRUE);
+		$count = $group->getMembers(array('limit' => 0, 'count' => TRUE));
 		
 		echo elgg_view_module('aside', elgg_echo('groups:members') . " ({$count})", $body);
 	}

@@ -5,8 +5,8 @@
  * @package Group-Extender
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Jeff Tilson
- * @copyright THINK Global School 2010 - 2012
- * @link http://www.thinkglobalschool.com/
+ * @copyright THINK Global School 2010 - 2015
+ * @link http://www.thinkglobalschool.org/
  */
 ?>
 //<script>
@@ -64,28 +64,25 @@ elgg.groupextender.admin.load_groups = function(category_guid) {
 
 // Click handler for remove links
 elgg.groupextender.admin.remove_group = function(event) {
-	var confirmText = $(this).attr('rel') || elgg.echo('question:areyousure');
-	if (confirm(confirmText)) {
-		// Grab group ID and category ID
-		var group_guid = $(this).attr('id');
-		var category_guid = $(this).attr('name');
-		var _this = $(this);
+	// Grab group ID and category ID
+	var group_guid = $(this).attr('id');
+	var category_guid = $(this).attr('name');
+	var _this = $(this);
 
-		elgg.action('group_category/removegroup', {
-			data: {
-				group_guid: group_guid,
-				category_guid: category_guid
-			},
-			success: function(data) {
-				if (data.status == -1) {
-					//console.log('error: ' + data.system_messages.error);
-				} else {
-					// Remove element from DOM
-					_this.closest('div.elgg-image-block').fadeOut('slow');
-				}
+	elgg.action('group_category/removegroup', {
+		data: {
+			group_guid: group_guid,
+			category_guid: category_guid
+		},
+		success: function(data) {
+			if (data.status == -1) {
+				//console.log('error: ' + data.system_messages.error);
+			} else {
+				// Remove element from DOM
+				_this.closest('div.elgg-image-block').fadeOut('slow');
 			}
-		});
-	} 
+		}
+	});
 	event.preventDefault();
 }
 

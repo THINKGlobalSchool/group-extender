@@ -37,8 +37,8 @@ if ($archive_category) {
 	global $CONFIG;
 
 	// MD info for excluding archived
-	$archived = get_metastring_id('archived');
-	$one_id = get_metastring_id(1);
+	$archived = elgg_get_metastring_id('archived');
+	$one_id = elgg_get_metastring_id(1);
 
 	if ($archived && $one_id) {
 				$archived_options = "

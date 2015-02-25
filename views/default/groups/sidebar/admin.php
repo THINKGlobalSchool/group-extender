@@ -70,7 +70,7 @@ if ($group->new_layout) {
 		'name' => 'admin_edit_nav',
 		'text' => elgg_echo('group-extender:tab:admin'),
 		'href' => "#groupextender-tab-admin",
-		'class' => 'group-extender-customize-nav-link',
+		'link_class' => 'group-extender-customize-nav-link',
 		'data-group_url' => $group->getURL(),
 		'id' => 'admin'
 	));

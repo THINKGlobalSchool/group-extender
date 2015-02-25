@@ -51,7 +51,7 @@ if (groupcategories_is_group_member($category, $group)) {
 }	
 
 // Get group members
-$members = $group->getMembers(0);
+$members = $group->getMembers(array('limit' => 0));
 
 // Set success flag
 $success = TRUE;
