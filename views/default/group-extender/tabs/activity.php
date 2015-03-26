@@ -20,7 +20,7 @@ if ($group->new_layout) {
 }
 
 // Add wire form
-if (elgg_get_plugin_setting('post_from_activity_stream', 'wire-extender') == 'yes' && elgg_is_logged_in() && $group->isMember(elgg_get_logged_in_user_guid())) {
+if (elgg_get_plugin_setting('post_from_activity_stream', 'wire-extender') && elgg_is_logged_in() && $group->isMember(elgg_get_logged_in_user_entity())) {
 	echo elgg_view('wire-extender/wire_form', array('group' => $group));
 }
 
