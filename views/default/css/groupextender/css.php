@@ -113,11 +113,6 @@
 
 }
 
-.elgg-menu-item-my-groups > a:after {
-	content: "\bb";
-	margin-left: 6px;
-}
-
 /* Group tab gallery override */
 .group-extender-tab-content-container ul.elgg-gallery {
 
