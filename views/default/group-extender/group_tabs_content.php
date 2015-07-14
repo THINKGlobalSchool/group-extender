@@ -69,6 +69,10 @@ foreach ($group_tabs as $uid => $tab) {
 		$selected = $group_tabs[$uid]['priority'] == group_extender_get_lowest_tab_priority($group);	
 	} else {
 		$selected = $uid == $default ? true : false;
+
+		if ($selected) {
+			$initial_tab = $uid;
+		}
 	}
 	
 	// If new layout isn't enabled, show the old tabs
@@ -114,3 +118,14 @@ if (!$group->new_layout) {
 
 echo $tab_content;
 echo "</div>";
+
+$script = <<<JAVASCRIPT
+	<script type='text/javascript'>
+		// Click the default tab_id
+		elgg.register_hook_handler('init', 'system', function() {
+			$('a#' + '$initial_tab').trigger('click');
+		});
+	</script>
+JAVASCRIPT;
+
+echo $script;
