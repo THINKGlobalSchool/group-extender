@@ -148,11 +148,17 @@
 }
 
 /** Tab/page sidebar **/
-.elgg-owner-block .elgg-menu-group-extender-tab-menu li {}
+.elgg-owner-block .elgg-menu-group-extender-tab-menu li {
+	border-top: 1px solid #DDD;
+}
 
-.elgg-owner-block .elgg-menu-group-extender-tab-menu li:first-child {}
+.elgg-owner-block .elgg-menu-group-extender-tab-menu li:first-child {
+	border-top: 0;
+}
 
-.elgg-owner-block .elgg-menu-group-extender-tab-menu li:last-child {}
+.elgg-owner-block .elgg-menu-group-extender-tab-menu li:last-child {
+	border-bottom: 1px solid #DDD;
+}
 
 /** Group tools menu **/
 .elgg-menu-group-tools li a {
