@@ -96,6 +96,7 @@ function group_extender_init() {
 	// Hook into page menu
 	elgg_register_plugin_hook_handler('prepare', 'menu:page', 'group_extender_page_menu_handler');
 	elgg_register_plugin_hook_handler('register', 'menu:page', 'group_extender_register_page_menu_handler');
+	elgg_register_plugin_hook_handler('cangroupcopy', 'entity', 'group_extender_can_group_copy_handler');
 
 	// extend groups page handler
 	elgg_register_plugin_hook_handler('route', 'groups', 'group_extender_route_groups_handler', 100);
