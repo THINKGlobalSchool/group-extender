@@ -43,6 +43,7 @@ elgg.groupextender.tabs.init = function() {
 
 	// Set up group extender lightboxen
 	$(".group-extender-lightbox").colorbox({
+		'trapFocus': false,
 		'onComplete': function() {
 			// Attempt to load google doc pickers
 			if (elgg.google != undefined && elgg.google.apiLoaded == true) {
