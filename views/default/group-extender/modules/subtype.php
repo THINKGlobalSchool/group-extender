@@ -74,7 +74,7 @@ if (!empty($tab['params']['tag'])) {
 	$options['metadata_case_sensitive'] = FALSE;
 }
 
-$options['base_url'] = 'ajax/view/group-extender/modules/subtype?t=1&group_guid=158&tab_id=55560195d0a7d';
+$options['base_url'] = "ajax/view/group-extender/modules/subtype?t=1&group_guid={$group_guid}&tab_id={$tab_id}";
 
 $content = elgg_list_entities_from_relationship($options);
 
