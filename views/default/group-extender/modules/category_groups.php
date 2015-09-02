@@ -73,7 +73,6 @@ if ($guid == 'all' || $guid == 'mine' || $guid == 'owned') {
 		$options['wheres'][] = $archived_options;
 	}
 
-	$options['limit'] = 2;
 	$options['base_url'] = $base_url;
 	$options['wheres'][] = $hidden_where;
 
@@ -88,7 +87,6 @@ if ($guid == 'all' || $guid == 'mine' || $guid == 'owned') {
 			'inverse_relationship' => TRUE,
 			'types' => 'group',
 			'full_view' => FALSE,
-			'limit' => 2,
 			'base_url' => $base_url
 		);
 
