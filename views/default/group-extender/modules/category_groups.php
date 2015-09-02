@@ -50,6 +50,8 @@ if ($archive_category) {
 	}
 }
 
+$base_url = "ajax/view/group-extender/modules/category_groups?t=1&guid={$guid}";
+
 // Load All Groups
 if ($guid == 'all' || $guid == 'mine' || $guid == 'owned') {
 	$options = array(
@@ -71,6 +73,8 @@ if ($guid == 'all' || $guid == 'mine' || $guid == 'owned') {
 		$options['wheres'][] = $archived_options;
 	}
 
+	$options['limit'] = 2;
+	$options['base_url'] = $base_url;
 	$options['wheres'][] = $hidden_where;
 
 	$content = elgg_list_entities_from_relationship($options);
@@ -84,7 +88,8 @@ if ($guid == 'all' || $guid == 'mine' || $guid == 'owned') {
 			'inverse_relationship' => TRUE,
 			'types' => 'group',
 			'full_view' => FALSE,
-			'limit' => 15
+			'limit' => 2,
+			'base_url' => $base_url
 		);
 
 		// Check for archive options
