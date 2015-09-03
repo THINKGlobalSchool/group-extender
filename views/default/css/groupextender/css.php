@@ -110,7 +110,8 @@
 }
 
 .group-extender-my-groups-item > div.elgg-body {
-
+	width: 140px;
+    margin-left: 42px;
 }
 
 /* Group tab gallery override */
