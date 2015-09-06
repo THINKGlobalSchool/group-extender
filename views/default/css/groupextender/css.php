@@ -123,6 +123,10 @@
 	padding: 4px 10px;
 }
 
+#group-extender-tab-editor-container {
+	margin-top: 15px;
+}
+ 
 /* Group title menu styles */
 
 .elgg-menu-title .elgg-menu-item-archived {

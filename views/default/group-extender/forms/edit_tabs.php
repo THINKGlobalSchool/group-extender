@@ -36,6 +36,14 @@ $current_tabs_container = "<div id='group-extender-current-tabs-form'>{$current_
 
 $current_tabs_module = elgg_view_module('info', $module_title, $current_tabs_container);
 
+$add_tab_button = elgg_view('input/submit', array(
+	'name' => 'add_tab_button',
+	'id' => 'add-tab-button',
+	'class' => 'group-extender-tab-editor elgg-button elgg-button-action',
+	'value' => elgg_echo('group-extender:label:addtab'),
+	'href' => 'ajax/view/group-extender/forms/edit_tab?group_guid=' . $group->guid
+));
+
 $new_tab_form = elgg_view('group-extender/forms/edit_tab', array('group_guid' => $group->guid));
 
 // Trigger a change when the new tab form loads (for first tab type)
@@ -47,6 +55,14 @@ echo <<<JAVASCRIPT
 </script>
 JAVASCRIPT;
 
+// Hidden group input
+$group_hidden = elgg_view('input/hidden', array(
+	'name' => 'group_guid',
+	'value' => $group->guid,
+));
+
 echo $current_tabs_module;
-echo $new_tab_form;
-echo $nav_settings_module;
+echo $group_hidden;
+echo $add_tab_button;
+echo "<div id='group-extender-tab-editor-container'></div>";
+

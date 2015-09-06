@@ -57,7 +57,7 @@ foreach ($group_tabs as $uid => $tab) {
 
 	$actions = elgg_view('output/url', array(
 		'text' => elgg_echo('edit'),
-		'class' => 'group-extender-lightbox',
+		'class' => 'group-extender-tab-editor',
 		'href' => "ajax/view/group-extender/forms/edit_tab?group_guid={$group->guid}&tab_id={$uid}",
 	)) . "&nbsp;";
 	

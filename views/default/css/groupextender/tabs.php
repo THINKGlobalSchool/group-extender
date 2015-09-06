@@ -24,7 +24,6 @@ table.group-extender-edit-tab-table td.group-extender-tab-priority span#ge-loade
 .group-extender-tab-form-customsearch,
 .group-extender-tab-form-tagdashboard,
 .group-extender-tab-form-subtype {
-	width: 400px;
 	height: auto;
 }
 

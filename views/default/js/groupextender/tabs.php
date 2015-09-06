@@ -64,6 +64,8 @@ elgg.groupextender.tabs.init = function() {
 		'hideOnOverlayClick':false,
     	'hideOnContentClick':false
 	});
+
+	$(document).on('click', '.group-extender-tab-editor', elgg.groupextender.tabs.editTab);
 		
 	elgg.groupextender.tabs.processHash();
 
@@ -81,6 +83,26 @@ elgg.groupextender.tabs.destroy = function() {
 	$(document).off('click', '.group-extender-homepage-link');
 	$(document).off('click', '.group-extender-delete-link');
 	$(document).off('change', '#group-extender-tab-type-select');
+}
+
+elgg.groupextender.tabs.editTab = function(event) {
+	var $container = $('#group-extender-tab-editor-container');
+	$container.addClass('elgg-ajax-loader');
+
+	elgg.get($(this).attr('href'), {
+		success: function(data) {
+			// Reset ajax loader
+			$container.removeClass('elgg-ajax-loader');
+			$container.html(data);
+			$('#group-extender-tab-type-select').trigger('change');
+		},
+		error: function() {
+			// Reset ajax loader
+			$container.removeClass('elgg-ajax-loader');
+		}
+	});
+
+	event.preventDefault();
 }
 
 // Click handler for group custom tabs
@@ -189,22 +211,14 @@ elgg.groupextender.tabs.tabSaveClick = function(event) {
 	var $_this = $(this);
 	
 	$(this).replaceWith("<div class='elgg-ajax-loader' id='ge-loader'></div>");
-	$.colorbox.resize();
 
 	// Fire save action
 	elgg.action('groupextender/save_tab', {
 		data: values,
 		success: function(data) {
 			if (data.status != -1) {
-				// Close if we're in a lightbox
-				$.colorbox.close();
-
+				$('#group-extender-tab-editor-container').html('');
 				elgg.groupextender.tabs.refreshCurrentTabs(values['group_guid']);
-
-				$('#group-extender-tab-menu-itemtype-select').change();
-				
-				// Trigger a hook to provide extra cleanup after successful save
-				elgg.trigger_hook('geTabSaved', 'cleanup', {'add_param' : values['add_param']}, values);
 			}
 			$('#ge-loader').replaceWith($_this);
 		}
@@ -247,7 +261,7 @@ elgg.groupextender.tabs.rssTabSaveClick = function(hook, type, params, value) {
 // Click handler for refresh tab click
 elgg.groupextender.tabs.tabRefreshClick = function(event) {
 	// Get form inputs
-	var $form = $('#groupextender-tab-admin').find('form');
+	var $form = $('#groupextender-tab-admin').find('input');
 
 	var values = {};
 	$.each($form.serializeArray(), function(i, field) {
@@ -307,7 +321,6 @@ elgg.groupextender.tabs.staticSaveClick = function(event) {
 		},
 		success: function(data) {
 			if (data.status != -1) {
-				$.colorbox.close();
 				elgg.groupextender.tabs.refreshCurrentTabs(values['group_guid']);
 			}
 			else $('#ge-loader').replaceWith($_this);
@@ -430,15 +443,6 @@ elgg.groupextender.tabs.staticContentFormValue = function(hook, type, params, op
 	return options;
 }
 
-
-// Hook handler for cleaning up any longtext inputs after saving
-elgg.groupextender.tabs.staticContentCleanup = function(hook, type, params, options) {
-	if (params['add_param'] == 'static_content') {
-		// text editor cleanup
-	}
-	return options;
-}
-
 // Hook handler for cleaning up the new tab save form
 elgg.groupextender.tabs.newFormCleanup = function(hook, type, params, options) {
 	$new_content = $('#group-extender-extended-type-content');
@@ -502,6 +506,5 @@ elgg.register_hook_handler('geTabSave', 'clicked', elgg.groupextender.tabs.rssTa
 //elgg.register_hook_handler('geTabTypeChanged', 'geChanged', elgg.groupextender.tabs.staticTabTypeChanged);
 elgg.register_hook_handler('geTabTypeLoaded', 'static', elgg.groupextender.tabs.staticContentSelected);
 elgg.register_hook_handler('geGetFormValues', 'values', elgg.groupextender.tabs.staticContentFormValue);
-elgg.register_hook_handler('geTabSaved', 'cleanup', elgg.groupextender.tabs.staticContentCleanup);
 elgg.register_hook_handler('geTabSaved', 'cleanup', elgg.groupextender.tabs.newFormCleanup);
 elgg.register_hook_handler('should_display', 'ajaxmodule', elgg.groupextender.tabs.multipleTagdashboards);

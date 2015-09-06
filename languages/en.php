@@ -36,6 +36,7 @@ return array(
 	'group-extender:label:activity' => 'Activity',
 	'group-extender:label:mygroups' => 'My Groups',
 	'group-extender:label:editgrouptabs' => 'Edit Group Pages',
+	'group-extender:label:addtab' => 'Add New Page',
 	'group-extender:label:type' => 'Page Type',
 	'group-extender:label:priority' => 'Priority',
 	'group-extender:label:title' => 'Title',
