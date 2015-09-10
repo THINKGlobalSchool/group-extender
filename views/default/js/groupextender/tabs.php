@@ -66,8 +66,6 @@ elgg.groupextender.tabs.init = function() {
 	});
 
 	$(document).on('click', '.group-extender-tab-editor', elgg.groupextender.tabs.editTab);
-		
-	elgg.groupextender.tabs.processHash();
 
 	// Hide the google search description on google search click
 	$("input.gsc-search-button").live('click', elgg.groupextender.tabs.googleSearchSubmit);
@@ -496,7 +494,10 @@ elgg.groupextender.tabs.processHash = function(todo_guid) {
 
 		// Click the given tab_id
 		$('a#' + tab_id).trigger('click');
+
+		return true;
 	}
+	return false;
 }
 
 elgg.register_hook_handler('init', 'system', elgg.groupextender.tabs.init);

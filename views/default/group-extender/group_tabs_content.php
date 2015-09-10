@@ -123,7 +123,10 @@ $script = <<<JAVASCRIPT
 	<script type='text/javascript'>
 		// Click the default tab_id
 		elgg.register_hook_handler('init', 'system', function() {
-			$('a#' + '$initial_tab').trigger('click');
+
+			if (!elgg.groupextender.tabs.processHash()) {
+				$('a#' + '$initial_tab').trigger('click');
+			}
 		});
 	</script>
 JAVASCRIPT;
