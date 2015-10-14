@@ -93,6 +93,7 @@ elgg.groupextender.tabs.editTab = function(event) {
 			$container.removeClass('elgg-ajax-loader');
 			$container.html(data);
 			$('#group-extender-tab-type-select').trigger('change');
+			elgg.trigger_hook('geTabEditLoaded', 'loaded');
 		},
 		error: function() {
 			// Reset ajax loader
