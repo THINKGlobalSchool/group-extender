@@ -86,5 +86,6 @@ if (!$content) {
 
 // init move/copy lightboxes
 $js = "<script type='text/javascript'>elgg.groupextender.initMoveCopyLightbox();</script>";
+$js .= "<script type='text/javascript'>elgg.simplekaltura_utility.lightbox_init();</script>";
 
 echo $js;
