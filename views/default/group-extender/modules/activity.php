@@ -12,9 +12,11 @@
 
 $group_guid = elgg_extract('group_guid', $vars);
 $group = get_entity($group_guid);
+$tab_id = elgg_extract('tab_id', $vars);
 
 $db_prefix = elgg_get_config('dbprefix');
 $content = elgg_list_river(array(
+	'base_url' => "ajax/view/group-extender/modules/activity?t=1&group_guid={$group_guid}&tab_id={$tab_id}",
 	'limit' => 10,
 	'pagination' => TRUE,
 	'joins' => array(
