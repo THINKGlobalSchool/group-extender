@@ -26,7 +26,7 @@ return array(
 	'admin:groupextender:addcategory' => 'Add Category',
 	'admin:groupextender:editcategory' => 'Edit Category',
 	'admin:groupextender:dashboard' => 'Dashboard',
-	'admin:groupextender:content' => 'Manage Content',
+	'admin:groupextender:tabs' => 'Manage Tabs',
 	
 	// Titles
 	'group-extender:title:groupdashboard' => 'Group Dashboard',
@@ -90,6 +90,8 @@ return array(
 	'group-extender:label:copytogroup' => 'Copy to Group',
 	'group-extender:label:move' => 'Move',
 	'group-extender:label:copy' => 'Copy',
+	'group-extender:label:copyfromgroup' => 'Copy from Group',
+	'group-extender:label:copytabs' => 'Copy Group Tabs',
 	'group-extender:label:selectgroup' => 'Select Group',
 	'group-extender:label:archivegroup' => 'Archive Group',
 	'group-extender:label:unarchivegroup' => 'Unarchive Group',
@@ -165,6 +167,7 @@ return array(
 	'group-extender:error:unknowncopyoption' => 'Unknown copy option \'%s\'',
 	'group-extender:error:homepage' => 'There was an error setting the group homepage',
 	'group-extender:error:nav_settings' => 'There was an error updating the group nav settings',
+	'group-extender:error:copysamegroup' => "Can't copy tabs to the same group",
 	'group-extender:success:addgroup' => 'Successfully added group to category: %s',
 	'group-extender:success:removegroup' => 'Successfully removed group from category: %s',
 	'group-extender:success:savetab' => 'Successfully saved group page',
@@ -181,6 +184,7 @@ return array(
 	'group-extender:success:copytabs' => 'Successfully copied group pages',
 	'group-extender:success:homepage' => 'Successfully set group homepage',
 	'group-extender:success:nav_settings' => 'Successfully updated group nav settings',
+	'group-extender:success:copytabs' => 'Successfully copied group tabs',
 
 	// Group tools overrides (until it's updated)
 	'groups:newest' => 'Newest',

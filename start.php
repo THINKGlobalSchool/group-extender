@@ -143,6 +143,7 @@ function group_extender_init() {
 	elgg_register_action("group_dashboard/dashboard", "$action_base/dashboard.php");
 	elgg_register_action("groups/homepage", "$action_base/homepage.php");
 	elgg_register_action("groupextender/nav_settings", "$action_base/nav_settings.php");
+	elgg_register_action("group-extender/admin/copy_tabs", "$action_base/copy_tabs.php", 'admin');
 
 	// Manage content action
 	//elgg_register_action("group-extender/manage_content", "$action_base/manage_content.php", 'admin');
@@ -913,7 +914,7 @@ function group_extender_pagesetup() {
 	if (elgg_in_context('admin')) {
 		elgg_register_admin_menu_item('administer', 'categories', 'groupextender');
 		elgg_register_admin_menu_item('administer', 'dashboard', 'groupextender');
-		elgg_register_admin_menu_item('administer', 'content', 'groupextender');
+		elgg_register_admin_menu_item('administer', 'tabs', 'groupextender');
 	}
 	
 	// Display group dashboard sidebar menu item
